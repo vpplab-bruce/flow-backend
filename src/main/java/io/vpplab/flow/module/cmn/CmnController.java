@@ -14,6 +14,15 @@ public class CmnController {
     @Autowired
     private CmnService cmnService;
 
+
+/*
+ frontend 파라미터 전달  예)
+ var axios = require('axios');
+ var FormData = require('form-data');
+ var data = new FormData();
+ data.append('로그인ID', 'donghae');*/
+
+
     @RequestMapping("/getLogin")
     public HashMap getLogin(@RequestParam HashMap<String,String> paramMap) {
         return cmnService.getLogin(paramMap);
