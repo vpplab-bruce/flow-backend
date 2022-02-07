@@ -20,5 +20,21 @@
         WHERE 1=1
         AND  A.login_id = #{로그인ID}
     </select>
+    <select id="getMenuMng" parameterType="hashMap" resultType="hashMap">
+        SELECT
+            D.category AS 1차메뉴
+             ,D.sub_category AS 2차메뉴
+             ,D.url AS URL주소
+             ,D.view_name AS 화면이름
+             ,D.is_view AS 화면여부
+             ,B.has_modify_auth AS 수정권한여부
+        FROM user A
+                 INNER JOIN authorization B ON A.authorization_id = B.id AND B.has_read_auth = '1'
+                 INNER JOIN auth_menu_mapping C ON B.id = C.auth_id
+                 LEFT OUTER JOIN menu D ON C.menu_id = D.id
+        WHERE 1=1
+          AND A.login_id = #{로그인ID}
+        ORDER BY A.id
+    </select>
 
 </mapper>

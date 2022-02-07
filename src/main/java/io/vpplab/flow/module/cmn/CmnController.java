@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 @RestController
 public class CmnController {
@@ -23,9 +23,14 @@ public class CmnController {
  data.append('로그인ID', 'donghae');*/
 
 
-    @RequestMapping("/getLogin")
+    @RequestMapping("/cmn/getLogin")
     public HashMap getLogin(@RequestParam HashMap<String,String> paramMap) {
         return cmnService.getLogin(paramMap);
+    }
+
+    @RequestMapping("/cmn/getMenuMng")
+    public Map<String, Object> getMenuMng(@RequestParam HashMap<String,String> paramMap) {
+        return cmnService.getMenuMng(paramMap);
     }
 
 }

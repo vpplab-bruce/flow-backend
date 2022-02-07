@@ -5,5 +5,6 @@
     <mappers>
         <mapper resource="sample/SampleMapper.xml"/>
         <mapper resource="cmn/CmnMapper.xml"/>
+        <mapper resource="project/PrjMapper.xml"/>
     </mappers>
 </configuration>
