@@ -67,7 +67,8 @@ public class RsrService {
         }
 
         /******************페이징*********************/
-        pageInfo.put("전체페이지갯수", PagingUtil.pageCnt(Integer.parseInt(rowCnt),clcRsrTotCnt)+"");
+        pageInfo.put("전체페이지갯수", PagingUtil.pageCnt(clcRsrTotCnt,Integer.parseInt(rowCnt))+"");
+        pageInfo.put("전체갯수",clcRsrTotCnt+"");
         /*****************페이징*********************/
 
         multiMap.put("페이지정보",pageInfo);
