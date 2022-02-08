@@ -23,7 +23,20 @@ public class PagingUtil {
 
         return totPageCnt;
     }
+    /**
+     * 페이징설정
+     * 조회갯수 rowCnt
+     * 현재페이지 pageNum
+     * return schPageNo 조회된페이지
+     * LIMIT 조회된페이지 ,조회갯수
+     */
 
+
+    public static int schPageNo(int pageNo , int rowCnt) {
+
+        int schPageNo =  ((pageNo - 1) * rowCnt);
+        return schPageNo;
+    }
     /**
      * @param args
      */

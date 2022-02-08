@@ -41,7 +41,7 @@ public class RsrService {
         if(paramMap.get("행갯수") != null){
             rowCnt = paramMap.get("행갯수").toString();
         }
-        paramMap.put("페이지번호",Integer.parseInt(pageNo)-1);
+        paramMap.put("페이지번호", PagingUtil.schPageNo(Integer.parseInt(pageNo),Integer.parseInt(rowCnt)));
         paramMap.put("행갯수",Integer.parseInt(rowCnt));
 
         HashMap<String,String> pageInfo = new HashMap<>();
