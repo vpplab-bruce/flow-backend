@@ -49,7 +49,7 @@ public class CmnService {
                     menuTree.add(cnt,dep1Map);
                     List<HashMap> sub  =  new ArrayList<>();
                     for(int j = 0; j < menuList.size(); j++){
-                        if((menuList.get(i).get("1차메뉴")).equals(menuList.get(j).get("2차메뉴")) && ("".equals(menuList.get(j).get("1차메뉴")) ||menuList.get(j).get("1차메뉴") == null)){
+                        if((menuList.get(i).get("1차메뉴")).equals(menuList.get(j).get("2차메뉴")) && ("".equals(menuList.get(j).get("1차메뉴")) || menuList.get(j).get("1차메뉴") == null)){
                             HashMap dep2Map = new HashMap<String,Object>();
                             dep2Map.put( "URL주소",menuList.get(j).get("URL주소"));
                             dep2Map.put( "화면이름",menuList.get(j).get("화면이름"));
