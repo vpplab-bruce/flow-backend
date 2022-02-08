@@ -47,7 +47,7 @@ public class RsrService {
         HashMap<String,String> pageInfo = new HashMap<>();
         pageInfo.put("페이지번호",pageNo);
         pageInfo.put("행갯수",rowCnt);
-        /*****************페이징*********************/
+        /*****************페이징**********************/
 
 
         String userId = loginInfo.get("로그인ID").toString();
