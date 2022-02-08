@@ -5,7 +5,7 @@
 <mapper namespace="io.vpplab.flow.domain.rsr.RsrDao">
     <select id="getClcRsrList" parameterType="hashMap" resultType="hashMap">
         SELECT
-            AA.잡합자원ID
+            AA.집합자원ID
              ,AA.집합자원그룹명
              ,AA.집합자원구분
              ,AA.운영상태
@@ -21,7 +21,7 @@
              ,AA.신청일자
              ,AA.로그인ID
         FROM(SELECT
-                 C.id AS 잡합자원ID
+                 C.id AS 집합자원ID
                   ,C.name AS 집합자원그룹명
                   ,C.type AS 집합자원구분
                   , '' AS 운영상태
@@ -48,26 +48,17 @@
                                        FROM plant GROUP BY id) E ON D.plant_id = E.id) AA
         WHERE 1=1
     AND AA.로그인ID = #{로그인ID}
-    ORDER BY AA.잡합자원ID
+
+            <if test="'집합자원그룹명' != null">
+                    AND AA.집합자원그룹명 LIKE CONCAT('%',#{집합자원그룹명},'%')
+            </if>
+
+    ORDER BY AA.집합자원ID
     LIMIT #{페이지번호},#{행갯수}
     </select>
-    <select id="getClcRsrListCnt" parameterType="hashMap" resultType="int">
+    <select id="getClcRsrListCnt" parameterType="hashMap" resultType="int" >
         SELECT
-            AA.잡합자원ID
-             ,AA.집합자원그룹명
-             ,AA.집합자원구분
-             ,AA.운영상태
-             ,AA.신청유형
-             ,AA.처리상태
-             ,AA.구성수
-             ,AA.자원용량
-             ,AA.PVWT용량
-             ,AA.ESS용량
-             ,AA.평균오차율
-             ,AA.오차율평가
-             ,AA.거래가능기간
-             ,AA.신청일자
-             ,AA.로그인ID
+          COUNT(*) AS cnt
         FROM(SELECT
                  C.id AS 잡합자원ID
                   ,C.name AS 집합자원그룹명
@@ -96,6 +87,9 @@
                                        FROM plant GROUP BY id) E ON D.plant_id = E.id) AA
         WHERE 1=1
           AND AA.로그인ID = #{로그인ID}
+        <if test="'집합자원그룹명' != null">
+                    AND AA.집합자원그룹명 LIKE CONCAT('%',#{집합자원그룹명},'%')
+                </if>
     </select>
 
 </mapper>
