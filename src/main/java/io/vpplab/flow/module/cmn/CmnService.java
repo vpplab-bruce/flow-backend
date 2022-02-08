@@ -6,6 +6,9 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,14 +22,23 @@ public class CmnService {
     @Autowired
     private CmnDao cmnDao;
 
-    public Map<String, Object> getLogin(HashMap<String,String> paramMap) {
-        HashMap<String,String> loginMap  =  cmnDao.getLogin(paramMap);
+    public Map<String, Object> getLogin(HashMap<String,String> paramMap,HttpServletRequest request) {
+        HttpSession session = request.getSession();
         Map<String, Object> multiMap = new HashMap<>();
         List<Map<String, Object>> menuTree = new ArrayList<Map<String, Object>>();
+        HashMap<String,String> loginMap  =  cmnDao.getLogin(paramMap);
         List<HashMap> menuList  =  cmnDao.getMenuMng(paramMap);
+
 
         int cnt =0;
         if(loginMap != null){
+
+            //비밀번호 비교 비밀번호실패시 비밀번호 오류건수 업데이트
+            //비밀번호 비교 암호화 확인 필요
+
+
+            // 비번이 맞을경우
+            session.setAttribute("사용자정보", loginMap);
             if(menuList.size() > 0){
                 for(int i = 0; i < menuList.size(); i++){
                     if(!"".equals(menuList.get(i).get("1차메뉴")) && menuList.get(i).get("1차메뉴") != null){
@@ -51,7 +63,6 @@ public class CmnService {
                         cnt++;
                     }
                 }
-
                 multiMap.put("1차메뉴",menuTree);
             }
             multiMap.put("로그인정보",loginMap);
@@ -62,6 +73,38 @@ public class CmnService {
             multiMap.put("1차메뉴",null);
             multiMap.put("조회여부","0");
         }
+        return multiMap;
+    }
+    public Map<String, Object> setPswdInit(HashMap<String,String> paramMap,HttpServletRequest request) {
+
+        Map<String, Object> multiMap = new HashMap<>();
+        HashMap<String,String> loginMap  =  cmnDao.getMyLoginInfo(paramMap);
+        if(loginMap != null){
+            String pswdInit = "";
+            SecureRandom random = new SecureRandom ();
+            String certNumCreate = random.nextInt(10)+""
+                    + random.nextInt(10)+""
+                    + random.nextInt(10)+""
+                    + random.nextInt(10)+""
+                    + random.nextInt(10)+""
+                    + random.nextInt(10);
+            pswdInit = certNumCreate;
+            // pswdInit 암호화 체크
+            HashMap<String, String> infoMap = new HashMap<>();
+            infoMap.put("로그인비밀번호",pswdInit);
+            infoMap.put("전화번호",paramMap.get("전화번호"));
+            infoMap.put("이메일",paramMap.get("이메일"));
+            int cnt = cmnDao.setMyPswd(infoMap);
+            if(cnt > 0){
+                multiMap.put("전송여부","1");
+                // SMS 전송처리
+            }else{
+                multiMap.put("전송여부","0");
+            }
+        }else{
+            multiMap.put("전송여부","0");
+        }
+
         return multiMap;
     }
 

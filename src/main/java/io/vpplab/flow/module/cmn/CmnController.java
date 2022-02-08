@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,8 +20,13 @@ public class CmnController {
 
 
     @RequestMapping("/cmn/getLogin")
-    public Map<String, Object> getLogin(@RequestParam HashMap<String,String> paramMap) {
-        return cmnService.getLogin(paramMap);
+    public Map<String, Object> getLogin(@RequestParam HashMap<String,String> paramMap, HttpServletRequest request) {
+        return cmnService.getLogin(paramMap,request);
     }
 
+
+    @RequestMapping("/cmn/setPswdInit")
+    public Map<String, Object> setPswdInit(@RequestParam HashMap<String,String> paramMap,HttpServletRequest request) {
+        return cmnService.setPswdInit(paramMap,request);
+    }
 }

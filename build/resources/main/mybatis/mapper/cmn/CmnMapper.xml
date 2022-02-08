@@ -36,5 +36,23 @@
           AND A.login_id = #{로그인ID}
         ORDER BY A.id
     </select>
+    <select id="getMyLoginInfo" parameterType="hashMap" resultType="hashMap">
+        SELECT
+              A.name AS 이름
+             ,A.phone AS 전화번호
+             ,A.email AS 이메일
+             ,A.login_id AS 로그인ID
+        FROM user A
+        WHERE A.phone = #{전화번호}
+          AND  A.email = #{이메일}
+    </select>
+    <update id="setMyPswd"  parameterType="hashMap" >
+        UPDATE user SET
+            login_password = #{로그인비밀번호}
+        WHERE phone = #{전화번호}
+          AND  email = #{이메일}
+    </update>
+
+
 
 </mapper>

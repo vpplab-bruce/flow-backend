@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class RsrController {
@@ -19,9 +21,9 @@ public class RsrController {
 
 
 
-    @RequestMapping("/getClcRsrList")
-    public List<HashMap> getClcRsrList(@RequestParam HashMap<String,String> paramMap) {
-        return rsrService.getClcRsrList(paramMap);
+    @RequestMapping("/rsr/getClcRsrList")
+    public Map<String, Object> getClcRsrList(@RequestParam HashMap<String,String> paramMap, HttpServletRequest request) {
+        return rsrService.getClcRsrList(paramMap,request);
     }
 
 }
