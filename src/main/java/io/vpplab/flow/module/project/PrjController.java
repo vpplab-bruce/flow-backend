@@ -18,7 +18,7 @@ public class PrjController {
     private PrjService prjService;
 
     @RequestMapping("/prj/getMyInfo")
-    public Map<String, Object> getMyInfo(@RequestParam HashMap<String,String> paramMap, HttpServletRequest request) {
+    public Map<String, Object> getMyInfo(@RequestParam HashMap<String,Object> paramMap, HttpServletRequest request) {
         return prjService.getMyInfo(paramMap,request);
     }
 

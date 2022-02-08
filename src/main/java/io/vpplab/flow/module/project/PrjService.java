@@ -23,18 +23,18 @@ public class PrjService {
     @Autowired
     private PrjDao prjDao;
 
-    public Map<String, Object> getMyInfo(HashMap<String,String> paramMap, HttpServletRequest request) {
+    public Map<String, Object> getMyInfo(HashMap<String,Object> paramMap, HttpServletRequest request) {
         HttpSession session = request.getSession();
         Map<String, Object> multiMap = new HashMap<>();
 
-        HashMap<String,String> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
         if(loginInfo == null){
             multiMap.put("조회여부","0");
             return multiMap;
         }
-        String userId = loginInfo.get("로그인ID");
+        String userId = loginInfo.get("로그인ID").toString();
         paramMap.put("로그인ID",userId);
-        HashMap<String,String> loginMap  =  prjDao.getMyInfo(paramMap);
+        HashMap<String,Object> loginMap  =  prjDao.getMyInfo(paramMap);
         if(loginMap != null){
             multiMap.put("조회여부","1");
             multiMap.put("내정보",loginMap);

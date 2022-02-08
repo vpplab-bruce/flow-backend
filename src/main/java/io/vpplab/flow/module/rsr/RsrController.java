@@ -22,7 +22,7 @@ public class RsrController {
 
 
     @RequestMapping("/rsr/getClcRsrList")
-    public Map<String, Object> getClcRsrList(@RequestParam HashMap<String,String> paramMap, HttpServletRequest request) {
+    public Map<String, Object> getClcRsrList(@RequestParam HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.getClcRsrList(paramMap,request);
     }
 

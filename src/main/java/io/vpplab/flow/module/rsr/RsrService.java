@@ -2,6 +2,7 @@ package io.vpplab.flow.module.rsr;
 
 import io.vpplab.flow.domain.cmn.CmnDao;
 import io.vpplab.flow.domain.rsr.RsrDao;
+import io.vpplab.flow.domain.utils.PagingUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,23 +22,55 @@ public class RsrService {
     @Autowired
     private RsrDao rsrDao;
 
-    public Map<String, Object> getClcRsrList(HashMap<String,String> paramMap, HttpServletRequest request) {
+    public Map<String, Object> getClcRsrList(HashMap<String,Object> paramMap, HttpServletRequest request) {
         HttpSession session = request.getSession();
         Map<String, Object> multiMap = new HashMap<>();
-        HashMap<String,String> loginInfo = (HashMap) session.getAttribute("사용자정보");
+
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
         if(loginInfo == null){
             multiMap.put("조회여부","0");
             return multiMap;
         }
-        String userId = loginInfo.get("로그인ID");
+
+        /******************페이징*********************/
+        String pageNo = "1";
+        String rowCnt = "10";
+        if(paramMap.get("페이지번호") != null){
+            pageNo = paramMap.get("페이지번호").toString();
+        }
+        if(paramMap.get("행갯수") != null){
+            rowCnt = paramMap.get("행갯수").toString();
+        }
+        paramMap.put("페이지번호",Integer.parseInt(pageNo)-1);
+        paramMap.put("행갯수",Integer.parseInt(rowCnt));
+
+        HashMap<String,String> pageInfo = new HashMap<>();
+        pageInfo.put("페이지번호",pageNo);
+        pageInfo.put("행갯수",rowCnt);
+        /*****************페이징*********************/
+
+
+        String userId = loginInfo.get("로그인ID").toString();
+
         paramMap.put("로그인ID",userId);
         List<HashMap> clcRsrMap  =  rsrDao.getClcRsrList(paramMap);
+        int clcRsrTotCnt  =  rsrDao.getClcRsrListCnt(paramMap);
+;
         if(clcRsrMap.size() > 0){
+            for(int i = 0 ; i < clcRsrMap.size() ; i++){
+                clcRsrMap.get(i).put("NO",clcRsrTotCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
+            }
             multiMap.put("조회여부","1");
             multiMap.put("집합자원",clcRsrMap);
         }else{
             multiMap.put("조회여부","0");
         }
+
+        /******************페이징*********************/
+        pageInfo.put("전체페이지갯수", PagingUtil.pageCnt(Integer.parseInt(rowCnt),clcRsrTotCnt)+"");
+        /*****************페이징*********************/
+
+        multiMap.put("페이지정보",pageInfo);
         return multiMap;
     }
 

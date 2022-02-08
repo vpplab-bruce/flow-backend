@@ -20,13 +20,13 @@ public class CmnController {
 
 
     @RequestMapping("/cmn/getLogin")
-    public Map<String, Object> getLogin(@RequestParam HashMap<String,String> paramMap, HttpServletRequest request) {
+    public Map<String, Object> getLogin(@RequestParam HashMap<String,Object> paramMap, HttpServletRequest request) {
         return cmnService.getLogin(paramMap,request);
     }
 
 
     @RequestMapping("/cmn/setPswdInit")
-    public Map<String, Object> setPswdInit(@RequestParam HashMap<String,String> paramMap,HttpServletRequest request) {
+    public Map<String, Object> setPswdInit(@RequestParam HashMap<String,Object> paramMap,HttpServletRequest request) {
         return cmnService.setPswdInit(paramMap,request);
     }
 }

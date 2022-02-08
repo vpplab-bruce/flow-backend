@@ -4,5 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface RsrDao {
-    List<HashMap> getClcRsrList(HashMap<String, String> paramMap);
+    List<HashMap> getClcRsrList(HashMap<String, Object> paramMap);
+    int getClcRsrListCnt(HashMap<String, Object> paramMap);
 }

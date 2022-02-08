@@ -22,11 +22,11 @@ public class CmnService {
     @Autowired
     private CmnDao cmnDao;
 
-    public Map<String, Object> getLogin(HashMap<String,String> paramMap,HttpServletRequest request) {
+    public Map<String, Object> getLogin(HashMap<String,Object> paramMap,HttpServletRequest request) {
         HttpSession session = request.getSession();
         Map<String, Object> multiMap = new HashMap<>();
         List<Map<String, Object>> menuTree = new ArrayList<Map<String, Object>>();
-        HashMap<String,String> loginMap  =  cmnDao.getLogin(paramMap);
+        HashMap<String,Object> loginMap  =  cmnDao.getLogin(paramMap);
         List<HashMap> menuList  =  cmnDao.getMenuMng(paramMap);
 
 
@@ -75,10 +75,10 @@ public class CmnService {
         }
         return multiMap;
     }
-    public Map<String, Object> setPswdInit(HashMap<String,String> paramMap,HttpServletRequest request) {
+    public Map<String, Object> setPswdInit(HashMap<String,Object> paramMap,HttpServletRequest request) {
 
         Map<String, Object> multiMap = new HashMap<>();
-        HashMap<String,String> loginMap  =  cmnDao.getMyLoginInfo(paramMap);
+        HashMap<String,Object> loginMap  =  cmnDao.getMyLoginInfo(paramMap);
         if(loginMap != null){
             String pswdInit = "";
             SecureRandom random = new SecureRandom ();
@@ -90,10 +90,10 @@ public class CmnService {
                     + random.nextInt(10);
             pswdInit = certNumCreate;
             // pswdInit 암호화 체크
-            HashMap<String, String> infoMap = new HashMap<>();
+            HashMap<String, Object> infoMap = new HashMap<>();
             infoMap.put("로그인비밀번호",pswdInit);
-            infoMap.put("전화번호",paramMap.get("전화번호"));
-            infoMap.put("이메일",paramMap.get("이메일"));
+            infoMap.put("전화번호",paramMap.get("전화번호").toString());
+            infoMap.put("이메일",paramMap.get("이메일").toString());
             int cnt = cmnDao.setMyPswd(infoMap);
             if(cnt > 0){
                 multiMap.put("전송여부","1");
