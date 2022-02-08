@@ -48,6 +48,7 @@
                                        FROM plant GROUP BY id) E ON D.plant_id = E.id) AA
         WHERE 1=1
     AND AA.로그인ID = #{로그인ID}
+    ORDER BY AA.잡합자원ID
     LIMIT #{페이지번호},#{행갯수}
     </select>
     <select id="getClcRsrListCnt" parameterType="hashMap" resultType="int">

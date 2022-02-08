@@ -48,6 +48,10 @@
                                        FROM plant GROUP BY id) E ON D.plant_id = E.id) AA
         WHERE 1=1
     AND AA.로그인ID = #{로그인ID}
+    <if test="집합자원그룹명 != null and 집합자원그룹명 != ''">
+        AND AA.집합자원그룹명 LIKE CONCAT('%',#{집합자원그룹명},'%')
+    </if>
+    ORDER BY AA.잡합자원ID
     LIMIT #{페이지번호},#{행갯수}
     </select>
     <select id="getClcRsrListCnt" parameterType="hashMap" resultType="int">
@@ -95,6 +99,9 @@
                                        FROM plant GROUP BY id) E ON D.plant_id = E.id) AA
         WHERE 1=1
           AND AA.로그인ID = #{로그인ID}
+        <if test="'집합자원그룹명' != null and '집합자원그룹명' != ''">
+            AND AA.집합자원그룹명 LIKE CONCAT('%',#{집합자원그룹명},'%')
+        </if>
     </select>
 
 </mapper>
