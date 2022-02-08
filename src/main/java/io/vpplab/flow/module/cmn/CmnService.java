@@ -41,23 +41,29 @@ public class CmnService {
         if(menuList.size() > 0){
             for(int i = 0; i < menuList.size(); i++){
                 if(!"".equals(menuList.get(i).get("1차메뉴")) && menuList.get(i).get("1차메뉴") != null){
-                    menuTree.add(cnt,menuList.get(i));
+                    Map<String, Object> dep1Map = new HashMap<>();
+                    dep1Map.put( "URL주소",menuList.get(i).get("URL주소"));
+                    dep1Map.put( "화면이름",menuList.get(i).get("화면이름"));
+                    dep1Map.put( "화면여부",menuList.get(i).get("화면여부"));
+                    dep1Map.put( "수정권한여부",menuList.get(i).get("수정권한여부"));
+                    menuTree.add(cnt,dep1Map);
                     List<HashMap> sub  =  new ArrayList<>();
                     for(int j = 0; j < menuList.size(); j++){
                         if((menuList.get(i).get("1차메뉴")).equals(menuList.get(j).get("2차메뉴")) && ("".equals(menuList.get(j).get("1차메뉴")) ||menuList.get(j).get("1차메뉴") == null)){
-                            sub.add(menuList.get(j));
+                            HashMap dep2Map = new HashMap<String,Object>();
+                            dep2Map.put( "URL주소",menuList.get(j).get("URL주소"));
+                            dep2Map.put( "화면이름",menuList.get(j).get("화면이름"));
+                            dep2Map.put( "화면여부",menuList.get(j).get("화면여부"));
+                            dep2Map.put( "수정권한여부",menuList.get(j).get("수정권한여부"));
+                            sub.add(dep2Map);
                         }
-
                     }
-                    menuTree.get(cnt).put("서브메뉴리스트",sub);
+                    menuTree.get(cnt).put("2차메뉴",sub);
                     cnt++;
                 }
             }
 
-
-
-            menuMap.put("메뉴리스트",menuTree);
-            // menuMap.put("menuList",menuList);
+            menuMap.put("1차메뉴",menuTree);
             menuMap.put("상태","00");
         }else{
             menuMap.put("상태","01");
