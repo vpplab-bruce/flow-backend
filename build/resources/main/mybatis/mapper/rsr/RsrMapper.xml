@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.vpplab.flow.domain.rsr.RsrDao">
+    <select id="getClcRsrList" parameterType="hashMap" resultType="hashMap">
+        SELECT
+            A.name AS 이름
+             ,A.organization AS  회사
+             ,A.job_title AS 직위
+             ,A.phone AS 전화번호
+             ,A.email AS 이메일
+             ,A.login_id AS 로그인ID
+             ,A.login_password AS 로그인암호
+             ,A.authorization_id AS 권한관리ID
+             ,B.name AS 권한관리명
+             ,A.sign_up_at AS 가입일시
+        FROM user A
+            LEFT OUTER JOIN authorization B ON A.authorization_id = B.id
+        WHERE 1=1
+        AND  A.login_id = 'donghae'
+    </select>
+
+</mapper>
