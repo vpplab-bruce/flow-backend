@@ -28,7 +28,7 @@ public class RsrService {
 
         HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
         if(loginInfo == null){
-            multiMap.put("조회여부","0");
+            multiMap.put("조회여부",false);
             return multiMap;
         }
 
@@ -60,10 +60,10 @@ public class RsrService {
             for(int i = 0 ; i < clcRsrMap.size() ; i++){
                 clcRsrMap.get(i).put("NO",clcRsrTotCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
             }
-            multiMap.put("조회여부","1");
+            multiMap.put("조회여부",true);
             multiMap.put("집합자원",clcRsrMap);
         }else{
-            multiMap.put("조회여부","0");
+            multiMap.put("조회여부",false);
         }
 
         /******************페이징*********************/

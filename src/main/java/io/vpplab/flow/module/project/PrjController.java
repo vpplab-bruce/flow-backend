@@ -2,6 +2,7 @@ package io.vpplab.flow.module.project;
 
 import io.vpplab.flow.module.cmn.CmnService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +19,7 @@ public class PrjController {
     private PrjService prjService;
 
     @RequestMapping("/prj/getMyInfo")
-    public Map<String, Object> getMyInfo(@RequestParam HashMap<String,Object> paramMap, HttpServletRequest request) {
+    public Map<String, Object> getMyInfo(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return prjService.getMyInfo(paramMap,request);
     }
 

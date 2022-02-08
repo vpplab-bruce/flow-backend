@@ -43,6 +43,7 @@ public class CmnService {
                 for(int i = 0; i < menuList.size(); i++){
                     if(!"".equals(menuList.get(i).get("1차메뉴")) && menuList.get(i).get("1차메뉴") != null){
                         Map<String, Object> dep1Map = new HashMap<>();
+                        dep1Map.put( "메뉴ID",menuList.get(i).get("메뉴ID"));
                         dep1Map.put( "URL주소",menuList.get(i).get("URL주소"));
                         dep1Map.put( "화면이름",menuList.get(i).get("화면이름"));
                         dep1Map.put( "화면여부",menuList.get(i).get("화면여부"));
@@ -52,6 +53,7 @@ public class CmnService {
                         for(int j = 0; j < menuList.size(); j++){
                             if((menuList.get(i).get("1차메뉴")).equals(menuList.get(j).get("2차메뉴")) && ("".equals(menuList.get(j).get("1차메뉴")) || menuList.get(j).get("1차메뉴") == null)){
                                 HashMap dep2Map = new HashMap<String,Object>();
+                                dep2Map.put( "메뉴ID",menuList.get(j).get("메뉴ID"));
                                 dep2Map.put( "URL주소",menuList.get(j).get("URL주소"));
                                 dep2Map.put( "화면이름",menuList.get(j).get("화면이름"));
                                 dep2Map.put( "화면여부",menuList.get(j).get("화면여부"));
@@ -66,12 +68,12 @@ public class CmnService {
                 multiMap.put("1차메뉴",menuTree);
             }
             multiMap.put("로그인정보",loginMap);
-            multiMap.put("조회여부","1");
+            multiMap.put("조회여부",true);
 
         }else{
             multiMap.put("로그인정보",null);
             multiMap.put("1차메뉴",null);
-            multiMap.put("조회여부","0");
+            multiMap.put("조회여부",false);
         }
         return multiMap;
     }
@@ -96,13 +98,13 @@ public class CmnService {
             infoMap.put("이메일",paramMap.get("이메일").toString());
             int cnt = cmnDao.setMyPswd(infoMap);
             if(cnt > 0){
-                multiMap.put("전송여부","1");
+                multiMap.put("전송여부",true);
                 // SMS 전송처리
             }else{
-                multiMap.put("전송여부","0");
+                multiMap.put("전송여부",false);
             }
         }else{
-            multiMap.put("전송여부","0");
+            multiMap.put("전송여부",false);
         }
 
         return multiMap;

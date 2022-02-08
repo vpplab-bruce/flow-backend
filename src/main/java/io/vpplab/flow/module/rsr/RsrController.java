@@ -2,6 +2,7 @@ package io.vpplab.flow.module.rsr;
 
 import io.vpplab.flow.module.cmn.CmnService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,7 @@ public class RsrController {
 
 
     @RequestMapping("/rsr/getClcRsrList")
-    public Map<String, Object> getClcRsrList(@RequestParam HashMap<String,Object> paramMap, HttpServletRequest request) {
+    public Map<String, Object> getClcRsrList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.getClcRsrList(paramMap,request);
     }
 

@@ -22,7 +22,8 @@
     </select>
     <select id="getMenuMng" parameterType="hashMap" resultType="hashMap">
         SELECT
-            D.category AS 1차메뉴
+              D.id AS 메뉴ID
+             ,D.category AS 1차메뉴
              ,D.sub_category AS 2차메뉴
              ,D.url AS URL주소
              ,D.view_name AS 화면이름
