@@ -45,4 +45,47 @@ public class PrjService {
         return multiMap;
     }
 
+    public Map<String, Object> setMyInfo(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Map<String, Object> multiMap = new HashMap<>();
+
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        if(loginInfo == null){
+            multiMap.put("성공여부",false);
+            return multiMap;
+        }
+        String userId = loginInfo.get("로그인ID").toString();
+        paramMap.put("로그인ID",userId);
+        int cnt  =  prjDao.setMyInfo(paramMap);
+        if(cnt > 0){
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+        return multiMap;
+    }
+
+    public Map<String, Object> getWithdrawal(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Map<String, Object> multiMap = new HashMap<>();
+
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        if(loginInfo == null){
+            multiMap.put("성공여부",false);
+            return multiMap;
+        }
+        String userId = loginInfo.get("로그인ID").toString();
+        paramMap.put("로그인ID",userId);
+        int cnt  =  prjDao.getWithdrawal(paramMap);
+        if(cnt > 0){
+            session.removeAttribute("사용자정보");
+            session.invalidate();
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+        return multiMap;
+    }
+
+
 }
