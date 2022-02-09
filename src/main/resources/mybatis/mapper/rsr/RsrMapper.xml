@@ -49,7 +49,7 @@
         WHERE 1=1
     AND AA.로그인ID = #{로그인ID}
 
-        <if test="'집합자원그룹명' != null and '집합자원그룹명' ==''">
+        <if test="'집합자원그룹명' != null and '집합자원그룹명' !=''">
                     AND AA.집합자원그룹명 LIKE CONCAT('%',#{집합자원그룹명},'%')
             </if>
 
@@ -87,7 +87,7 @@
                                        FROM plant GROUP BY id) E ON D.plant_id = E.id) AA
         WHERE 1=1
           AND AA.로그인ID = #{로그인ID}
-        <if test="'집합자원그룹명' != null and '집합자원그룹명' ==''">
+        <if test="'집합자원그룹명' != null and '집합자원그룹명' !=''">
                     AND AA.집합자원그룹명 LIKE CONCAT('%',#{집합자원그룹명},'%')
                 </if>
     </select>
