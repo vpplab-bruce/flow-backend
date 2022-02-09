@@ -5,7 +5,8 @@
 <mapper namespace="io.vpplab.flow.domain.project.PrjDao">
     <select id="getMyInfo" parameterType="hashMap" resultType="hashMap">
         SELECT
-            A.name AS 이름
+              A.id AS 사용자ID
+             ,A.name AS 이름
              ,A.organization AS  회사
              ,A.job_title AS 직위
              ,A.phone AS 전화번호
@@ -35,4 +36,95 @@
     <update id="getWithdrawal" parameterType="hashMap">
       DELETE FROM user WHERE  login_id = #{로그인ID}
     </update>
+
+    <select id="getUserList" parameterType="hashMap" resultType="hashMap">
+        SELECT
+              A.id AS 사용자ID
+             ,A.name AS 이름
+             ,A.organization AS  회사
+             ,A.job_title AS 직위
+             ,A.phone AS 전화번호
+             ,A.email AS 이메일
+             ,A.login_id AS 로그인ID
+             ,A.login_failure_count AS 로그인실패횟수
+             ,A.authorization_id AS 권한관리ID
+             ,B.name AS 권한관리명
+             ,A.sign_up_at AS 가입일시
+        FROM user A
+                 LEFT OUTER JOIN authorization B ON A.authorization_id = B.id
+        WHERE 1=1
+    </select>
+
+    <select id="getUserListCnt" parameterType="hashMap" resultType="int">
+        SELECT
+          COUNT(*) AS CNT
+        FROM user A
+                 LEFT OUTER JOIN authorization B ON A.authorization_id = B.id
+        WHERE 1=1
+    </select>
+
+    <select id="getUserDtl" parameterType="hashMap" resultType="hashMap">
+        SELECT
+              A.id AS 사용자ID
+             ,A.name AS 이름
+             ,A.organization AS  회사
+             ,A.job_title AS 직위
+             ,A.phone AS 전화번호
+             ,A.email AS 이메일
+             ,A.login_id AS 로그인ID
+             ,A.login_failure_count AS 로그인실패횟수
+             ,A.authorization_id AS 권한관리ID
+             ,B.name AS 권한관리명
+             ,A.sign_up_at AS 가입일시
+        FROM user A
+                 LEFT OUTER JOIN authorization B ON A.authorization_id = B.id
+        WHERE A.id = #{사용자ID}
+    </select>
+
+    <update id="setUserSave" parameterType="hashMap">
+        UPDATE user SET
+         name = #{이름}
+        ,job_title = #{직위}
+        ,phone = #{전화번호}
+        ,email = #{이메일}
+        ,authorization_id = #{권한레벨}
+        WHERE id = #{사용자ID}
+    </update>
+    <update id="setUserPswd" parameterType="hashMap">
+        UPDATE user SET
+         login_failure_count = '0'
+        ,login_password = #{로그인비밀번호}
+        WHERE id = #{사용자ID}
+    </update>
+
+    <update id="setUserDel" parameterType="hashMap">
+        DELETE FROM user WHERE  id = #{사용자ID}
+    </update>
+    <insert id="setUserAdd" parameterType="hashMap">
+     INSERT INTO user(
+          name
+          ,organization
+          ,login_id
+          ,job_title
+          ,phone
+          ,email
+          ,authorization_id
+          ,login_password
+          ,login_at
+          ,sign_up_at
+     ) VALUES (
+          #{이름}
+          ,#{회사}
+          ,#{로그인ID}
+          ,#{직위}
+          ,#{전화번호}
+          ,#{이메일}
+          ,#{권한레벨}
+          ,#{로그인비밀번호}
+          ,NOW()
+          ,NOW()
+     )
+
+    </insert>
+
 </mapper>
