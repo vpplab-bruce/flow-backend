@@ -101,7 +101,7 @@ public class PrjService {
         Map<String, Object> multiMap = new HashMap<>();
         HttpSession session = request.getSession();
         HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
-        paramMap.put("중개사업자키",loginInfo.get("중개사업자키"));
+        paramMap.put("중개사업자ID",loginInfo.get("중개사업자ID"));
         /******************페이징*********************/
         String pageNo = "1";
         String rowCnt = "10";
@@ -218,6 +218,7 @@ public class PrjService {
         }
         return multiMap;
     }
+    @SneakyThrows
     public Map<String, Object> setUserAdd(HashMap<String,Object> paramMap, HttpServletRequest request) {
         Map<String, Object> multiMap = new HashMap<>();
 
@@ -233,8 +234,19 @@ public class PrjService {
         paramMap.put("로그인비밀번호",pswdInit);
         int cnt  =  prjDao.setUserAdd(paramMap);
         if(cnt > 0){
-            
-            //문자비밀번호 전송
+
+            HashMap<String, Object> msgMap = new HashMap<>();
+            msgMap.put("코드","M_01");
+            String msg =  cmnDao.getMsg(msgMap);
+            msg =  msg.replace("{{pswdInit}}",pswdInit);
+            msg =  msg.replace("\n","<br/>");
+            MailUtil mailHandler = new MailUtil(javaMailSender);
+            mailHandler.setTo(paramMap.get("이메일").toString());
+            mailHandler.setFrom(mailAddr);
+            mailHandler.setSubject("[VPPLAB 임시비밀번호 안내]");
+            String htmlContent = "<p>"+msg+"<p>";
+            mailHandler.setText(htmlContent, true);
+            mailHandler.send();
             multiMap.put("성공여부",true);
         }else{
             multiMap.put("성공여부",false);

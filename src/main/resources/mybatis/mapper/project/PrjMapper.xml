@@ -16,7 +16,7 @@
              ,A.authorization_id AS 권한관리ID
              ,B.name AS 권한관리명
              ,A.sign_up_at AS 가입일시
-             ,A.agency_id AS 중개사업자키
+             ,A.agency_id AS 중개사업자ID
         FROM user A
                  LEFT OUTER JOIN authorization B ON A.authorization_id = B.id
         WHERE 1=1
@@ -51,10 +51,10 @@
              ,A.authorization_id AS 권한관리ID
              ,B.name AS 권한관리명
              ,A.sign_up_at AS 가입일시
-             ,A.agency_id AS 중개사업자키
+             ,A.agency_id AS 중개사업자ID
         FROM user A
                  LEFT OUTER JOIN authorization B ON A.authorization_id = B.id
-        WHERE A.agency_id = #{중개사업자키}
+        WHERE A.agency_id = #{중개사업자ID}
     </select>
 
     <select id="getUserListCnt" parameterType="hashMap" resultType="int">
@@ -62,7 +62,7 @@
           COUNT(*) AS CNT
         FROM user A
                  LEFT OUTER JOIN authorization B ON A.authorization_id = B.id
-        WHERE A.agency_id = #{중개사업자키}
+        WHERE A.agency_id = #{중개사업자ID}
     </select>
 
     <select id="getUserDtl" parameterType="hashMap" resultType="hashMap">
@@ -78,7 +78,7 @@
              ,A.authorization_id AS 권한관리ID
              ,B.name AS 권한관리명
              ,A.sign_up_at AS 가입일시
-             ,A.agency_id AS 중개사업자키
+             ,A.agency_id AS 중개사업자ID
         FROM user A
                  LEFT OUTER JOIN authorization B ON A.authorization_id = B.id
         WHERE A.id = #{사용자ID}
@@ -128,7 +128,7 @@
           ,#{로그인비밀번호}
           ,NOW()
           ,NOW()
-          ,#{중개사업자키}
+          ,#{중개사업자ID}
      )
 
     </insert>
