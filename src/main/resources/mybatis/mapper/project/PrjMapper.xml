@@ -7,7 +7,7 @@
         SELECT
               A.id AS 사용자ID
              ,A.name AS 이름
-             ,A.department AS  회사
+             ,A.department AS  소속
              ,A.job_title AS 직위
              ,A.phone AS 전화번호
              ,A.email AS 이메일
@@ -24,7 +24,7 @@
     <update id="setMyInfo" parameterType="hashMap">
         UPDATE user SET
             name = #{이름}
-            ,department = #{회사}
+            ,department = #{소속}
             ,job_title = #{직위}
             ,phone = #{전화번호}
             ,email = #{이메일}
@@ -41,7 +41,7 @@
         SELECT
               A.id AS 사용자ID
              ,A.name AS 이름
-             ,A.department AS  회사
+             ,A.department AS  소속
              ,A.job_title AS 직위
              ,A.phone AS 전화번호
              ,A.email AS 이메일
@@ -67,7 +67,7 @@
         SELECT
               A.id AS 사용자ID
              ,A.name AS 이름
-             ,A.department AS  회사
+             ,A.department AS  소속
              ,A.job_title AS 직위
              ,A.phone AS 전화번호
              ,A.email AS 이메일
@@ -84,10 +84,11 @@
     <update id="setUserSave" parameterType="hashMap">
         UPDATE user SET
          name = #{이름}
-        ,job_title = #{직위}
-        ,phone = #{전화번호}
-        ,email = #{이메일}
-        ,authorization_id = #{권한레벨}
+         ,department = #{소속}
+         ,job_title = #{직위}
+         ,phone = #{전화번호}
+         ,email = #{이메일}
+         ,authorization_id = #{권한레벨}
         WHERE id = #{사용자ID}
     </update>
     <update id="setUserPswd" parameterType="hashMap">
@@ -114,7 +115,7 @@
           ,sign_up_at
      ) VALUES (
           #{이름}
-          ,#{회사}
+          ,#{소속}
           ,#{로그인ID}
           ,#{직위}
           ,#{전화번호}

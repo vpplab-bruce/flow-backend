@@ -6,7 +6,7 @@
     <select id="getLogin" parameterType="hashMap" resultType="hashMap">
         SELECT
             A.name AS 이름
-             ,A.department AS  회사
+             ,A.department AS  소속
              ,A.job_title AS 직위
              ,A.phone AS 전화번호
              ,A.email AS 이메일

@@ -112,9 +112,9 @@ public class CmnService {
                 multiMap.put("전송여부",true);
 
                 MailUtil mailHandler = new MailUtil(javaMailSender);
-                mailHandler.setTo("park82ch@gmail.com");
+                mailHandler.setTo(loginMap.get("이메일").toString());
                 mailHandler.setFrom(mailAddr);
-                mailHandler.setSubject("제목");
+                mailHandler.setSubject("[VPPLAB 비밀번호 초기화]");
 
                 String msg = "내용";
                 String htmlContent = "<p>"+msg+"<p>";
