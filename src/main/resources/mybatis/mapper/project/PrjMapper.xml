@@ -7,7 +7,7 @@
         SELECT
               A.id AS 사용자ID
              ,A.name AS 이름
-             ,A.organization AS  회사
+             ,A.department AS  회사
              ,A.job_title AS 직위
              ,A.phone AS 전화번호
              ,A.email AS 이메일
@@ -24,7 +24,7 @@
     <update id="setMyInfo" parameterType="hashMap">
         UPDATE user SET
             name = #{이름}
-            ,organization = #{회사}
+            ,department = #{회사}
             ,job_title = #{직위}
             ,phone = #{전화번호}
             ,email = #{이메일}
@@ -41,7 +41,7 @@
         SELECT
               A.id AS 사용자ID
              ,A.name AS 이름
-             ,A.organization AS  회사
+             ,A.department AS  회사
              ,A.job_title AS 직위
              ,A.phone AS 전화번호
              ,A.email AS 이메일
@@ -67,7 +67,7 @@
         SELECT
               A.id AS 사용자ID
              ,A.name AS 이름
-             ,A.organization AS  회사
+             ,A.department AS  회사
              ,A.job_title AS 직위
              ,A.phone AS 전화번호
              ,A.email AS 이메일
@@ -103,7 +103,7 @@
     <insert id="setUserAdd" parameterType="hashMap">
      INSERT INTO user(
           name
-          ,organization
+          ,department
           ,login_id
           ,job_title
           ,phone
