@@ -2,10 +2,14 @@ package io.vpplab.flow.module.project;
 
 import io.vpplab.flow.domain.cmn.CmnDao;
 import io.vpplab.flow.domain.project.PrjDao;
+import io.vpplab.flow.domain.utils.MailUtil;
 import io.vpplab.flow.domain.utils.PagingUtil;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +27,12 @@ public class PrjService {
 
     @Autowired
     private PrjDao prjDao;
+    @Autowired
+    private CmnDao cmnDao;
+    @Autowired
+    JavaMailSender javaMailSender;
+    @Value("${spring.mail.username}")
+    private String mailAddr;
 
     public Map<String, Object> getMyInfo(HashMap<String,Object> paramMap, HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -89,7 +99,9 @@ public class PrjService {
     }
     public Map<String, Object> getUserList(HashMap<String,Object> paramMap, HttpServletRequest request) {
         Map<String, Object> multiMap = new HashMap<>();
-
+        HttpSession session = request.getSession();
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        paramMap.put("중개사업자키",loginInfo.get("중개사업자키"));
         /******************페이징*********************/
         String pageNo = "1";
         String rowCnt = "10";
@@ -131,10 +143,10 @@ public class PrjService {
 
     public Map<String, Object> getUserDtl(HashMap<String,Object> paramMap, HttpServletRequest request) {
         Map<String, Object> multiMap = new HashMap<>();
-        HashMap userListMap  =  prjDao.getUserDtl(paramMap);
-        if(userListMap.size() > 0){
+        HashMap userMap  =  prjDao.getUserDtl(paramMap);
+        if(userMap != null){
             multiMap.put("조회여부",true);
-            multiMap.put("사용자정보",userListMap);
+            multiMap.put("사용자정보",userMap);
         }else{
             multiMap.put("조회여부",false);
         }
@@ -154,7 +166,8 @@ public class PrjService {
     }
 
 
-    public Map<String, Object> setUserPwInit(HashMap<String,Object> paramMap,HttpServletRequest request) {
+    @SneakyThrows
+    public Map<String, Object> setUserPwInit(HashMap<String,Object> paramMap, HttpServletRequest request) {
 
         Map<String, Object> multiMap = new HashMap<>();
             String pswdInit = "";
@@ -171,7 +184,21 @@ public class PrjService {
             infoMap.put("로그인비밀번호",pswdInit);
             infoMap.put("사용자ID",paramMap.get("사용자ID"));
             int cnt = prjDao.setUserPswd(infoMap);
+            HashMap userInfoMap  =  prjDao.getUserDtl(paramMap);
             if(cnt > 0){
+                HashMap<String, Object> msgMap = new HashMap<>();
+                msgMap.put("코드","M_01");
+                String msg =  cmnDao.getMsg(msgMap);
+                msg =  msg.replace("{{pswdInit}}",pswdInit);
+                msg =  msg.replace("\n","<br/>");
+                MailUtil mailHandler = new MailUtil(javaMailSender);
+                mailHandler.setTo(userInfoMap.get("이메일").toString());
+                mailHandler.setFrom(mailAddr);
+                mailHandler.setSubject("[VPPLAB 임시비밀번호 안내]");
+                String htmlContent = "<p>"+msg+"<p>";
+                mailHandler.setText(htmlContent, true);
+                mailHandler.send();
+
                 multiMap.put("전송여부",true);
                 // SMS 전송처리
             }else{

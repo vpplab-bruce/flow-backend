@@ -105,18 +105,20 @@ public class CmnService {
             // pswdInit 암호화 체크
             HashMap<String, Object> infoMap = new HashMap<>();
             infoMap.put("로그인비밀번호",pswdInit);
-            infoMap.put("전화번호",paramMap.get("전화번호").toString());
+            infoMap.put("로그인ID",paramMap.get("로그인ID").toString());
             infoMap.put("이메일",paramMap.get("이메일").toString());
             int cnt = cmnDao.setMyPswd(infoMap);
             if(cnt > 0){
                 multiMap.put("전송여부",true);
-
+                HashMap<String, Object> msgMap = new HashMap<>();
+                msgMap.put("코드","M_01");
+                String msg =  cmnDao.getMsg(msgMap);
+                msg =  msg.replace("{{pswdInit}}",pswdInit);
+                msg =  msg.replace("\n","<br/>");
                 MailUtil mailHandler = new MailUtil(javaMailSender);
-                mailHandler.setTo(loginMap.get("이메일").toString());
+                mailHandler.setTo(paramMap.get("이메일").toString());
                 mailHandler.setFrom(mailAddr);
-                mailHandler.setSubject("[VPPLAB 비밀번호 초기화]");
-
-                String msg = "내용";
+                mailHandler.setSubject("[VPPLAB 임시비밀번호 안내]");
                 String htmlContent = "<p>"+msg+"<p>";
                 mailHandler.setText(htmlContent, true);
                 mailHandler.send();

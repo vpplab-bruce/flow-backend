@@ -51,8 +51,9 @@ public class RsrService {
 
 
         String userId = loginInfo.get("로그인ID").toString();
-
+        String agency = loginInfo.get("중개사업자키").toString();
         paramMap.put("로그인ID",userId);
+        paramMap.put("중개사업자키",agency);
         List<HashMap> clcRsrMap  =  rsrDao.getClcRsrList(paramMap);
         int clcRsrTotCnt  =  rsrDao.getClcRsrListCnt(paramMap);
 ;
