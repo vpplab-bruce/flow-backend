@@ -26,7 +26,7 @@ public class MailUtil {
         messageHelper = new MimeMessageHelper(message, true, "UTF-8");
     }
 
-    // 보내는 사람 이메일
+    // 보내는 사람 이메일 기본
     public void setFrom(String fromAddress) throws MessagingException {
         messageHelper.setFrom(fromAddress);
     }
