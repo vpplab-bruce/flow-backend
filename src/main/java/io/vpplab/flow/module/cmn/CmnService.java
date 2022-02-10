@@ -1,9 +1,13 @@
 package io.vpplab.flow.module.cmn;
 
 import io.vpplab.flow.domain.cmn.CmnDao;
+import io.vpplab.flow.domain.utils.MailUtil;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +25,12 @@ public class CmnService {
 
     @Autowired
     private CmnDao cmnDao;
+
+    @Autowired
+    JavaMailSender javaMailSender;
+
+    @Value("${spring.mail.username}")
+    private String mailAddr;
 
     public Map<String, Object> getLogin(HashMap<String,Object> paramMap,HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -77,7 +87,8 @@ public class CmnService {
         }
         return multiMap;
     }
-    public Map<String, Object> setPswdInit(HashMap<String,Object> paramMap,HttpServletRequest request) {
+    @SneakyThrows
+    public Map<String, Object> setPswdInit(HashMap<String,Object> paramMap, HttpServletRequest request) {
 
         Map<String, Object> multiMap = new HashMap<>();
         HashMap<String,Object> loginMap  =  cmnDao.getMyLoginInfo(paramMap);
@@ -99,7 +110,16 @@ public class CmnService {
             int cnt = cmnDao.setMyPswd(infoMap);
             if(cnt > 0){
                 multiMap.put("전송여부",true);
-                // SMS 전송처리
+
+                MailUtil mailHandler = new MailUtil(javaMailSender);
+                mailHandler.setTo("park82ch@gmail.com");
+                mailHandler.setFrom(mailAddr);
+                mailHandler.setSubject("제목");
+
+                String msg = "내용";
+                String htmlContent = "<p>"+msg+"<p>";
+                mailHandler.setText(htmlContent, true);
+                mailHandler.send();
             }else{
                 multiMap.put("전송여부",false);
             }
