@@ -39,5 +39,3 @@ out/
 .class
 .bin
 .lock
-.build/*
-*.properties
