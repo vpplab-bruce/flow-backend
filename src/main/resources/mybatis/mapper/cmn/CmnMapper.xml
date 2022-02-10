@@ -37,7 +37,7 @@
              ,B.has_read_auth AS 읽기권한여부
              ,D.has_default_menu_auth AS 메뉴수정권한여부
         FROM user A
-                 INNER JOIN authorization B ON A.authorization_id = B.id
+                 INNER JOIN authorization B ON A.authorization_id = B.id AND A.agency_id = B.agency_id
                  INNER JOIN auth_menu_mapping C ON B.id = C.auth_id
                  LEFT OUTER JOIN menu D ON C.menu_id = D.id AND D.is_default_menu = '1'
         WHERE 1=1
