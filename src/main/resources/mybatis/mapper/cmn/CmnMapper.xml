@@ -33,13 +33,12 @@
              ,D.url AS URL주소
              ,D.view_name AS 화면이름
              ,D.is_view AS 화면여부
-             ,B.has_modify_auth AS 수정권한여부
-             ,B.has_read_auth AS 읽기권한여부
-             ,D.has_default_menu_auth AS 메뉴수정권한여부
+             ,C.has_modify_auth AS 수정권한여부
+             ,C.has_read_auth AS 읽기권한여부
         FROM user A
                  INNER JOIN authorization B ON A.authorization_id = B.id AND A.agency_id = B.agency_id
-                 INNER JOIN auth_menu_mapping C ON B.id = C.auth_id
-                 LEFT OUTER JOIN menu D ON C.menu_id = D.id AND D.is_default_menu = '1'
+                 INNER JOIN auth_menu_mapping C ON B.id = C.auth_id AND C.has_read_auth ='1'
+                 LEFT OUTER JOIN menu D ON C.menu_id = D.id
         WHERE 1=1
           AND A.login_id = #{로그인ID}
         ORDER BY A.id
