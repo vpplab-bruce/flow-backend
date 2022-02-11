@@ -28,11 +28,11 @@
                     ,A.status AS 운영상태
                     ,A.apply_type AS 신청유형
                     ,A.apply_status AS 처리상태
-                    ,SUM(B.resource_cnt) AS 구성수
-                    ,SUM(B.capacity) AS 자원용량
-                    ,SUM(B.capacity01) AS PVWT용량
-                    ,SUM(B.capacity04) AS ESS용량
-                    ,'' AS 평균오차율
+                    ,B.resource_cnt AS 구성수
+                    ,B.capacity AS 자원용량
+                    ,B.capacityPvWt AS PVWT용량
+                    ,B.ess_capacity AS ESS용량
+                    ,C.error_rate AS 평균오차율
                     ,'' AS 오차율평가
                     ,'' AS 거래가능기간
                     ,A.created_at AS 신청일자
@@ -40,20 +40,40 @@
                 LEFT OUTER JOIN ( SELECT
                                     AA.resource_set_id
                                     ,COUNT(resource_id) AS  resource_cnt
-                                    ,SUM(BB.capacity) AS capacity
-                                    ,CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) END AS capacity01
-                                    ,CASE WHEN BB.facility_type ='04' THEN SUM(BB.capacity) END AS capacity04
+                                    ,(SUM(BB.capacity)+SUM(ess_capacity))  AS capacity
+                                    ,CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) END AS capacityPvWt
+                                    ,SUM(BB.ess_capacity) AS ess_capacity
                                 FROM resource_set_list AA
-                                LEFT OUTER JOIN resource BB ON AA.resource_id = BB.id  GROUP BY BB.id) B ON A.id = B.resource_set_id) CC
+                                LEFT OUTER JOIN resource BB ON AA.resource_id = BB.id  GROUP BY AA.resource_set_id) B ON A.id = B.resource_set_id
+                LEFT OUTER JOIN forecast_by_resource_set C ON A.id = C.resource_set_id
+                ) CC
         WHERE 1=1
         AND CC.중개사업자ID = #{중개사업자ID}
+        <if test="'집합자원ID' != null and '집합자원ID' !=''">
+            AND CC.집합자원ID = #{집합자원ID}
+        </if>
+        <if test="'집합자원구분' != null and '집합자원구분' !=''">
+            AND CC.집합자원구분 = #{집합자원구분}
+        </if>
+        <if test="'운영상태' != null and '운영상태' !=''">
+            AND CC.운영상태 = #{운영상태}
+        </if>
         <if test="'집합자원그룹명' != null and '집합자원그룹명' !=''">
             AND CC.집합자원그룹명 LIKE CONCAT('%',#{집합자원그룹명},'%')
+        </if>
+        <if test="'신청유형' != null and '신청유형' !=''">
+            AND CC.신청유형 = #{신청유형}
+        </if>
+        <if test="'처리상태' != null and '처리상태' !=''">
+            AND CC.처리상태 = #{처리상태}
+        </if>
+        <if test="'오차율평가' != null and '오차율평가' !=''">
+            AND CC.오차율평가 = #{오차율평가}
         </if>
         ORDER BY CC.집합자원ID
         LIMIT #{페이지번호},#{행갯수}
     </select>
-    <select id="getClcRsrListCnt" parameterType="hashMap" resultType="int" >
+    <select id="getClcRsrListCnt" parameterType="hashMap" resultType="int">
         SELECT
           COUNT(*) AS cnt
         FROM(SELECT
@@ -64,11 +84,11 @@
                 ,A.status AS 운영상태
                 ,A.apply_type AS 신청유형
                 ,A.apply_status AS 처리상태
-                ,SUM(B.resource_cnt) AS 구성수
-                ,SUM(B.capacity) AS 자원용량
-                ,SUM(B.capacity01) AS PVWT용량
-                ,SUM(B.capacity04) AS ESS용량
-                ,'' AS 평균오차율
+                ,B.resource_cnt AS 구성수
+                ,B.capacity AS 자원용량
+                ,B.capacityPvWt AS PVWT용량
+                ,B.ess_capacity AS ESS용량
+                ,C.error_rate AS 평균오차율
                 ,'' AS 오차율평가
                 ,'' AS 거래가능기간
                 ,A.created_at AS 신청일자
@@ -76,16 +96,57 @@
                 LEFT OUTER JOIN ( SELECT
                                     AA.resource_set_id
                                     ,COUNT(resource_id) AS  resource_cnt
-                                    ,SUM(BB.capacity) AS capacity
-                                    ,CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) END AS capacity01
-                                    ,CASE WHEN BB.facility_type ='04' THEN SUM(BB.capacity) END AS capacity04
+                                    ,(SUM(BB.capacity)+SUM(ess_capacity))  AS capacity
+                                    ,CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) END AS capacityPvWt
+                                    ,SUM(BB.ess_capacity) AS ess_capacity
                                 FROM resource_set_list AA
-                                LEFT OUTER JOIN resource BB ON AA.resource_id = BB.id  GROUP BY BB.id) B ON A.id = B.resource_set_id) CC
+                                LEFT OUTER JOIN resource BB ON AA.resource_id = BB.id  GROUP BY AA.resource_set_id) B ON A.id = B.resource_set_id
+                LEFT OUTER JOIN forecast_by_resource_set C ON A.id = C.resource_set_id
+            ) CC
         WHERE 1=1
         AND CC.중개사업자ID = #{중개사업자ID}
+        <if test="'집합자원ID' != null and '집합자원ID' !=''">
+            AND CC.집합자원ID = #{집합자원ID}
+        </if>
+        <if test="'집합자원구분' != null and '집합자원구분' !=''">
+            AND CC.집합자원구분 = #{집합자원구분}
+        </if>
+        <if test="'운영상태' != null and '운영상태' !=''">
+            AND CC.운영상태 = #{운영상태}
+        </if>
         <if test="'집합자원그룹명' != null and '집합자원그룹명' !=''">
             AND CC.집합자원그룹명 LIKE CONCAT('%',#{집합자원그룹명},'%')
         </if>
+        <if test="'신청유형' != null and '신청유형' !=''">
+            AND CC.신청유형 = #{신청유형}
+        </if>
+        <if test="'처리상태' != null and '처리상태' !=''">
+            AND CC.처리상태 = #{처리상태}
+        </if>
+        <if test="'오차율평가' != null and '오차율평가' !=''">
+            AND CC.오차율평가 = #{오차율평가}
+        </if>
     </select>
+    <insert id="setClcRsr" parameterType="hashMap">
+        INSERT INTO resource_set(
+             agency_id
+            ,name
+            ,status
+            ,type
+            ,apply_type
+            ,apply_status
+            ,created_at
+            ,created_by
+        )VALUES(
+               #{중개사업자ID}
+               ,#{집합자원그룹명}
+               ,#{집합자원구분}
+               ,#{운영상태}
+               ,#{신청유형}
+               ,#{처리상태}
+               ,NOW()
+               ,#{작성자}
+               )
+    </insert>
 
 </mapper>

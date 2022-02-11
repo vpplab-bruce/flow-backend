@@ -19,6 +19,7 @@
              ,C.phone AS 대표전화번호
              ,C.email AS 대표이메일
              ,A.agency_id AS 중개사업자ID
+             ,A.id AS 사용자식별자
         FROM user A
                  LEFT OUTER JOIN authorization B ON A.authorization_id = B.id
                  LEFT OUTER JOIN agency C ON A.agency_id = C.id

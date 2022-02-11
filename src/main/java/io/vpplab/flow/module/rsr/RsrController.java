@@ -27,4 +27,9 @@ public class RsrController {
         return rsrService.getClcRsrList(paramMap,request);
     }
 
+    @RequestMapping("/rsr/setClcRsrAdd")
+    public Map<String, Object> setClcRsr(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.setClcRsr(paramMap,request);
+    }
+
 }

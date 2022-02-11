@@ -27,6 +27,8 @@ public class RsrService {
         Map<String, Object> multiMap = new HashMap<>();
 
         HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+
+
         if(loginInfo == null){
             multiMap.put("조회여부",false);
             return multiMap;
@@ -44,18 +46,18 @@ public class RsrService {
         paramMap.put("페이지번호", PagingUtil.schPageNo(Integer.parseInt(pageNo),Integer.parseInt(rowCnt)));
         paramMap.put("행갯수",Integer.parseInt(rowCnt));
 
-        HashMap<String,String> pageInfo = new HashMap<>();
+        HashMap<String,Object> pageInfo = new HashMap<>();
         pageInfo.put("페이지번호",pageNo);
         pageInfo.put("행갯수",rowCnt);
         /*****************페이징**********************/
 
+        paramMap.put("로그인ID", loginInfo.get("로그인ID"));
+        paramMap.put("중개사업자ID",loginInfo.get("중개사업자ID"));
 
-        String userId = loginInfo.get("로그인ID").toString();
-        String agency = loginInfo.get("중개사업자ID").toString();
-        paramMap.put("로그인ID",userId);
-        paramMap.put("중개사업자ID",agency);
         List<HashMap> clcRsrMap  =  rsrDao.getClcRsrList(paramMap);
         int clcRsrTotCnt  =  rsrDao.getClcRsrListCnt(paramMap);
+
+
 ;
         if(clcRsrMap.size() > 0){
             for(int i = 0 ; i < clcRsrMap.size() ; i++){
@@ -73,6 +75,23 @@ public class RsrService {
         /*****************페이징*********************/
 
         multiMap.put("페이지정보",pageInfo);
+        return multiMap;
+    }
+    public Map<String, Object> setClcRsr(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Map<String, Object> multiMap = new HashMap<>();
+
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        paramMap.put("중개사업자ID",loginInfo.get("중개사업자ID"));
+        paramMap.put("작성자",loginInfo.get("사용자식별자"));
+
+        int cnt = rsrDao.setClcRsr(paramMap);
+        if(cnt > 0){
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+
         return multiMap;
     }
 
