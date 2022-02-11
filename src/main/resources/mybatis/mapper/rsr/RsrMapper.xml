@@ -49,7 +49,7 @@
                 ) CC
         WHERE 1=1
         AND CC.중개사업자ID = #{중개사업자ID}
-        <if test="'집합자원ID' != null and '집합자원ID' !=''">
+<!--        <if test="'집합자원ID' != null and '집합자원ID' !=''">
             AND CC.집합자원ID = #{집합자원ID}
         </if>
         <if test="'집합자원구분' != null and '집합자원구분' !=''">
@@ -69,7 +69,7 @@
         </if>
         <if test="'오차율평가' != null and '오차율평가' !=''">
             AND CC.오차율평가 = #{오차율평가}
-        </if>
+        </if>-->
         ORDER BY CC.집합자원ID
         LIMIT #{페이지번호},#{행갯수}
     </select>
@@ -105,7 +105,7 @@
             ) CC
         WHERE 1=1
         AND CC.중개사업자ID = #{중개사업자ID}
-        <if test="'집합자원ID' != null and '집합자원ID' !=''">
+  <!--      <if test="'집합자원ID' != null and '집합자원ID' !=''">
             AND CC.집합자원ID = #{집합자원ID}
         </if>
         <if test="'집합자원구분' != null and '집합자원구분' !=''">
@@ -125,7 +125,7 @@
         </if>
         <if test="'오차율평가' != null and '오차율평가' !=''">
             AND CC.오차율평가 = #{오차율평가}
-        </if>
+        </if>-->
     </select>
     <insert id="setClcRsr" parameterType="hashMap">
         INSERT INTO resource_set(
