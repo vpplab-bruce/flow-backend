@@ -8,5 +8,6 @@ public interface CmnDao {
     HashMap getMyLoginInfo(HashMap<String, Object> paramMap);
     int setMyPswd(HashMap<String, Object> paramMap);
     List<HashMap> getMenuMng(HashMap<String, Object> paramMap);
+    List<HashMap> getAdminCode();
     String getMsg(HashMap<String, Object> paramMap);
 }

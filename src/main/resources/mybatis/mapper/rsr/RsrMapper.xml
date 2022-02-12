@@ -49,27 +49,27 @@
                 ) CC
         WHERE 1=1
         AND CC.중개사업자ID = #{중개사업자ID}
-<!--        <if test="'집합자원ID' != null and '집합자원ID' !=''">
-            AND CC.집합자원ID = #{집합자원ID}
+        <if test='id != null and id !=""'>
+            AND CC.집합자원ID = #{id}
         </if>
-        <if test="'집합자원구분' != null and '집합자원구분' !=''">
-            AND CC.집합자원구분 = #{집합자원구분}
+        <if test='type != null and type !=""'>
+            AND CC.집합자원구분 = #{type}
         </if>
-        <if test="'운영상태' != null and '운영상태' !=''">
-            AND CC.운영상태 = #{운영상태}
+        <if test='status != null and status !=""'>
+            AND CC.운영상태 = #{status}
         </if>
-        <if test="'집합자원그룹명' != null and '집합자원그룹명' !=''">
-            AND CC.집합자원그룹명 LIKE CONCAT('%',#{집합자원그룹명},'%')
+        <if test='name != null and name !=""'>
+            AND CC.집합자원그룹명 LIKE CONCAT('%',#{name},'%')
         </if>
-        <if test="'신청유형' != null and '신청유형' !=''">
-            AND CC.신청유형 = #{신청유형}
+        <if test='apply_type != null and apply_type !=""'>
+            AND CC.신청유형 = #{apply_type}
         </if>
-        <if test="'처리상태' != null and '처리상태' !=''">
-            AND CC.처리상태 = #{처리상태}
+        <if test='apply_status != null and apply_status !=""'>
+            AND CC.처리상태 = #{apply_status}
         </if>
-        <if test="'오차율평가' != null and '오차율평가' !=''">
-            AND CC.오차율평가 = #{오차율평가}
-        </if>-->
+        <if test='error_rate_cd != null and error_rate_cd !=""'>
+            AND CC.오차율평가 = #{error_rate_cd}
+        </if>
         ORDER BY CC.집합자원ID
         LIMIT #{페이지번호},#{행갯수}
     </select>
@@ -105,27 +105,27 @@
             ) CC
         WHERE 1=1
         AND CC.중개사업자ID = #{중개사업자ID}
-  <!--      <if test="'집합자원ID' != null and '집합자원ID' !=''">
-            AND CC.집합자원ID = #{집합자원ID}
+        <if test='id != null and id !=""'>
+            AND CC.집합자원ID = #{id}
         </if>
-        <if test="'집합자원구분' != null and '집합자원구분' !=''">
-            AND CC.집합자원구분 = #{집합자원구분}
+        <if test='type != null and type !=""'>
+            AND CC.집합자원구분 = #{type}
         </if>
-        <if test="'운영상태' != null and '운영상태' !=''">
-            AND CC.운영상태 = #{운영상태}
+        <if test='status != null and status !=""'>
+            AND CC.운영상태 = #{status}
         </if>
-        <if test="'집합자원그룹명' != null and '집합자원그룹명' !=''">
-            AND CC.집합자원그룹명 LIKE CONCAT('%',#{집합자원그룹명},'%')
+        <if test='name != null and name !=""'>
+            AND CC.집합자원그룹명 LIKE CONCAT('%',#{name},'%')
         </if>
-        <if test="'신청유형' != null and '신청유형' !=''">
-            AND CC.신청유형 = #{신청유형}
+        <if test='apply_type != null and apply_type !=""'>
+            AND CC.신청유형 = #{apply_type}
         </if>
-        <if test="'처리상태' != null and '처리상태' !=''">
-            AND CC.처리상태 = #{처리상태}
+        <if test='apply_status != null and apply_status !=""'>
+            AND CC.처리상태 = #{apply_status}
         </if>
-        <if test="'오차율평가' != null and '오차율평가' !=''">
-            AND CC.오차율평가 = #{오차율평가}
-        </if>-->
+        <if test='error_rate_cd != null and error_rate_cd !=""'>
+            AND CC.오차율평가 = #{error_rate_cd}
+        </if>
     </select>
     <insert id="setClcRsr" parameterType="hashMap">
         INSERT INTO resource_set(

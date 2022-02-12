@@ -68,4 +68,13 @@
         WHERE A.code = #{코드}
     </select>
 
+    <select id="getAdminCode"  resultType="hashMap">
+        SELECT
+            category AS 카테고리
+            ,code AS 코드
+            ,name AS 코드명
+        FROM admin_common_code
+        ORDER BY category, sequence
+    </select>
+
 </mapper>

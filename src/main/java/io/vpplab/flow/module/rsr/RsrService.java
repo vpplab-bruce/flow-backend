@@ -53,6 +53,14 @@ public class RsrService {
 
         paramMap.put("로그인ID", loginInfo.get("로그인ID"));
         paramMap.put("중개사업자ID",loginInfo.get("중개사업자ID"));
+        paramMap.put("id",paramMap.get("집합자원ID"));
+        paramMap.put("type",paramMap.get("집합자원구분"));
+        paramMap.put("status",paramMap.get("운영상태"));
+        paramMap.put("name",paramMap.get("집합자원그룹명"));
+        paramMap.put("apply_type",paramMap.get("신청유형"));
+        paramMap.put("apply_status",paramMap.get("처리상태"));
+        paramMap.put("error_rate_cd",paramMap.get("오차율평가"));
+
 
         List<HashMap> clcRsrMap  =  rsrDao.getClcRsrList(paramMap);
         int clcRsrTotCnt  =  rsrDao.getClcRsrListCnt(paramMap);

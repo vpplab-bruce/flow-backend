@@ -67,6 +67,8 @@ public class PrjService {
         }
         String userId = loginInfo.get("로그인ID").toString();
         paramMap.put("로그인ID",userId);
+        paramMap.put("login_password",paramMap.get("로그인암호"));
+
         int cnt  =  prjDao.setMyInfo(paramMap);
         if(cnt > 0){
             multiMap.put("성공여부",true);

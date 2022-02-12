@@ -29,8 +29,8 @@
             ,job_title = #{직위}
             ,phone = #{전화번호}
             ,email = #{이메일}
-            <if test="'로그인암호' != null and '로그인암호' !=''">
-                ,login_password = #{로그인암호}
+            <if test='login_password != null and login_password !=""'>
+                ,login_password = #{login_password}
             </if>
             WHERE login_id = #{로그인ID}
     </update>

@@ -38,7 +38,7 @@ public class CmnService {
         List<Map<String, Object>> menuTree = new ArrayList<Map<String, Object>>();
         HashMap<String,Object> loginMap  =  cmnDao.getLogin(paramMap);
         List<HashMap> menuList  =  cmnDao.getMenuMng(paramMap);
-
+        List<HashMap> codeList = cmnDao.getAdminCode();
 
         int cnt =0;
         if(loginMap != null){
@@ -77,6 +77,10 @@ public class CmnService {
                 }
                 multiMap.put("1차메뉴",menuTree);
             }
+
+
+
+
             multiMap.put("로그인정보",loginMap);
             multiMap.put("조회여부",true);
 
@@ -85,6 +89,7 @@ public class CmnService {
             multiMap.put("1차메뉴",null);
             multiMap.put("조회여부",false);
         }
+        multiMap.put("공통코드",codeList);
         return multiMap;
     }
     @SneakyThrows
