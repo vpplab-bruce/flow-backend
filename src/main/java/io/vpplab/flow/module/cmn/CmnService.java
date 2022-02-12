@@ -77,19 +77,15 @@ public class CmnService {
                 }
                 multiMap.put("1차메뉴",menuTree);
             }
-
-
-
-
             multiMap.put("로그인정보",loginMap);
             multiMap.put("조회여부",true);
-
+            multiMap.put("공통코드",codeList);
         }else{
             multiMap.put("로그인정보",null);
             multiMap.put("1차메뉴",null);
             multiMap.put("조회여부",false);
         }
-        multiMap.put("공통코드",codeList);
+
         return multiMap;
     }
     @SneakyThrows
