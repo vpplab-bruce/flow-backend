@@ -9,4 +9,6 @@ public interface RsrDao {
     int setClcRsr(HashMap<String, Object> paramMap);
     HashMap getClcRsrDtl(HashMap<String, Object> paramMap);
     List<HashMap> getClcRsrMemoList(HashMap<String, Object> paramMap);
+    int setMemo(HashMap<String, Object> paramMap);
+    int setMemoDel(HashMap<String, Object> paramMap);
 }

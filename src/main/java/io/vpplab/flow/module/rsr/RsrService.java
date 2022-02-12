@@ -1,6 +1,5 @@
 package io.vpplab.flow.module.rsr;
 
-import io.vpplab.flow.domain.cmn.CmnDao;
 import io.vpplab.flow.domain.rsr.RsrDao;
 import io.vpplab.flow.domain.utils.PagingUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,13 +105,44 @@ public class RsrService {
 
     public Map<String, Object> getClcRsrDtl(HashMap<String,Object> paramMap, HttpServletRequest request) {
         Map<String, Object> multiMap = new HashMap<>();
-
+        List<Map<String, Object>> tab1List = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> tab2List = new ArrayList<Map<String, Object>>();
+        HashMap rsrInfo = new HashMap<>();
         HashMap clcRsrDtl = rsrDao.getClcRsrDtl(paramMap);
         List<HashMap> clcRsrMemoList = rsrDao.getClcRsrMemoList(paramMap);
         clcRsrDtl.put("메모",clcRsrMemoList);
         if(clcRsrDtl != null){
-            multiMap.put("성공여부",true);
+            multiMap.put("조회여부",true);
             multiMap.put("집합자원상세",clcRsrDtl);
+            multiMap.put("발전량예측분석통계",rsrInfo);
+            multiMap.put("발전량예측분석",tab1List);
+            multiMap.put("소속자원관리",tab2List);
+        }else{
+            multiMap.put("발전량예측분석",null);
+            multiMap.put("소속자원관리",null);
+            multiMap.put("조회여부",false);
+        }
+
+        return multiMap;
+    }
+    public Map<String, Object> setMemo(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        int cnt = rsrDao.setMemo(paramMap);
+        if(cnt > 0){
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+
+        return multiMap;
+    }
+    public Map<String, Object> setMemoDel(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        int cnt = rsrDao.setMemoDel(paramMap);
+        if(cnt > 0){
+            multiMap.put("성공여부",true);
         }else{
             multiMap.put("성공여부",false);
         }

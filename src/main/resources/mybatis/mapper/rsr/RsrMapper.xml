@@ -156,23 +156,33 @@
          ,A.apply_type AS 신청유형
          ,A.apply_status AS 처리상태
          ,B.error_rate AS 평균오차율
+         ,A.created_at AS 신청일시
     FROM resource_set A
              LEFT OUTER JOIN forecast_by_resource_set B ON A.id = B.resource_set_id
     WHERE A.id= #{집합자원ID}
 </select>
 <select id="getClcRsrMemoList" parameterType="hashMap" resultType="hashMap" >
     SELECT
-        type AS 요청구분
-         ,requested_at AS 요청일시
-         ,requested_name AS 요청자이름
-         ,requested_phone AS 요청자전화번호
-         ,requested_memo AS 요청자이름
-         ,approved_at AS 승인일시
-         ,approved_name AS 승인자이름
-         ,approved_phone AS 승인자전화번호
-         ,approved_memo AS 승인자메모
+        id AS 이벤트ID
+        ,type AS 요청구분
+        ,requested_at AS 요청일시
+        ,requested_name AS 요청자이름
+        ,requested_phone AS 요청자전화번호
+        ,requested_memo AS 요청자이름
+        ,approved_at AS 승인일시
+        ,approved_name AS 승인자이름
+        ,approved_phone AS 승인자전화번호
+        ,approved_memo AS 승인자메모
     FROM event
     WHERE resource_id = #{집합자원ID}
     ORDER BY approved_at
 </select>
+<update id="setMemo" parameterType="hashMap"  >
+    UPDATE event SET
+        approved_memo = #{승인자메모}
+ WHERE id = #{이벤트ID}
+</update>
+<update id="setMemoDel" parameterType="hashMap"  >
+    DELETE FROM event WHERE  id = #{이벤트ID}
+</update>
 </mapper>
