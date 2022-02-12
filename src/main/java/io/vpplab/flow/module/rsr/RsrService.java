@@ -103,4 +103,20 @@ public class RsrService {
         return multiMap;
     }
 
+    public Map<String, Object> getClcRsrDtl(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        HashMap clcRsrDtl = rsrDao.getClcRsrDtl(paramMap);
+        List<HashMap> clcRsrMemoList = rsrDao.getClcRsrMemoList(paramMap);
+        clcRsrDtl.put("메모",clcRsrMemoList);
+        if(clcRsrDtl != null){
+            multiMap.put("성공여부",true);
+            multiMap.put("집합자원상세",clcRsrDtl);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+
+        return multiMap;
+    }
+
 }
