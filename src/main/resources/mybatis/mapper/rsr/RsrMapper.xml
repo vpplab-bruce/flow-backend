@@ -188,14 +188,14 @@
 
 <select id="tab1List" parameterType="hashMap" resultType="hashMap" >
     SELECT
-        base_date AS 측정일자
-         ,base_time AS 측정시간
-         ,SUM(forecast_amount_1st) AS 1차예측
-         ,SUM(forecast_amount_2nd) AS 2차예측
-         ,(SUM(forecast_amount_1st)+SUM(forecast_amount_2nd)) /2 AS 예측평균
-         ,SUM(generation_amount) AS 발전값
-         ,SUM(resource_capacity) AS 총설비용량
-         ,SUM(error_rate) AS 오차율
+        B.base_date AS 측정일자
+         ,B.base_time AS 측정시간
+         ,SUM(B.forecast_amount_1st) AS 1차예측
+         ,SUM(B.forecast_amount_2nd) AS 2차예측
+         ,(SUM(B.forecast_amount_1st)+SUM(B.forecast_amount_2nd)) /2 AS 예측평균
+         ,SUM(B.generation_amount) AS 발전값
+         ,SUM(B.resource_capacity) AS 총설비용량
+         ,SUM(B.error_rate) AS 오차율
     FROM resource_set_list A
              INNER JOIN forecast_by_resource_set B ON A.resource_set_id = B.resource_set_id
     WHERE A.resource_set_id = #{집합자원ID}
@@ -203,17 +203,18 @@
 </select>
 <select id="tab2List" parameterType="hashMap" resultType="hashMap" >
     SELECT
-        base_date AS 측정일자
-         ,base_time AS 측정시간
-         ,SUM(forecast_amount_1st) AS 1차예측
-         ,SUM(forecast_amount_2nd) AS 2차예측
-         ,(SUM(forecast_amount_1st)+SUM(forecast_amount_2nd)) /2 AS 예측평균
-         ,SUM(generation_amount) AS 발전값
-         ,SUM(resource_capacity) AS 총설비용량
-         ,SUM(error_rate) AS 오차율
+        C.base_date AS 측정일자
+         ,C.base_time AS 측정시간
+         ,SUM(C.forecast_amount_1st) AS 1차예측
+         ,SUM(C.forecast_amount_2nd) AS 2차예측
+         ,(SUM(C.forecast_amount_1st)+SUM(C.forecast_amount_2nd)) /2 AS 예측평균
+         ,SUM(C.generation_amount) AS 발전값
+         ,SUM(C.resource_capacity) AS 총설비용량
+         ,SUM(C.error_rate) AS 오차율
     FROM resource_set_list A
-             INNER JOIN forecast_by_resource B ON  A.resource_id = B.resource_id
+        INNER JOIN resource B ON  A.resource_id = B.id
+        INNER JOIN forecast_by_resource C ON  B.id = C.resource_id
     WHERE A.resource_set_id = #{집합자원ID}
-    GROUP BY B.base_date,B.base_time
+    GROUP BY C.base_date,C.base_time
 </select>
 </mapper>
