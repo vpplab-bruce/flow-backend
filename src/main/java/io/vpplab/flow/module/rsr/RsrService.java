@@ -108,6 +108,38 @@ public class RsrService {
         List<Map<String, Object>> tab1List = new ArrayList<Map<String, Object>>();
         List<Map<String, Object>> tab2List = new ArrayList<Map<String, Object>>();
         HashMap rsrInfo = new HashMap<>();
+        rsrInfo.put("집합자원갯수","0");
+        rsrInfo.put("집합지원총용량","0");
+        rsrInfo.put("오차율평가","01");
+        rsrInfo.put("가동율","0");
+        rsrInfo.put("평균오차율","0");
+        rsrInfo.put("최대오차율","0");
+        rsrInfo.put("최소오차율","0");
+
+        HashMap tab1info = new HashMap<>();
+        tab1info.put("측정시간","");
+        tab1info.put("실제발전량","");
+        tab1info.put("1차예측","");
+        tab1info.put("2차예측","");
+        tab1info.put("예측평균","");
+        tab1info.put("오차율","");
+        tab1info.put("비교","");
+        tab1List.add(tab1info);
+        HashMap tab2info = new HashMap<>();
+        tab2info.put("자원ID","");
+        tab2info.put("설비구분","");
+        tab2info.put("발전상태","");
+        tab2info.put("설비용량","");
+        tab2info.put("ESS상태","");
+        tab2info.put("ESS용량","");
+        tab2info.put("발전자원명","");
+        tab2info.put("평균오차율","");
+        tab2info.put("최대오차율","");
+        tab2info.put("최소오차율","");
+        tab2info.put("계약종료일시","");
+        tab2info.put("자원추가일시","");
+        tab2List.add(tab2info);
+
         HashMap clcRsrDtl = rsrDao.getClcRsrDtl(paramMap);
         List<HashMap> clcRsrMemoList = rsrDao.getClcRsrMemoList(paramMap);
         clcRsrDtl.put("메모",clcRsrMemoList);
