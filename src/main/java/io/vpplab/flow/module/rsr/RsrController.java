@@ -44,5 +44,9 @@ public class RsrController {
     public Map<String, Object> setRsrPlantDel(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.setRsrPlantDel(paramMap,request);
     }
+    @RequestMapping("/rsr/getRsrPlantList")
+    public Map<String, Object> getRsrPlantList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.getRsrPlantList(paramMap,request);
+    }
 
 }

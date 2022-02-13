@@ -16,4 +16,6 @@ public interface RsrDao {
     int setMemo(HashMap<String, Object> paramMap);
     int setMemoDel(HashMap<String, Object> paramMap);
     int setRsrPlantDel(HashMap<String, Object> paramMap);
+    List<HashMap> getRsrPlantList(HashMap<String, Object> paramMap);
+    int getRsrPlantListCnt(HashMap<String, Object> paramMap);
 }

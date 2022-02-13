@@ -286,4 +286,46 @@
     <update id="setRsrPlantDel" parameterType="hashMap"  >
         DELETE FROM resource_set_list WHERE  resource_set_id = #{집합자원ID} AND resource_id = #{자원ID}
     </update>
+    <select id="getRsrPlantList" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            A.id AS 자원ID
+             ,A.facility_type AS 설비구분
+             ,A.status AS 발전상태
+             ,A.capacity AS 설비용량
+             ,A.ess_status AS ESS상태
+             ,A.ess_capacity AS ESS용량
+             ,A.name AS 발전자원명
+             ,B.avg_error_rate AS 평균오차율
+             ,B.max_error_rate AS 최대오차율
+             ,B.min_error_rate AS 최소오차율
+             ,C.contract_end_date AS 계약종료일시
+             ,A.created_at AS 자원추가일시
+        FROM resource A
+                 LEFT OUTER JOIN ( SELECT
+                                       resource_id
+                                        ,(SUM(error_rate) / COUNT(error_rate)) *100  AS avg_error_rate
+                                        ,MAX(error_rate) AS max_error_rate
+                                        ,MIN(error_rate) AS min_error_rate
+                                   FROM forecast_by_resource GROUP BY resource_id
+        ) B ON  A.id = B.resource_id
+                 LEFT OUTER JOIN resource_meta C ON A.id = C.resource_id
+        WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list)
+        ORDER BY A.id
+        LIMIT #{페이지번호},#{행갯수}
+    </select>
+    <select id="getRsrPlantListCnt" parameterType="hashMap" resultType="int" >
+        SELECT
+           COUNT(A.id)  AS CNT
+        FROM resource A
+                 LEFT OUTER JOIN ( SELECT
+                                       resource_id
+                                        ,(SUM(error_rate) / COUNT(error_rate)) *100  AS avg_error_rate
+                                        ,MAX(error_rate) AS max_error_rate
+                                        ,MIN(error_rate) AS min_error_rate
+                                   FROM forecast_by_resource GROUP BY resource_id
+        ) B ON  A.id = B.resource_id
+                 LEFT OUTER JOIN resource_meta C ON A.id = C.resource_id
+        WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list)
+        ORDER BY A.id
+    </select>
 </mapper>

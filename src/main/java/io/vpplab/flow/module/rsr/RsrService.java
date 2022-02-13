@@ -191,4 +191,48 @@ public class RsrService {
         return multiMap;
     }
 
+    public Map<String, Object> getRsrPlantList(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        /******************페이징*********************/
+        String pageNo = "1";
+        String rowCnt = "10";
+        if(paramMap.get("페이지번호") != null){
+            pageNo = paramMap.get("페이지번호").toString();
+        }
+        if(paramMap.get("행갯수") != null){
+            rowCnt = paramMap.get("행갯수").toString();
+        }
+        paramMap.put("페이지번호", PagingUtil.schPageNo(Integer.parseInt(pageNo),Integer.parseInt(rowCnt)));
+        paramMap.put("행갯수",Integer.parseInt(rowCnt));
+
+        HashMap<String,String> pageInfo = new HashMap<>();
+        pageInfo.put("페이지번호",pageNo);
+        pageInfo.put("행갯수",rowCnt);
+        /*****************페이징**********************/
+        List<HashMap> getRsrPlantList = rsrDao.getRsrPlantList(paramMap);
+        int getRsrPlantListCnt  =  rsrDao.getRsrPlantListCnt(paramMap);
+
+        if(getRsrPlantList.size() > 0){
+            for(int i = 0 ; i < getRsrPlantList.size() ; i++){
+                getRsrPlantList.get(i).put("NO",getRsrPlantListCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
+            }
+        }
+        /******************페이징*********************/
+        pageInfo.put("전체페이지갯수", PagingUtil.pageCnt(getRsrPlantListCnt,Integer.parseInt(rowCnt))+"");
+        pageInfo.put("전체갯수",getRsrPlantListCnt+"");
+        /*****************페이징*********************/
+
+        if(getRsrPlantList.size() > 0){
+            multiMap.put("조회여부",true);
+            multiMap.put("집합자원등록발전소",getRsrPlantList);
+        }else{
+            multiMap.put("조회여부",false);
+            multiMap.put("집합자원등록발전소",null);
+        }
+        multiMap.put("페이지정보",pageInfo);
+        return multiMap;
+    }
+
+
 }
