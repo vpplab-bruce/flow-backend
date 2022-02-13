@@ -215,7 +215,16 @@
         INNER JOIN forecast_by_resource C ON  B.id = C.resource_id
     WHERE A.resource_set_id = #{집합자원ID}
     ORDER BY C.base_date,C.base_time
+    LIMIT #{페이지번호},#{행갯수}
 </select>
+    <select id="tab2ListCnt" parameterType="hashMap" resultType="int" >
+        SELECT
+         COUNT(*) AS CNT
+        FROM resource_set_list A
+                 INNER JOIN resource B ON  A.resource_id = B.id
+                 INNER JOIN forecast_by_resource C ON  B.id = C.resource_id
+        WHERE A.resource_set_id = #{집합자원ID}
+    </select>
     <select id="getRsrInfo" parameterType="hashMap" resultType="hashMap" >
         SELECT
             COUNT(B.error_rate) AS 집합자원갯수
