@@ -178,10 +178,10 @@ public class RsrService {
 
         return multiMap;
     }
-    public Map<String, Object> setRsrDel(HashMap<String,Object> paramMap, HttpServletRequest request) {
+    public Map<String, Object> setRsrPlantDel(HashMap<String,Object> paramMap, HttpServletRequest request) {
         Map<String, Object> multiMap = new HashMap<>();
 
-        int cnt = rsrDao.setRsrDel(paramMap);
+        int cnt = rsrDao.setRsrPlantDel(paramMap);
         if(cnt > 0){
             multiMap.put("성공여부",true);
         }else{

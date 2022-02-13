@@ -283,7 +283,7 @@
         GROUP BY B.resource_set_id
     </select>
 
-    <update id="setRsrDel" parameterType="hashMap"  >
+    <update id="setRsrPlantDel" parameterType="hashMap"  >
         DELETE FROM resource_set_list WHERE  resource_set_id = #{집합자원ID} AND resource_id = #{자원ID}
     </update>
 </mapper>
