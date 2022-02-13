@@ -19,10 +19,13 @@
              ,A.approved_phone AS 승인자전화번호
              ,A.approved_memo AS 승인자메모
              ,C.name AS 집합자원그룹명
+             ,D.name AS 발전자원명
         FROM event A
                  LEFT OUTER JOIN resource_set_list B ON A.resource_id = B.resource_id
                  LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id
+                 LEFT OUTER JOIN resource D ON A.resource_id = D.id
         ORDER BY A.id
+        LIMIT #{페이지번호},#{행갯수}
     </select>
     <select id="getEventListCnt" parameterType="hashMap" resultType="int">
         SELECT
@@ -30,6 +33,7 @@
         FROM event A
                  LEFT OUTER JOIN resource_set_list B ON A.resource_id = B.resource_id
                  LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id
+                 LEFT OUTER JOIN resource D ON A.resource_id = D.id
         ORDER BY A.id
     </select>
 
