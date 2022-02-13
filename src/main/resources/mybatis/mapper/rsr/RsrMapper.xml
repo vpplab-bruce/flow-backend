@@ -310,6 +310,27 @@
         ) B ON  A.id = B.resource_id
                  LEFT OUTER JOIN resource_meta C ON A.id = C.resource_id
         WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list)
+        <if test='facility_type != null and facility_type !=""'>
+        AND A.facility_type = #{facility_type}
+        </if>
+        <if test='status != null and status !=""'>
+            AND A.status = #{status}
+        </if>
+        <if test='name != null and name !=""'>
+            AND A.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='stat_capacity != null and stat_capacity !=""'>
+            AND A.capacity <![CDATA[ >= ]]>  #{stat_capacity}
+        </if>
+        <if test='end_capacity != null and end_capacity !=""'>
+            AND A.capacity <![CDATA[ <= ]]>  #{end_capacity}
+        </if>
+        <if test='stat_avg_error_rate != null and stat_avg_error_rate !=""'>
+            AND B.avg_error_rate <![CDATA[ >= ]]>  #{stat_avg_error_rate}
+        </if>
+        <if test='end_avg_error_rate != null and end_avg_error_rate !=""'>
+            AND B.avg_error_rate <![CDATA[ <= ]]>  #{end_avg_error_rate}
+        </if>
         ORDER BY A.id
         LIMIT #{페이지번호},#{행갯수}
     </select>
@@ -326,6 +347,27 @@
         ) B ON  A.id = B.resource_id
                  LEFT OUTER JOIN resource_meta C ON A.id = C.resource_id
         WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list)
+        <if test='facility_type != null and facility_type !=""'>
+            AND A.facility_type = #{facility_type}
+        </if>
+        <if test='status != null and status !=""'>
+            AND A.status = #{status}
+        </if>
+        <if test='name != null and name !=""'>
+            AND A.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='stat_capacity != null and stat_capacity !=""'>
+            AND A.capacity <![CDATA[ >= ]]>  #{stat_capacity}
+        </if>
+        <if test='end_capacity != null and end_capacity !=""'>
+            AND A.capacity <![CDATA[ <= ]]>  #{end_capacity}
+        </if>
+        <if test='stat_avg_error_rate != null and stat_avg_error_rate !=""'>
+            AND B.avg_error_rate <![CDATA[ >= ]]>  #{stat_avg_error_rate}
+        </if>
+        <if test='end_avg_error_rate != null and end_avg_error_rate !=""'>
+            AND B.avg_error_rate <![CDATA[ <= ]]>  #{end_avg_error_rate}
+        </if>
         ORDER BY A.id
     </select>
     <select id="getRsrPlantONList" parameterType="hashMap" resultType="hashMap" >

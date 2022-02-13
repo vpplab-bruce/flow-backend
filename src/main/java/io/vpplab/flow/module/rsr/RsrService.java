@@ -193,6 +193,13 @@ public class RsrService {
 
     public Map<String, Object> getRsrPlantList(HashMap<String,Object> paramMap, HttpServletRequest request) {
         Map<String, Object> multiMap = new HashMap<>();
+        paramMap.put("facility_type",paramMap.get("설비구분"));
+        paramMap.put("status",paramMap.get("발전상태"));
+        paramMap.put("name",paramMap.get("발전소명"));
+        paramMap.put("stat_capacity",paramMap.get("시작설비용량"));
+        paramMap.put("end_capacity",paramMap.get("종료설비용량"));
+        paramMap.put("stat_avg_error_rate",paramMap.get("시작평균오차율"));
+        paramMap.put("end_avg_error_rate",paramMap.get("종료평균오차율"));
 
         /******************페이징*********************/
         String pageNo = "1";
