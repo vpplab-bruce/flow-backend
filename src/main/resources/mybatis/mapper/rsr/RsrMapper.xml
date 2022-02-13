@@ -33,7 +33,9 @@
                     ,B.capacityPvWt AS PVWT용량
                     ,B.ess_capacity AS ESS용량
                     ,C.error_rate AS 평균오차율
-                    ,'' AS 오차율평가
+                    ,(CASE WHEN C.error_rate >= 0 AND C.error_rate     <![CDATA[ <= ]]> 6 THEN '좋음'
+                        WHEN C.error_rate > 6 AND C.error_rate     <![CDATA[ <= ]]> 8 THEN '보통'
+                        WHEN C.error_rate > 8 THEN '나쁨' END) AS 오차율평가
                     ,'' AS 거래가능기간
                     ,A.created_at AS 신청일자
                 FROM resource_set A
@@ -68,7 +70,17 @@
             AND CC.처리상태 = #{apply_status}
         </if>
         <if test='error_rate_cd != null and error_rate_cd !=""'>
-            AND CC.오차율평가 = #{error_rate_cd}
+            <if test='error_rate_cd !="01"'>
+                AND CC.오차율평가 >= 0
+                AND CC.오차율평가 <![CDATA[ <= ]]> 6
+            </if>
+            <if test='error_rate_cd !="02"'>
+                AND CC.오차율평가 > 6
+                AND CC.오차율평가 <![CDATA[ <= ]]> 8
+            </if>
+            <if test='error_rate_cd !="03"'>
+                AND CC.오차율평가 > 8
+            </if>
         </if>
         ORDER BY CC.집합자원ID
         LIMIT #{페이지번호},#{행갯수}
@@ -126,7 +138,17 @@
             AND CC.처리상태 = #{apply_status}
         </if>
         <if test='error_rate_cd != null and error_rate_cd !=""'>
-            AND CC.오차율평가 = #{error_rate_cd}
+            <if test='error_rate_cd !="01"'>
+                AND CC.오차율평가 >= 0
+                AND CC.오차율평가 <![CDATA[ <= ]]> 6
+            </if>
+            <if test='error_rate_cd !="02"'>
+                AND CC.오차율평가 > 6
+                AND CC.오차율평가 <![CDATA[ <= ]]> 8
+            </if>
+            <if test='error_rate_cd !="03"'>
+                AND CC.오차율평가 > 8
+            </if>
         </if>
     </select>
     <insert id="setClcRsr" parameterType="hashMap">
@@ -249,8 +271,8 @@
         SELECT
             COUNT(B.error_rate) AS 집합자원갯수
             ,SUM(B.resource_capacity) AS 집합지원총용량
-            ,(CASE WHEN ((SUM(B.error_rate) / COUNT(B.error_rate)) *100) >= 0 AND ((SUM(B.error_rate) / COUNT(B.error_rate)) *100)      <![CDATA[ <= ]]> 6 THEN '좋음'
-            WHEN ((SUM(B.error_rate) / COUNT(B.error_rate)) *100) > 6 AND ((SUM(B.error_rate) / COUNT(B.error_rate)) *100)      <![CDATA[ <= ]]> 8 THEN '보통'
+            ,(CASE WHEN ((SUM(B.error_rate) / COUNT(B.error_rate)) *100) >= 0 AND ((SUM(B.error_rate) / COUNT(B.error_rate)) *100)  <![CDATA[ <= ]]> 6 THEN '좋음'
+            WHEN ((SUM(B.error_rate) / COUNT(B.error_rate)) *100) > 6 AND ((SUM(B.error_rate) / COUNT(B.error_rate)) *100) <![CDATA[ <= ]]> 8 THEN '보통'
             WHEN ((SUM(B.error_rate) / COUNT(B.error_rate)) *100) > 8 THEN '나쁨' END) AS 오차율평가
             ,(SUM(B.resource_capacity) / COUNT(B.resource_capacity)) *100 AS 가동율
             ,(SUM(B.error_rate) / COUNT(B.error_rate)) *100  AS 평균오차율
