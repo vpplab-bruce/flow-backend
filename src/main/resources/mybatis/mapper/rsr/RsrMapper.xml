@@ -89,7 +89,9 @@
                 ,B.capacityPvWt AS PVWT용량
                 ,B.ess_capacity AS ESS용량
                 ,C.error_rate AS 평균오차율
-                ,'' AS 오차율평가
+                ,(CASE WHEN C.error_rate >= 0 AND C.error_rate     <![CDATA[ <= ]]> 6 THEN '좋음'
+                WHEN C.error_rate > 6 AND C.error_rate     <![CDATA[ <= ]]> 8 THEN '보통'
+                WHEN C.error_rate > 8 THEN '나쁨' END) AS 오차율평가
                 ,'' AS 거래가능기간
                 ,A.created_at AS 신청일자
             FROM resource_set A
