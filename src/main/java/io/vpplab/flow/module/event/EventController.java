@@ -19,6 +19,10 @@ public class EventController {
     public Map<String, Object> getEventList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return eventService.getEventList(paramMap,request);
     }
+    @RequestMapping("/event/getEventDtl")
+    public Map<String, Object> getEventDtl(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return eventService.getEventDtl(paramMap,request);
+    }
 
 
 }

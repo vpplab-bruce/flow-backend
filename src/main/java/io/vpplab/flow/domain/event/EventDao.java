@@ -7,5 +7,6 @@ public interface EventDao {
 
     List<HashMap> getEventList(HashMap<String, Object> paramMap);
     int getEventListCnt(HashMap<String, Object> paramMap);
+    HashMap getEventDtl(HashMap<String, Object> paramMap);
 
 }

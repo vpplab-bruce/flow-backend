@@ -69,6 +69,19 @@ public class EventService {
         multiMap.put("페이지정보",pageInfo);
         return multiMap;
     }
+    public Map<String, Object> getEventDtl(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        HashMap eventDtl  =  eventDao.getEventDtl(paramMap);
+        ;
+        if(eventDtl != null){
+            multiMap.put("조회여부",true);
+            multiMap.put("이벤트정보상세",eventDtl);
+        }else{
+            multiMap.put("조회여부",false);
+        }
+        return multiMap;
+    }
 
 
 }
