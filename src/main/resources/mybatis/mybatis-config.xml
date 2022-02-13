@@ -7,5 +7,6 @@
         <mapper resource="cmn/CmnMapper.xml"/>
         <mapper resource="project/PrjMapper.xml"/>
         <mapper resource="rsr/RsrMapper.xml"/>
+        <mapper resource="event/EventMapper.xml"/>
     </mappers>
 </configuration>

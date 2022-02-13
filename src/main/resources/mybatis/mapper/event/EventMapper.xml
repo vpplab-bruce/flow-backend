@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.vpplab.flow.domain.event.EventDao">
+    <select id="getEventList" parameterType="hashMap" resultType="hashMap">
+        SELECT
+            A.id AS 이벤트ID
+             ,A.resource_id AS 자원ID
+             ,A.type AS 요청구분
+             ,A.start_at AS 시작일시
+             ,A.end_at AS 종료일시
+             ,A.requested_at AS 요청일시
+             ,A.requested_name AS 요청자이름
+             ,A.requested_phone AS 요청자전화번호
+             ,A.requested_memo AS 요청자메모
+             ,A.approved_at AS 승인일시
+             ,A.approved_name AS 승인자명
+             ,A.approved_phone AS 승인자전화번호
+             ,A.approved_memo AS 승인자메모
+             ,C.name AS 집합자원그룹명
+        FROM event A
+                 LEFT OUTER JOIN resource_set_list B ON A.resource_id = B.resource_id
+                 LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id
+        ORDER BY A.id
+    </select>
+    <select id="getEventListCnt" parameterType="hashMap" resultType="int">
+        SELECT
+            COUNT(A.id) AS CNT
+        FROM event A
+                 LEFT OUTER JOIN resource_set_list B ON A.resource_id = B.resource_id
+                 LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id
+        ORDER BY A.id
+    </select>
+
+</mapper>
+
+
