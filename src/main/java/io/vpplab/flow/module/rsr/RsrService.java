@@ -105,17 +105,10 @@ public class RsrService {
 
     public Map<String, Object> getClcRsrDtl(HashMap<String,Object> paramMap, HttpServletRequest request) {
         Map<String, Object> multiMap = new HashMap<>();
-        HashMap rsrInfo = new HashMap<>();
-        rsrInfo.put("집합자원갯수","0");
-        rsrInfo.put("집합지원총용량","0");
-        rsrInfo.put("오차율평가","01");
-        rsrInfo.put("가동율","0");
-        rsrInfo.put("평균오차율","0");
-        rsrInfo.put("최대오차율","0");
-        rsrInfo.put("최소오차율","0");
 
         List<HashMap> tab1List = rsrDao.tab1List(paramMap);
         List<HashMap> tab2List = rsrDao.tab2List(paramMap);
+        HashMap rsrInfo = rsrDao.getRsrInfo(paramMap);
         HashMap clcRsrDtl = rsrDao.getClcRsrDtl(paramMap);
         List<HashMap> clcRsrMemoList = rsrDao.getClcRsrMemoList(paramMap);
         clcRsrDtl.put("메모",clcRsrMemoList);

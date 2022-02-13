@@ -190,31 +190,43 @@
     SELECT
         B.base_date AS 측정일자
          ,B.base_time AS 측정시간
-         ,SUM(B.forecast_amount_1st) AS 1차예측
-         ,SUM(B.forecast_amount_2nd) AS 2차예측
-         ,(SUM(B.forecast_amount_1st)+SUM(B.forecast_amount_2nd)) /2 AS 예측평균
-         ,SUM(B.generation_amount) AS 발전값
-         ,SUM(B.resource_capacity) AS 총설비용량
-         ,SUM(B.error_rate) AS 오차율
-    FROM resource_set_list A
-             INNER JOIN forecast_by_resource_set B ON A.resource_set_id = B.resource_set_id
-    WHERE A.resource_set_id = #{집합자원ID}
-    GROUP BY B.base_date,B.base_time
+         ,B.forecast_amount_1st AS 1차예측
+         ,B.forecast_amount_2nd AS 2차예측
+         ,(B.forecast_amount_1st+B.forecast_amount_2nd) /2 AS 예측평균
+         ,B.generation_amount AS 발전값
+         ,B.resource_capacity AS 총설비용량
+         ,B.error_rate AS 오차율
+    FROM forecast_by_resource_set B
+    WHERE B.resource_set_id = #{집합자원ID}
+    ORDER BY B.base_date,B.base_time
 </select>
 <select id="tab2List" parameterType="hashMap" resultType="hashMap" >
     SELECT
         C.base_date AS 측정일자
          ,C.base_time AS 측정시간
-         ,SUM(C.forecast_amount_1st) AS 1차예측
-         ,SUM(C.forecast_amount_2nd) AS 2차예측
-         ,(SUM(C.forecast_amount_1st)+SUM(C.forecast_amount_2nd)) /2 AS 예측평균
-         ,SUM(C.generation_amount) AS 발전값
-         ,SUM(C.resource_capacity) AS 총설비용량
-         ,SUM(C.error_rate) AS 오차율
+         ,C.forecast_amount_1st AS 1차예측
+         ,C.forecast_amount_2nd AS 2차예측
+         ,(C.forecast_amount_1st+C.forecast_amount_2nd) /2 AS 예측평균
+         ,C.generation_amount AS 발전값
+         ,C.resource_capacity AS 총설비용량
+         ,C.error_rate AS 오차율
     FROM resource_set_list A
         INNER JOIN resource B ON  A.resource_id = B.id
         INNER JOIN forecast_by_resource C ON  B.id = C.resource_id
     WHERE A.resource_set_id = #{집합자원ID}
-    GROUP BY C.base_date,C.base_time
+    ORDER BY C.base_date,C.base_time
 </select>
+    <select id="getRsrInfo" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            COUNT(B.error_rate) AS 집합자원갯수
+             ,SUM(B.resource_capacity) AS 집합지원총용량
+             ,(SUM(B.error_rate) / COUNT(B.error_rate)) *100 AS 오차율평가
+             ,(SUM(B.resource_capacity) / COUNT(B.resource_capacity)) *100 AS 가동율
+             ,(SUM(B.error_rate) / COUNT(B.error_rate)) *100  AS 평균오차율
+             ,MAX(B.error_rate) AS 최대오차율
+             ,MIN(B.error_rate) AS 최소오차율
+        FROM forecast_by_resource_set B
+        WHERE B.resource_set_id = #{집합자원ID}
+        GROUP BY B.resource_set_id
+    </select>
 </mapper>
