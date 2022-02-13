@@ -40,5 +40,9 @@ public class RsrController {
     public Map<String, Object> setMemoDel(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.setMemoDel(paramMap,request);
     }
+    @RequestMapping("/rsr/setRsrDel")
+    public Map<String, Object> setRsrDel(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.setRsrDel(paramMap,request);
+    }
 
 }

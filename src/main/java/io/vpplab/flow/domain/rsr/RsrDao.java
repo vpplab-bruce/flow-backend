@@ -15,4 +15,5 @@ public interface RsrDao {
     int tab2ListCnt(HashMap<String, Object> paramMap);
     int setMemo(HashMap<String, Object> paramMap);
     int setMemoDel(HashMap<String, Object> paramMap);
+    int setRsrDel(HashMap<String, Object> paramMap);
 }
