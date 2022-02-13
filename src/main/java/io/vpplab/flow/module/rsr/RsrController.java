@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -47,6 +48,10 @@ public class RsrController {
     @RequestMapping("/rsr/getRsrPlantList")
     public Map<String, Object> getRsrPlantList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.getRsrPlantList(paramMap,request);
+    }
+    @RequestMapping("/rsr/setRsrPlant")
+    public Map<String, Object> setRsrPlant(@RequestBody List<HashMap<String,Object>> paramMap, HttpServletRequest request) {
+        return rsrService.setRsrPlant(paramMap,request);
     }
 
 }

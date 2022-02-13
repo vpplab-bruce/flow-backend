@@ -210,12 +210,19 @@ public class RsrService {
         pageInfo.put("페이지번호",pageNo);
         pageInfo.put("행갯수",rowCnt);
         /*****************페이징**********************/
+        List<HashMap> getRsrPlantONList = rsrDao.getRsrPlantONList(paramMap);
         List<HashMap> getRsrPlantList = rsrDao.getRsrPlantList(paramMap);
         int getRsrPlantListCnt  =  rsrDao.getRsrPlantListCnt(paramMap);
 
         if(getRsrPlantList.size() > 0){
             for(int i = 0 ; i < getRsrPlantList.size() ; i++){
                 getRsrPlantList.get(i).put("NO",getRsrPlantListCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
+            }
+        }
+        String capacity = "0";
+        if(getRsrPlantONList.size() > 0){
+            for(int i = 0 ; i < getRsrPlantONList.size() ; i++){
+                capacity = Float.parseFloat(capacity)+(Float.parseFloat(getRsrPlantONList.get(i).get("설비용량").toString()) +  Float.parseFloat(getRsrPlantONList.get(i).get("ESS용량").toString()))+"";
             }
         }
         /******************페이징*********************/
@@ -226,11 +233,39 @@ public class RsrService {
         if(getRsrPlantList.size() > 0){
             multiMap.put("조회여부",true);
             multiMap.put("집합자원등록발전소",getRsrPlantList);
+            multiMap.put("집합자원발전소",getRsrPlantONList);
         }else{
             multiMap.put("조회여부",false);
             multiMap.put("집합자원등록발전소",null);
+            multiMap.put("집합자원발전소",null);
+        }
+        if(getRsrPlantONList.size() > 0){
+            multiMap.put("집합자원발전소",getRsrPlantONList);
+            multiMap.put("참여자원용량",capacity);
+        }else{
+            multiMap.put("집합자원발전소",null);
         }
         multiMap.put("페이지정보",pageInfo);
+        return multiMap;
+    }
+    public Map<String, Object> setRsrPlant(List<HashMap<String,Object>> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+        int cnt = 1;
+        for(int i = 0 ; i < paramMap.size(); i++){
+            HashMap<String,Object> param = new HashMap<>();
+            param.put("집합자원ID",paramMap.get(i).get("집합자원ID"));
+            param.put("자원ID",paramMap.get(i).get("자원ID"));
+            int arrCnt = rsrDao.setRsrPlant(param);
+            if(arrCnt == 0){
+                cnt = 0;
+            }
+        }
+        if(cnt > 0){
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+
         return multiMap;
     }
 

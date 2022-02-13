@@ -328,4 +328,40 @@
         WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list)
         ORDER BY A.id
     </select>
+    <select id="getRsrPlantONList" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            B.id AS 자원ID
+             ,B.facility_type AS 설비구분
+             ,B.status AS 발전상태
+             ,B.capacity AS 설비용량
+             ,B.ess_status AS ESS상태
+             ,B.ess_capacity AS ESS용량
+             ,B.name AS 발전자원명
+             ,C.avg_error_rate AS 평균오차율
+             ,C.max_error_rate AS 최대오차율
+             ,C.min_error_rate AS 최소오차율
+             ,D.contract_end_date AS 계약종료일시
+             ,B.created_at AS 자원추가일시
+        FROM resource_set_list A
+                 INNER JOIN resource B ON  A.resource_id = B.id
+                 LEFT OUTER JOIN ( SELECT
+                                       resource_id
+                                        ,(SUM(error_rate) / COUNT(error_rate)) *100  AS avg_error_rate
+                                        ,MAX(error_rate) AS max_error_rate
+                                        ,MIN(error_rate) AS min_error_rate
+                                   FROM forecast_by_resource GROUP BY resource_id
+        ) C ON  B.id = C.resource_id
+                 LEFT OUTER JOIN resource_meta D ON A.resource_id = D.resource_id
+        WHERE A.resource_set_id = #{집합자원ID}
+        ORDER BY B.id
+    </select>
+    <insert id="setRsrPlant" parameterType="hashMap">
+        INSERT INTO resource_set_list(
+             resource_set_id
+            ,resource_id
+        )VALUES(
+            #{집합자원ID}
+            ,#{자원ID}
+               )
+    </insert>
 </mapper>
