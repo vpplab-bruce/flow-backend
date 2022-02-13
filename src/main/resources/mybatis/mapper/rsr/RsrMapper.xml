@@ -298,7 +298,7 @@
              ,B.avg_error_rate AS 평균오차율
              ,B.max_error_rate AS 최대오차율
              ,B.min_error_rate AS 최소오차율
-             ,C.contract_end_date AS 계약종료일시
+        --     ,C.contract_end_date AS 계약종료일시
              ,A.created_at AS 자원추가일시
         FROM resource A
                  LEFT OUTER JOIN ( SELECT
@@ -308,7 +308,7 @@
                                         ,MIN(error_rate) AS min_error_rate
                                    FROM forecast_by_resource GROUP BY resource_id
         ) B ON  A.id = B.resource_id
-                 LEFT OUTER JOIN resource_meta C ON A.id = C.resource_id
+          --       LEFT OUTER JOIN resource_meta C ON A.id = C.resource_id
         WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list)
         <if test='facility_type != null and facility_type !=""'>
         AND A.facility_type = #{facility_type}
@@ -345,7 +345,7 @@
                                         ,MIN(error_rate) AS min_error_rate
                                    FROM forecast_by_resource GROUP BY resource_id
         ) B ON  A.id = B.resource_id
-                 LEFT OUTER JOIN resource_meta C ON A.id = C.resource_id
+          --       LEFT OUTER JOIN resource_meta C ON A.id = C.resource_id
         WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list)
         <if test='facility_type != null and facility_type !=""'>
             AND A.facility_type = #{facility_type}
