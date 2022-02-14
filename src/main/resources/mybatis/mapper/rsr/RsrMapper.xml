@@ -282,7 +282,7 @@
             LEFT OUTER JOIN (
                             SELECT
                                 id
-                                ,CASE WHEN status = '01' THEN '1' ELSE '0' END AS cnt
+                                ,SUM(CASE WHEN status = '01' THEN '1' ELSE '0' END) AS cnt
                                 ,COUNT(status) AS allCnt
                             FROM resource
                             ) B ON A.resource_id = B.id
