@@ -31,6 +31,16 @@ public class EventService {
 
     public Map<String, Object> getEventList(HashMap<String,Object> paramMap, HttpServletRequest request) {
         Map<String, Object> multiMap = new HashMap<>();
+
+        paramMap.put("name",paramMap.get("발전자원명"));
+        paramMap.put("requested_name",paramMap.get("요청자명"));
+        paramMap.put("requested_phone",paramMap.get("요청자전화번호"));
+        paramMap.put("type",paramMap.get("요청구분"));
+        paramMap.put("status",paramMap.get("처리상태"));
+        paramMap.put("requested_at",paramMap.get("처리일"));
+        paramMap.put("approved_at",paramMap.get("등록일"));
+
+
         /******************페이징*********************/
         String pageNo = "1";
         String rowCnt = "10";

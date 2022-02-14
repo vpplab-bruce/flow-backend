@@ -11,7 +11,7 @@
              ,A.start_at AS 시작일시
              ,A.end_at AS 종료일시
              ,A.requested_at AS 요청일시
-             ,A.requested_name AS 요청자이름
+             ,A.requested_name AS 요청자명
              ,A.requested_phone AS 요청자전화번호
              ,A.requested_memo AS 요청자메모
              ,A.approved_at AS 승인일시
@@ -25,6 +25,29 @@
                  LEFT OUTER JOIN resource_set_list B ON A.resource_id = B.resource_id
                  LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id
                  LEFT OUTER JOIN resource D ON A.resource_id = D.id
+        WHERE 1=1
+        <if test='name != null and name !=""'>
+            AND D.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='requested_name != null and requested_name !=""'>
+            AND A.requested_name = #{requested_name}
+        </if>
+        <if test='requested_phone != null and requested_phone !=""'>
+            AND A.requested_phone = #{requested_phone}
+        </if>
+        <if test='type != null and type !=""'>
+            AND A.type = #{type}
+        </if>
+        <if test='status != null and status !=""'>
+            AND A.status = #{status}
+        </if>
+        <if test='requested_at != null and requested_at !=""'>
+            AND DATE_FORMAT(A.requested_at,'%Y%m%d') = DATE_FORMAT(#{requested_at},'%Y%m%d')
+        </if>
+        <if test='approved_at != null and approved_at !=""'>
+            AND DATE_FORMAT(A.approved_at,'%Y%m%d') = DATE_FORMAT(#{approved_at},'%Y%m%d')
+        </if>
+
         ORDER BY A.id
         LIMIT #{페이지번호},#{행갯수}
     </select>
@@ -35,6 +58,28 @@
                  LEFT OUTER JOIN resource_set_list B ON A.resource_id = B.resource_id
                  LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id
                  LEFT OUTER JOIN resource D ON A.resource_id = D.id
+        WHERE 1=1
+        <if test='name != null and name !=""'>
+            AND D.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='requested_name != null and requested_name !=""'>
+            AND A.requested_name = #{requested_name}
+        </if>
+        <if test='requested_phone != null and requested_phone !=""'>
+            AND A.requested_phone = #{requested_phone}
+        </if>
+        <if test='type != null and type !=""'>
+            AND A.type = #{type}
+        </if>
+        <if test='status != null and status !=""'>
+            AND A.status = #{status}
+        </if>
+        <if test='requested_at != null and requested_at !=""'>
+            AND DATE_FORMAT(A.requested_at,'%Y%m%d') = DATE_FORMAT(#{requested_at},'%Y%m%d')
+        </if>
+        <if test='approved_at != null and approved_at !=""'>
+            AND DATE_FORMAT(A.approved_at,'%Y%m%d') = DATE_FORMAT(#{approved_at},'%Y%m%d')
+        </if>
         ORDER BY A.id
     </select>
     <select id="getEventDtl" parameterType="hashMap" resultType="hashMap">
