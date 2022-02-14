@@ -481,17 +481,7 @@
     </select>
     <select id="getPlantBusiListCnt" parameterType="hashMap" resultType="int" >
         SELECT
-            A.id AS 발전사업자ID
-            ,A.name AS 발전사업자명
-            ,A.business_registration_no AS 사업자등록번호
-            ,A.ceo AS 대표자명
-            ,A.ceo_contract AS 대표자전화번호
-            ,A.manager AS 담당자명
-            ,A.manager_contract AS 담당자전화번호
-            ,A.address AS 주소
-            ,B.cnt AS 발전사업수
-            ,B.capacity AS 설비용량
-            ,B.ess_capacity AS ESS용량
+          COUNT(A.id) AS CNT
         FROM generation_business_company A
             LEFT OUTER JOIN (
                             SELECT
