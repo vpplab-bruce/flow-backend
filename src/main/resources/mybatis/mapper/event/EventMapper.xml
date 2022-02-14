@@ -91,7 +91,7 @@
                ,#{승인자메모}
                ) ON DUPLICATE KEY UPDATE
             resource_id = #{자원ID}
-            ,TYPE = #{요청구분}
+            ,type = #{요청구분}
             ,start_at = DATE_FORMAT(CONCAT(#{요청일시},' ',#{시작일시},'00'),'%Y%m%d %H:%i:%s')
             ,end_at = DATE_FORMAT(CONCAT(#{요청일시},' ',#{종료일시},'00'),'%Y%m%d %H:%i:%s')
             ,requested_at = DATE_FORMAT(#{요청일시},'%Y%m%d %H:%i:%s')
