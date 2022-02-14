@@ -42,7 +42,7 @@
                 LEFT OUTER JOIN ( SELECT
                                     AA.resource_set_id
                                     ,COUNT(resource_id) AS  resource_cnt
-                                    ,(SUM(BB.capacity)+SUM(ess_capacity))  AS capacity
+                                    ,((CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) ELSE 0 END)+SUM(ess_capacity))  AS capacity
                                     ,CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) END AS capacityPvWt
                                     ,SUM(BB.ess_capacity) AS ess_capacity
                                 FROM resource_set_list AA
@@ -110,7 +110,7 @@
                 LEFT OUTER JOIN ( SELECT
                                     AA.resource_set_id
                                     ,COUNT(resource_id) AS  resource_cnt
-                                    ,(SUM(BB.capacity)+SUM(ess_capacity))  AS capacity
+                                    ,((CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) ELSE 0 END)+SUM(ess_capacity))  AS capacity
                                     ,CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) END AS capacityPvWt
                                     ,SUM(BB.ess_capacity) AS ess_capacity
                                 FROM resource_set_list AA
