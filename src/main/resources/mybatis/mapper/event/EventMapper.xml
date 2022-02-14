@@ -60,7 +60,7 @@
                  LEFT OUTER JOIN resource D ON A.resource_id = D.id
         WHERE  A.id = #{이벤트ID}
     </select>
-    <insert id="setEventAdd" parameterType="hashMap">
+    <insert id="setEventSave" parameterType="hashMap">
         INSERT INTO event(
                           id
                          ,resource_id
