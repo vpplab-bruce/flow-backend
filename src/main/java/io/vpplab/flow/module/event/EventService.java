@@ -82,6 +82,18 @@ public class EventService {
         }
         return multiMap;
     }
+    public Map<String, Object> setEventAdd(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+         int cnt =  eventDao.setEventAdd(paramMap);
+        ;
+        if(cnt > 0){
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+        return multiMap;
+    }
 
 
 }

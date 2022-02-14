@@ -44,7 +44,7 @@
              ,A.start_at AS 시작일시
              ,A.end_at AS 종료일시
              ,A.requested_at AS 요청일시
-             ,A.requested_name AS 요청자이름
+             ,A.requested_name AS 요청자명
              ,A.requested_phone AS 요청자전화번호
              ,A.requested_memo AS 요청자메모
              ,A.approved_at AS 승인일시
@@ -60,6 +60,49 @@
                  LEFT OUTER JOIN resource D ON A.resource_id = D.id
         WHERE  A.id = #{이벤트ID}
     </select>
+    <insert id="setEventAdd" parameterType="hashMap">
+        INSERT INTO event(
+                          id
+                         ,resource_id
+                         ,type
+                         ,start_at
+                         ,end_at
+                         ,requested_at
+                         ,requested_name
+                         ,requested_phone
+                         ,requested_memo
+                         ,approved_at
+                         ,approved_name
+                         ,approved_phone
+                         ,approved_memo
+        )VALUES(
+                   #{이벤트ID}
+               ,#{자원ID}
+               ,#{요청구분}
+               ,DATE_FORMAT(CONCAT(#{요청일시},' ',#{시작일시},'00'),'%Y%m%d %H:%i:%s')
+               ,DATE_FORMAT(CONCAT(#{요청일시},' ',#{종료일시},'00'),'%Y%m%d %H:%i:%s')
+               ,DATE_FORMAT(#{요청일시},'%Y%m%d %H:%i:%s')
+               ,#{요청자명}
+               ,#{요청자전화번호}
+               ,#{요청자메모}
+               ,DATE_FORMAT(#{승인일시},'%Y%m%d %H:%i:%s')
+               ,#{승인자명}
+               ,#{승인자전호번호}
+               ,#{승인자메모}
+               ) ON DUPLICATE KEY UPDATE
+            resource_id = #{자원ID}
+            ,TYPE = #{요청구분}
+            ,start_at = DATE_FORMAT(CONCAT(#{요청일시},' ',#{시작일시},'00'),'%Y%m%d %H:%i:%s')
+            ,end_at = DATE_FORMAT(CONCAT(#{요청일시},' ',#{종료일시},'00'),'%Y%m%d %H:%i:%s')
+            ,requested_at = DATE_FORMAT(#{요청일시},'%Y%m%d %H:%i:%s')
+            ,requested_name = #{요청자명}
+            ,requested_phone = #{요청자전화번호}
+            ,requested_memo = #{요청자메모}
+            ,approved_at = DATE_FORMAT(#{승인일시},'%Y%m%d %H:%i:%s')
+            ,approved_name = #{승인자명}
+            ,approved_phone = #{승인자전호번호}
+            ,approved_memo = #{승인자메모}
+    </insert>
 </mapper>
 
 
