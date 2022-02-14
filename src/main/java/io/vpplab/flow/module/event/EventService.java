@@ -66,7 +66,7 @@ public class EventService {
                 eventList.get(i).put("NO",eventListCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
             }
             multiMap.put("조회여부",true);
-            multiMap.put("이벤트정보",eventListCnt);
+            multiMap.put("이벤트정보",eventList);
         }else{
             multiMap.put("조회여부",false);
         }
@@ -140,7 +140,7 @@ public class EventService {
                 getEventRsrList.get(i).put("NO",getEventRsrListCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
             }
             multiMap.put("조회여부",true);
-            multiMap.put("이벤트발전자워정보",getEventRsrListCnt);
+            multiMap.put("이벤트발전자원정보",getEventRsrList);
         }else{
             multiMap.put("조회여부",false);
         }
