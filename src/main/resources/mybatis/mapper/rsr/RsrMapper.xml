@@ -431,4 +431,95 @@
             ,#{자원ID}
                )
     </insert>
+
+
+
+    <select id="getPlantBusiList" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            A.id AS 발전사업자ID
+            ,A.name AS 발전사업자명
+            ,A.business_registration_no AS 사업자등록번호
+            ,A.ceo AS 대표자명
+            ,A.ceo_contract AS 대표자전화번호
+            ,A.manager AS 담당자명
+            ,A.manager_contract AS 담당자전화번호
+            ,A.address AS 주소
+            ,B.cnt AS 발전사업수
+            ,B.capacity AS 설비용량
+            ,B.ess_capacity AS ESS용량
+        FROM generation_business_company A
+            LEFT OUTER JOIN (
+                        SELECT
+                            generation_business_company_id
+                            ,COUNT(id) AS cnt
+                            ,SUM(capacity) AS capacity
+                            ,SUM(ess_capacity) AS ess_capacity
+                        FROM resource
+                        GROUP BY generation_business_company_id
+                        ) B ON A.id = B.generation_business_company_id
+        WHERE 1=1
+        <if test='name != null and name !=""'>
+            AND A.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='business_registration_no != null and business_registration_no !=""'>
+            AND A.business_registration_no = #{business_registration_no}
+        </if>
+        <if test='ceo != null and ceo !=""'>
+            AND A.ceo LIKE CONCAT('%',#{ceo},'%')
+        </if>
+        <if test='manager != null and manager !=""'>
+            AND A.manager LIKE CONCAT('%',#{manager},'%')
+        </if>
+        <if test='manager_contract != null and manager_contract !=""'>
+            AND A.manager_contract LIKE CONCAT('%',#{manager_contract},'%')
+        </if>
+        <if test='address != null and address !=""'>
+            AND A.address LIKE CONCAT('%',#{address},'%')
+        </if>
+        ORDER BY A.id
+        LIMIT #{페이지번호},#{행갯수}
+    </select>
+    <select id="getPlantBusiListCnt" parameterType="hashMap" resultType="int" >
+        SELECT
+            A.id AS 발전사업자ID
+            ,A.name AS 발전사업자명
+            ,A.business_registration_no AS 사업자등록번호
+            ,A.ceo AS 대표자명
+            ,A.ceo_contract AS 대표자전화번호
+            ,A.manager AS 담당자명
+            ,A.manager_contract AS 담당자전화번호
+            ,A.address AS 주소
+            ,B.cnt AS 발전사업수
+            ,B.capacity AS 설비용량
+            ,B.ess_capacity AS ESS용량
+        FROM generation_business_company A
+            LEFT OUTER JOIN (
+                            SELECT
+                                generation_business_company_id
+                                ,COUNT(id) AS cnt
+                                ,SUM(capacity) AS capacity
+                                ,SUM(ess_capacity) AS ess_capacity
+                            FROM resource
+                            GROUP BY generation_business_company_id
+                            ) B ON A.id = B.generation_business_company_id
+        WHERE 1=1
+        <if test='name != null and name !=""'>
+            AND A.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='business_registration_no != null and business_registration_no !=""'>
+            AND A.business_registration_no = #{business_registration_no}
+        </if>
+        <if test='ceo != null and ceo !=""'>
+            AND A.ceo LIKE CONCAT('%',#{ceo},'%')
+        </if>
+        <if test='manager != null and manager !=""'>
+            AND A.manager LIKE CONCAT('%',#{manager},'%')
+        </if>
+        <if test='manager_contract != null and manager_contract !=""'>
+            AND A.manager_contract LIKE CONCAT('%',#{manager_contract},'%')
+        </if>
+        <if test='address != null and address !=""'>
+            AND A.address LIKE CONCAT('%',#{address},'%')
+        </if>
+    </select>
 </mapper>

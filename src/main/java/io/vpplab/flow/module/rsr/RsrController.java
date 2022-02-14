@@ -53,5 +53,11 @@ public class RsrController {
     public Map<String, Object> setRsrPlant(@RequestBody List<HashMap<String,Object>> paramMap, HttpServletRequest request) {
         return rsrService.setRsrPlant(paramMap,request);
     }
+    
+    //발전자원등록관리 조회
+    @RequestMapping("/rsr/getPlantBusiList")
+    public Map<String, Object> getPlantBusiList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.getPlantBusiList(paramMap,request);
+    }
 
 }

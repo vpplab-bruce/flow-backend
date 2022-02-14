@@ -20,4 +20,10 @@ public interface RsrDao {
     List<HashMap> getRsrPlantList(HashMap<String, Object> paramMap);
     int getRsrPlantListCnt(HashMap<String, Object> paramMap);
     int setRsrPlant(HashMap<String, Object> paramMap);
+
+
+
+    List<HashMap> getPlantBusiList(HashMap<String, Object> paramMap);
+    int getPlantBusiListCnt(HashMap<String, Object> paramMap);
+
 }

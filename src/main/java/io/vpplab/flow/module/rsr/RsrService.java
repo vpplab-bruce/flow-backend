@@ -276,5 +276,55 @@ public class RsrService {
         return multiMap;
     }
 
+    public Map<String, Object> getPlantBusiList(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
 
+        /******************페이징*********************/
+        String pageNo = "1";
+        String rowCnt = "10";
+        if(paramMap.get("페이지번호") != null){
+            pageNo = paramMap.get("페이지번호").toString();
+        }
+        if(paramMap.get("행갯수") != null){
+            rowCnt = paramMap.get("행갯수").toString();
+        }
+        paramMap.put("페이지번호", PagingUtil.schPageNo(Integer.parseInt(pageNo),Integer.parseInt(rowCnt)));
+        paramMap.put("행갯수",Integer.parseInt(rowCnt));
+
+        HashMap<String,Object> pageInfo = new HashMap<>();
+        pageInfo.put("페이지번호",pageNo);
+        pageInfo.put("행갯수",rowCnt);
+        /*****************페이징**********************/
+
+        paramMap.put("name",paramMap.get("발전사업자명"));
+        paramMap.put("business_registration_no",paramMap.get("사업자등록번호"));
+        paramMap.put("ceo",paramMap.get("대표자명"));
+        paramMap.put("manager",paramMap.get("담당자명"));
+        paramMap.put("manager_contract",paramMap.get("담당자전화번호"));
+        paramMap.put("address",paramMap.get("주소"));
+
+
+        List<HashMap> getPlantBusiList  =  rsrDao.getPlantBusiList(paramMap);
+        int getPlantBusiListCnt  =  rsrDao.getPlantBusiListCnt(paramMap);
+
+
+        ;
+        if(getPlantBusiList.size() > 0){
+            for(int i = 0 ; i < getPlantBusiList.size() ; i++){
+                getPlantBusiList.get(i).put("NO",getPlantBusiListCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
+            }
+            multiMap.put("조회여부",true);
+            multiMap.put("발전자원",getPlantBusiList);
+        }else{
+            multiMap.put("조회여부",false);
+        }
+
+        /******************페이징*********************/
+        pageInfo.put("전체페이지갯수", PagingUtil.pageCnt(getPlantBusiListCnt,Integer.parseInt(rowCnt))+"");
+        pageInfo.put("전체갯수",getPlantBusiListCnt+"");
+        /*****************페이징*********************/
+
+        multiMap.put("페이지정보",pageInfo);
+        return multiMap;
+    }
 }
