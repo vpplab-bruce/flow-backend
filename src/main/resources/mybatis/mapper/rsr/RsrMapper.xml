@@ -269,18 +269,43 @@
     </select>
     <select id="getRsrInfo" parameterType="hashMap" resultType="hashMap" >
         SELECT
-            COUNT(B.error_rate) AS 집합자원갯수
-            ,SUM(B.resource_capacity) AS 집합지원총용량
-            ,(CASE WHEN ((SUM(B.error_rate) / COUNT(B.error_rate)) *100) >= 0 AND ((SUM(B.error_rate) / COUNT(B.error_rate)) *100)  <![CDATA[ <= ]]> 6 THEN '좋음'
-            WHEN ((SUM(B.error_rate) / COUNT(B.error_rate)) *100) > 6 AND ((SUM(B.error_rate) / COUNT(B.error_rate)) *100) <![CDATA[ <= ]]> 8 THEN '보통'
-            WHEN ((SUM(B.error_rate) / COUNT(B.error_rate)) *100) > 8 THEN '나쁨' END) AS 오차율평가
-            ,(SUM(B.resource_capacity) / COUNT(B.resource_capacity)) *100 AS 가동율
-            ,(SUM(B.error_rate) / COUNT(B.error_rate)) *100  AS 평균오차율
-            ,MAX(B.error_rate) AS 최대오차율
-            ,MIN(B.error_rate) AS 최소오차율
-        FROM forecast_by_resource_set B
-        WHERE B.resource_set_id = #{집합자원ID}
-        GROUP BY B.resource_set_id
+            COUNT(A.resource_set_id) AS 집합자원갯수
+            ,C.집합지원총용량
+            ,C.평균오차율평가
+            ,C.평균오차율
+            ,C.최대오차율평가
+            ,C.최대오차율
+            ,C.최소오차율평가
+            ,C.최소오차율
+            ,(B.cnt /B.allCnt) * 100 AS 가동율
+        FROM resource_set_list A
+            LEFT OUTER JOIN (
+                            SELECT
+                                id
+                                ,CASE WHEN status = '01' THEN '1' ELSE '0' END AS cnt
+                                ,COUNT(status) AS allCnt
+                            FROM resource
+                            ) B ON A.resource_id = B.id
+            LEFT OUTER JOIN (
+                            SELECT
+                                resource_set_id
+                                ,SUM(resource_capacity) AS 집합지원총용량
+                                ,(CASE WHEN ((SUM(error_rate) / COUNT(error_rate)) *100) >= 0 AND ((SUM(error_rate) / COUNT(error_rate)) *100)  <![CDATA[ <= ]]>  6 THEN '좋음'
+                                    WHEN ((SUM(error_rate) / COUNT(error_rate)) *100) > 6 AND ((SUM(error_rate) / COUNT(error_rate)) *100)  <![CDATA[ <= ]]>  8 THEN '보통'
+                                    WHEN ((SUM(error_rate) / COUNT(error_rate)) *100) > 8 THEN '나쁨' END) AS 평균오차율평가
+                                ,(SUM(error_rate) / COUNT(error_rate)) *100  AS 평균오차율
+                                ,(CASE WHEN MAX(error_rate) >= 0 AND MAX(error_rate) <![CDATA[ <= ]]> 6 THEN '좋음'
+                                    WHEN MAX(error_rate) > 6 AND MAX(error_rate)  <![CDATA[ <= ]]>  8 THEN '보통'
+                                    WHEN MAX(error_rate) > 8 THEN '나쁨' END) AS  최대오차율평가
+                                ,MAX(error_rate) AS 최대오차율
+                                ,(CASE WHEN MIN(error_rate) >= 0 AND MIN(error_rate) <![CDATA[ <= ]]>  6 THEN '좋음'
+                                    WHEN MIN(error_rate) > 6 AND MIN(error_rate)  <![CDATA[ <= ]]>  8 THEN '보통'
+                                    WHEN MIN(error_rate) > 8 THEN '나쁨' END) AS  최소오차율평가
+                                ,MIN(error_rate) AS 최소오차율
+                            FROM forecast_by_resource_set
+                            ) C ON A.resource_set_id = C.resource_set_id
+        WHERE A.resource_set_id = #{집합자원ID}
+        GROUP BY A.resource_set_id
     </select>
 
     <update id="setRsrPlantDel" parameterType="hashMap"  >
