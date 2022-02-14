@@ -161,7 +161,7 @@
              ,B.manager AS 담당자명
              ,B.manager_contract AS 담당자전화번호
         FROM resource A
-            INNER JOIN resource_meta B ON A.id = B.resource_id AND kpx_resource_id IS NOT NULL
+            INNER JOIN resource_meta B ON A.id = B.resource_id AND B.kpx_resource_id IS NOT NULL
         WHERE 1=1
         <if test='name != null and name !=""'>
             AND A.name LIKE CONCAT('%',#{name},'%')
@@ -182,7 +182,7 @@
         SELECT
             COUNT(A.id) AS CNT
         FROM resource A
-                 INNER JOIN resource_meta B ON A.id = B.resource_id AND kpx_resource_id IS NOT NULL
+                 INNER JOIN resource_meta B ON A.id = B.resource_id AND B.kpx_resource_id IS NOT NULL
         WHERE 1=1
         <if test='name != null and name !=""'>
             AND A.name LIKE CONCAT('%',#{name},'%')
