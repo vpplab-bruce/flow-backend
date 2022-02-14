@@ -18,6 +18,7 @@
              ,A.approved_name AS 승인자명
              ,A.approved_phone AS 승인자전화번호
              ,A.approved_memo AS 승인자메모
+             ,A.status AS 처리상태
              ,C.name AS 집합자원그룹명
              ,D.name AS 발전자원명
         FROM event A
@@ -51,6 +52,7 @@
              ,A.approved_name AS 승인자명
              ,A.approved_phone AS 승인자전화번호
              ,A.approved_memo AS 승인자메모
+             ,A.status AS 처리상태
              ,C.name AS 집합자원그룹명
              ,D.name AS 발전자원명
              ,D.id AS 발전자원ID
@@ -75,6 +77,7 @@
                          ,approved_name
                          ,approved_phone
                          ,approved_memo
+                         ,status
         )VALUES(
                    #{이벤트ID}
                ,#{자원ID}
@@ -89,6 +92,7 @@
                ,#{승인자명}
                ,#{승인자전호번호}
                ,#{승인자메모}
+               ,#{처리상태}
                ) ON DUPLICATE KEY UPDATE
             resource_id = #{자원ID}
             ,type = #{요청구분}
@@ -102,6 +106,7 @@
             ,approved_name = #{승인자명}
             ,approved_phone = #{승인자전호번호}
             ,approved_memo = #{승인자메모}
+            ,status = #{처리상태}
     </insert>
 </mapper>
 
