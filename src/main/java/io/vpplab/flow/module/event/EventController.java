@@ -27,6 +27,10 @@ public class EventController {
     public Map<String, Object> setEventSave(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return eventService.setEventSave(paramMap,request);
     }
+    @RequestMapping("/event/getEventRsrList")
+    public Map<String, Object> getEventRsrList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return eventService.getEventRsrList(paramMap,request);
+    }
 
 
 }

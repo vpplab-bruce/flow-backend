@@ -9,4 +9,6 @@ public interface EventDao {
     int getEventListCnt(HashMap<String, Object> paramMap);
     HashMap getEventDtl(HashMap<String, Object> paramMap);
     int setEventSave(HashMap<String, Object> paramMap);
+    List<HashMap> getEventRsrList(HashMap<String, Object> paramMap);
+    int getEventRsrListCnt(HashMap<String, Object> paramMap);
 }
