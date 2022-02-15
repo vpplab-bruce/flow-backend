@@ -512,4 +512,65 @@
             AND A.address LIKE CONCAT('%',#{address},'%')
         </if>
     </select>
+    <select id="getBusiChk" parameterType="hashMap" resultType="int" >
+        SELECT
+            COUNT(id) AS CNT
+        FROM generation_business_company
+        WHERE 1=1
+        AND business_registration_no = #{사업자등록번호}
+
+    </select>
+    <select id="getPlantBusiDtl" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            A.id AS 발전사업자ID
+             ,A.name AS 발전사업자명
+             ,A.business_registration_no AS 사업자등록번호
+             ,A.ceo AS 대표자명
+             ,A.ceo_contract AS 대표자전화번호
+             ,A.manager AS 담당자명
+             ,A.manager_contract AS 담당자전화번호
+             ,A.address AS 주소
+        FROM generation_business_company A
+        WHERE 1=1
+            AND A.id  =  #{발전사업자ID}
+    </select>
+    <update id="setPlantBusiDel"  parameterType="hashMap" >
+        DELETE FROM generation_business_company WHERE  id = #{발전사업자ID}
+    </update>
+    <update id="setPlantBusiSave"  parameterType="hashMap" >
+        UPDATE generation_business_company SET
+            name = #{발전사업자명}
+            ,business_registration_no = #{사업자등록번호}
+            ,address = #{주소}
+            ,ceo = #{대표자명}
+            ,ceo_contract = #{대표자전화번호}
+            ,manager = #{담당자명}
+            ,manager_contract = #{당담자전화번호}
+        WHERE id = #{발전사업자ID}
+
+    </update>
+    <update id="setPlantBusiAdd"  parameterType="hashMap" >
+           INSERT INTO generation_business_company(
+               name
+               ,business_registration_no
+               ,address
+               ,ceo
+               ,ceo_contract
+               ,manager
+               ,manager_contract
+               ,created_at
+               ,created_by
+           )VALUES(
+              #{발전사업자명}
+              ,#{사업자등록번호}
+              ,#{주소}
+              ,#{대표자명}
+              ,#{대표자전화번호}
+              ,#{담당자명}
+              ,#{담당자전화번호}
+              ,NOW()
+              ,#{작성자}
+           )
+
+    </update>
 </mapper>

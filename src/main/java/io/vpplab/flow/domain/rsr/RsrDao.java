@@ -21,9 +21,11 @@ public interface RsrDao {
     int getRsrPlantListCnt(HashMap<String, Object> paramMap);
     int setRsrPlant(HashMap<String, Object> paramMap);
 
-
-
     List<HashMap> getPlantBusiList(HashMap<String, Object> paramMap);
     int getPlantBusiListCnt(HashMap<String, Object> paramMap);
-
+    int getBusiChk(HashMap<String, Object> paramMap);
+    HashMap getPlantBusiDtl(HashMap<String, Object> paramMap);
+    int setPlantBusiDel(HashMap<String, Object> paramMap);
+    int setPlantBusiAdd(HashMap<String, Object> paramMap);
+    int setPlantBusiSave(HashMap<String, Object> paramMap);
 }

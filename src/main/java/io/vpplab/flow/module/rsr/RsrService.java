@@ -276,6 +276,7 @@ public class RsrService {
         return multiMap;
     }
 
+
     public Map<String, Object> getPlantBusiList(HashMap<String,Object> paramMap, HttpServletRequest request) {
         Map<String, Object> multiMap = new HashMap<>();
 
@@ -325,6 +326,70 @@ public class RsrService {
         /*****************페이징*********************/
 
         multiMap.put("페이지정보",pageInfo);
+        return multiMap;
+    }
+    public Map<String, Object> getBusiChk(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+        int cnt = rsrDao.getBusiChk(paramMap);
+        if(cnt > 0){
+            multiMap.put("중복여부",true);
+        }else{
+            multiMap.put("중복여부",false);
+        }
+
+        return multiMap;
+    }
+    public Map<String, Object> getPlantBusiDtl(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+        HashMap getPlantBusiDtl = rsrDao.getPlantBusiDtl(paramMap);
+        if(getPlantBusiDtl != null){
+            multiMap.put("조회여부",true);
+            multiMap.put("발전자원상세",getPlantBusiDtl);
+        }else{
+            multiMap.put("조회여부",false);
+        }
+
+        return multiMap;
+    }
+    public Map<String, Object> setPlantBusiDel(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+        int cnt = rsrDao.setPlantBusiDel(paramMap);
+        if(cnt > 0){
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+
+        return multiMap;
+    }
+    public Map<String, Object> setPlantBusiAdd(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Map<String, Object> multiMap = new HashMap<>();
+
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        paramMap.put("작성자",loginInfo.get("사용자식별자"));
+        int cnt = rsrDao.setPlantBusiAdd(paramMap);
+        if(cnt > 0){
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+
+        return multiMap;
+    }
+    public Map<String, Object> setPlantBusiSave(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Map<String, Object> multiMap = new HashMap<>();
+
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        paramMap.put("작성자",loginInfo.get("사용자식별자"));
+        int cnt = rsrDao.setPlantBusiSave(paramMap);
+        if(cnt > 0){
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+
         return multiMap;
     }
 }

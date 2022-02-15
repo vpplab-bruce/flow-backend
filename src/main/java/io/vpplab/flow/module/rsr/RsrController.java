@@ -59,5 +59,25 @@ public class RsrController {
     public Map<String, Object> getPlantBusiList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.getPlantBusiList(paramMap,request);
     }
+    @RequestMapping("/rsr/getBusiChk")
+    public Map<String, Object> getBusiChk(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.getBusiChk(paramMap,request);
+    }
+    @RequestMapping("/rsr/getPlantBusiDtl")
+    public Map<String, Object> getPlantBusiDtl(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.getPlantBusiDtl(paramMap,request);
+    }
+    @RequestMapping("/rsr/setPlantBusiDel")
+    public Map<String, Object> setPlantBusiDel(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.setPlantBusiDel(paramMap,request);
+    }
+    @RequestMapping("/rsr/setPlantBusiAdd")
+    public Map<String, Object> setPlantBusiAdd(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.setPlantBusiAdd(paramMap,request);
+    }
+    @RequestMapping("/rsr/setPlantBusiSave")
+    public Map<String, Object> setPlantBusiSave(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.setPlantBusiSave(paramMap,request);
+    }
 
 }
