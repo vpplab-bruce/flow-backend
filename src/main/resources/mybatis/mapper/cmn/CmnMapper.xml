@@ -34,6 +34,7 @@
              ,D.url AS URL주소
              ,D.view_name AS 화면이름
              ,D.is_view AS 화면여부
+             ,D.is_default_menu AS 기본메뉴여부
              ,C.has_modify_auth AS 수정권한여부
              ,C.has_read_auth AS 읽기권한여부
         FROM user A

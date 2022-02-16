@@ -51,7 +51,7 @@ public class CmnService {
             session.setAttribute("사용자정보", loginMap);
             if(menuList.size() > 0){
                 for(int i = 0; i < menuList.size(); i++){
-                    if(!"".equals(menuList.get(i).get("1차메뉴")) && menuList.get(i).get("1차메뉴") != null){
+                    if("1".equals(menuList.get(i).get("기본메뉴여부").toString())){
                         Map<String, Object> dep1Map = new HashMap<>();
                         dep1Map.put( "메뉴ID",menuList.get(i).get("메뉴ID"));
                         dep1Map.put( "URL주소",menuList.get(i).get("URL주소"));
@@ -61,7 +61,7 @@ public class CmnService {
                         menuTree.add(cnt,dep1Map);
                         List<HashMap> sub  =  new ArrayList<>();
                         for(int j = 0; j < menuList.size(); j++){
-                            if((menuList.get(i).get("1차메뉴")).equals(menuList.get(j).get("2차메뉴")) && ("".equals(menuList.get(j).get("1차메뉴")) || menuList.get(j).get("1차메뉴") == null)){
+                            if(!"1".equals(menuList.get(j).get("기본메뉴여부").toString()) && ((menuList.get(i).get("1차메뉴")).equals(menuList.get(j).get("2차메뉴")))){
                                 HashMap dep2Map = new HashMap<String,Object>();
                                 dep2Map.put( "메뉴ID",menuList.get(j).get("메뉴ID"));
                                 dep2Map.put( "URL주소",menuList.get(j).get("URL주소"));
