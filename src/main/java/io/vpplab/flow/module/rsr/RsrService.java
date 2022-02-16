@@ -342,6 +342,51 @@ public class RsrService {
     public Map<String, Object> getPlantBusiDtl(HashMap<String,Object> paramMap, HttpServletRequest request) {
         Map<String, Object> multiMap = new HashMap<>();
         HashMap getPlantBusiDtl = rsrDao.getPlantBusiDtl(paramMap);
+
+        /******************페이징*********************/
+        String pageNo = "1";
+        String rowCnt = "10";
+        if(paramMap.get("페이지번호") != null){
+            pageNo = paramMap.get("페이지번호").toString();
+        }
+        if(paramMap.get("행갯수") != null){
+            rowCnt = paramMap.get("행갯수").toString();
+        }
+        paramMap.put("페이지번호", PagingUtil.schPageNo(Integer.parseInt(pageNo),Integer.parseInt(rowCnt)));
+        paramMap.put("행갯수",Integer.parseInt(rowCnt));
+
+        HashMap<String,Object> pageInfo = new HashMap<>();
+        pageInfo.put("페이지번호",pageNo);
+        pageInfo.put("행갯수",rowCnt);
+        /*****************페이징**********************/
+
+        paramMap.put("facility_type",paramMap.get("설비구분"));
+        paramMap.put("status",paramMap.get("발전상태"));
+        paramMap.put("ess_status",paramMap.get("ESS운영상태"));
+        paramMap.put("has_rec_contraction",paramMap.get("중개시장참여"));
+        paramMap.put("previous_dealing_type",paramMap.get("기존거래방식"));
+        paramMap.put("name",paramMap.get("발전자원명"));
+
+
+        List<HashMap> getPlantBusiRsrList  =  rsrDao.getPlantBusiRsrList(paramMap);
+        int getPlantBusiRsrListCnt  =  rsrDao.getPlantBusiRsrListCnt(paramMap);
+
+        if(getPlantBusiRsrList.size() > 0){
+            for(int i = 0 ; i < getPlantBusiRsrList.size() ; i++){
+                getPlantBusiRsrList.get(i).put("NO",getPlantBusiRsrListCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
+            }
+            multiMap.put("발전사업자자원",getPlantBusiRsrList);
+        }else{
+        }
+
+        /******************페이징*********************/
+        pageInfo.put("전체페이지갯수", PagingUtil.pageCnt(getPlantBusiRsrListCnt,Integer.parseInt(rowCnt))+"");
+        pageInfo.put("전체갯수",getPlantBusiRsrListCnt+"");
+        /*****************페이징*********************/
+
+        multiMap.put("페이지정보",pageInfo);
+
+
         if(getPlantBusiDtl != null){
             multiMap.put("조회여부",true);
             multiMap.put("발전자원상세",getPlantBusiDtl);
@@ -425,8 +470,6 @@ public class RsrService {
         List<HashMap> getPlantBusiRsrList  =  rsrDao.getPlantBusiRsrList(paramMap);
         int getPlantBusiRsrListCnt  =  rsrDao.getPlantBusiRsrListCnt(paramMap);
 
-
-        ;
         if(getPlantBusiRsrList.size() > 0){
             for(int i = 0 ; i < getPlantBusiRsrList.size() ; i++){
                 getPlantBusiRsrList.get(i).put("NO",getPlantBusiRsrListCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
@@ -471,7 +514,7 @@ public class RsrService {
         HashMap getPlantBusiRsrDtl = rsrDao.getPlantBusiRsrDtl(paramMap);
         if(getPlantBusiRsrDtl != null){
             multiMap.put("조회여부",true);
-            multiMap.put("발전자원정보상세",getPlantBusiRsrDtl);
+            multiMap.put("발전사업자자원상세",getPlantBusiRsrDtl);
         }else{
             multiMap.put("조회여부",false);
         }

@@ -83,7 +83,7 @@ public class RsrController {
     public Map<String, Object> getPlantBusiRsrList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.getPlantBusiRsrList(paramMap,request);
     }
-    @RequestMapping("/rsr/getPlantBusiRsrList")
+    @RequestMapping("/rsr/getPlantBusiRsrAdd")
     public Map<String, Object> getPlantBusiRsrAdd(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.getPlantBusiRsrAdd(paramMap,request);
     }
