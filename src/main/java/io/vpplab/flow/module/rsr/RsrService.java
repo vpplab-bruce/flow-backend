@@ -466,5 +466,31 @@ public class RsrService {
 
         return multiMap;
     }
+    public Map<String, Object> getPlantBusiRsrDtl(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+        HashMap getPlantBusiRsrDtl = rsrDao.getPlantBusiRsrDtl(paramMap);
+        if(getPlantBusiRsrDtl != null){
+            multiMap.put("조회여부",true);
+            multiMap.put("발전자원정보상세",getPlantBusiRsrDtl);
+        }else{
+            multiMap.put("조회여부",false);
+        }
+        return multiMap;
+    }
+    public Map<String, Object> setPlantBusiRsrSave(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+        int cnt = rsrDao.setPlantBusiRsrSave(paramMap);
+        if(cnt > 0){
+            int metaCnt = rsrDao.setPlantBusiRsrMetaSave(paramMap);
+            if(metaCnt > 0){
+                multiMap.put("성공여부",true);
+            }else{
+                multiMap.put("성공여부",false);
+            }
+        }else{
+            multiMap.put("성공여부",false);
+        }
+        return multiMap;
+    }
 
 }

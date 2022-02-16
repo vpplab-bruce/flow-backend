@@ -733,5 +733,84 @@
                )
 
     </insert>
-
+    <select id="getPlantBusiRsrDtl" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            A.id AS 발전자원ID
+             ,A.name AS 발전자원명
+             ,A.address AS 주소
+             ,A.zip_code AS 우편번호
+             ,A.latitude AS 위도
+             ,A.longitude AS 경도
+             ,A.facility_type AS 설비구분
+             ,A.status AS 설비상태
+             ,A.capacity AS 설비용량
+             ,A.has_ess AS ESS유무
+             ,A.ess_status AS ESS운영상태
+             ,A.ess_capacity AS ESS설비용량
+             ,A.area_type AS 지역구분
+             ,B.business_registration_no AS 사업자등록번호
+             ,B.ceo AS 대표자명
+             ,B.ceo_contract AS 대표자전화번호
+             ,B.manager AS 담당자명
+             ,B.manager_contract AS 담당자전화번호
+             ,B.bank AS 정산계좌은행
+             ,B.bank_account AS 정산계좌번호
+             ,B.bank_account_holder AS 정산계좌명의
+             ,B.has_o_and_m_contract AS KPX계량기설치여부
+             ,B.contract_start_date AS 계약기간시작일자
+             ,B.contract_end_date AS 계약기간종료일자
+             ,B.has_rec_contraction AS ONM계약여부
+             ,B.rec_contract_start_date AS REC계약기간시작일자
+             ,B.rec_contract_end_date AS REC계약기간종료일자
+             ,B.has_kpx_meter AS KPX계량기설치여부
+             ,B.kpx_resource_id AS 분산자원코드
+             ,B.kepco_meter_code AS 한전계량기코드
+             ,B.previous_dealing_type AS 기존거래방식
+             ,B.commission_rate AS 중개사업계약종류
+             ,B.monitoring_info AS 모니터링정보
+        FROM resource A
+                 LEFT OUTER JOIN resource_meta B ON A.id = B.resource_id
+        WHERE A.id = #{발전자원ID}
+    </select>
+    <update id="setPlantBusiRsrSave" parameterType="hashMap">
+        UPDATE resource SET
+            name = #{발전자원명}
+            ,address = #{주소}
+            ,zip_code = #{우편번호}
+            ,latitude = #{위도}
+            ,longitude = #{경도}
+            ,facility_type = #{설비구분}
+            ,status = #{설비상태}
+            ,capacity = #{설비용량}
+            ,has_ess = #{ESS유무}
+            ,ess_status = #{ESS운영상태}
+            ,ess_capacity = #{ESS설비용량}
+            ,area_type = #{지역구분}
+        WHERE id = #{발전자원ID}
+    </update>
+    <update id="setPlantBusiRsrMetaSave" parameterType="hashMap">
+        UPDATE resource_meta SET
+            name = #{발전자원명}
+           ,business_registration_no = #{사업자등록번호}
+           ,ceo = #{대표자명}
+           ,ceo_contract = #{대표자전화번호}
+           ,manager = #{담당자명}
+           ,manager_contract = #{담당자전화번호}
+           ,bank = #{정산계좌은행}
+           ,bank_account = #{정산계좌번호}
+           ,bank_account_holder = #{정산계좌명의}
+           ,has_o_and_m_contract = #{KPX계량기설치여부}
+           ,contract_start_date = #{계약기간시작일자}
+           ,contract_end_date = #{계약기간종료일자}
+           ,has_rec_contraction = #{ONM계약여부}
+           ,rec_contract_start_date = #{REC계약기간시작일자}
+           ,rec_contract_end_date = #{REC계약기간종료일자}
+           ,has_kpx_meter = #{KPX계량기설치여부}
+           ,kpx_resource_id = #{분산자원코드}
+           ,kepco_meter_code = #{한전계량기코드}
+           ,previous_dealing_type = #{기존거래방식}
+           ,commission_rate = #{중개사업계약종류}
+           ,monitoring_info = #{모니터링정보}
+        WHERE resource_id = #{발전자원ID}
+    </update>
 </mapper>
