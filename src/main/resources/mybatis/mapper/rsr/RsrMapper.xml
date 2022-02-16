@@ -679,5 +679,59 @@
             SELECT LAST_INSERT_ID() AS id
         </selectKey>
     </insert>
+    <insert id="getPlantBusiRsrMetaAdd" parameterType="hashMap">
+        INSERT INTO resource_meta(
+              resource_id
+             ,name
+             ,business_registration_no
+             ,ceo
+             ,ceo_contract
+             ,manager
+             ,manager_contract
+             ,bank
+             ,bank_account
+             ,bank_account_holder
+             ,has_o_and_m_contract
+             ,contract_start_date
+             ,contract_end_date
+             ,has_rec_contraction
+             ,rec_contract_start_date
+             ,rec_contract_end_date
+             ,has_kpx_meter
+             ,kpx_resource_id
+             ,kepco_meter_code
+             ,previous_dealing_type
+             ,commission_rate
+             ,monitoring_info
+             ,created_at
+             ,created_by
+        )VALUES(
+                   #{발전자원ID}
+               ,#{발전자원명}
+               ,#{사업자등록번호}
+               ,#{대표자명}
+               ,#{대표자전화번호}
+               ,#{담당자명}
+               ,#{담당자전화번호}
+               ,#{정산계좌은행}
+               ,#{정산계좌번호}
+               ,#{정산계좌명의}
+               ,#{KPX계량기설치여부}
+               ,#{계약기간시작일자}
+               ,#{계약기간종료일자}
+               ,#{ONM계약여부}
+               ,#{REC계약기간시작일자}
+               ,#{REC계약기간종료일자}
+               ,#{KPX계량기설치여부}
+               ,#{분산자원코드}
+               ,#{한전계량기코드}
+               ,#{기존거래방식}
+               ,#{중개사업계약종류}
+               ,#{모니터링정보}
+               ,NOW()
+               ,#{작성자}
+               )
+
+    </insert>
 
 </mapper>

@@ -445,4 +445,26 @@ public class RsrService {
         multiMap.put("페이지정보",pageInfo);
         return multiMap;
     }
+    public Map<String, Object> getPlantBusiRsrAdd(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Map<String, Object> multiMap = new HashMap<>();
+
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        paramMap.put("작성자",loginInfo.get("사용자식별자"));
+        int cnt = rsrDao.getPlantBusiRsrAdd(paramMap);
+        if(cnt > 0){
+            paramMap.put("발전자원ID",paramMap.get("id"));
+            int metaCnt = rsrDao.getPlantBusiRsrMetaAdd(paramMap);
+            if(metaCnt > 0){
+                multiMap.put("성공여부",true);
+            }else{
+                multiMap.put("성공여부",false);
+            }
+        }else{
+            multiMap.put("성공여부",false);
+        }
+
+        return multiMap;
+    }
+
 }

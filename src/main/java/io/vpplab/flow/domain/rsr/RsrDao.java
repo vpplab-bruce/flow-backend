@@ -30,4 +30,6 @@ public interface RsrDao {
     int setPlantBusiSave(HashMap<String, Object> paramMap);
     List<HashMap> getPlantBusiRsrList(HashMap<String, Object> paramMap);
     int getPlantBusiRsrListCnt(HashMap<String, Object> paramMap);
+    int getPlantBusiRsrAdd(HashMap<String, Object> paramMap);
+    int getPlantBusiRsrMetaAdd(HashMap<String, Object> paramMap);
 }
