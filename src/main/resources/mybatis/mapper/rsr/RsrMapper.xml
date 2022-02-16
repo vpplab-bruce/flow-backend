@@ -542,6 +542,7 @@
             name = #{발전사업자명}
             ,business_registration_no = #{사업자등록번호}
             ,address = #{주소}
+            ,zip_code=#{우편번호}
             ,ceo = #{대표자명}
             ,ceo_contract = #{대표자전화번호}
             ,manager = #{담당자명}
@@ -554,6 +555,7 @@
                name
                ,business_registration_no
                ,address
+               ,zip_code
                ,ceo
                ,ceo_contract
                ,manager
@@ -564,6 +566,7 @@
               #{발전사업자명}
               ,#{사업자등록번호}
               ,#{주소}
+              ,#{우편번호}
               ,#{대표자명}
               ,#{대표자전화번호}
               ,#{담당자명}
