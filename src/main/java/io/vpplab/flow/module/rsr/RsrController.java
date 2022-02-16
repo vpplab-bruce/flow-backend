@@ -95,5 +95,9 @@ public class RsrController {
     public Map<String, Object> setPlantBusiRsrSave(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.setPlantBusiRsrSave(paramMap,request);
     }
+    @RequestMapping("/rsr/setPlantBusiRsrDel")
+    public Map<String, Object> setPlantBusiRsrDel(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.setPlantBusiRsrDel(paramMap,request);
+    }
 
 }

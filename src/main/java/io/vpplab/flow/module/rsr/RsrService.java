@@ -536,4 +536,20 @@ public class RsrService {
         return multiMap;
     }
 
+    public Map<String, Object> setPlantBusiRsrDel(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+        int cnt = rsrDao.setPlantBusiRsrDel(paramMap);
+        if(cnt > 0){
+            int metaCnt = rsrDao.setPlantBusiRsrMetaDel(paramMap);
+            if(metaCnt > 0){
+                multiMap.put("성공여부",true);
+            }else{
+                multiMap.put("성공여부",false);
+            }
+        }else{
+            multiMap.put("성공여부",false);
+        }
+        return multiMap;
+    }
+
 }

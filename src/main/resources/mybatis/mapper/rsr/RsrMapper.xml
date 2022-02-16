@@ -813,4 +813,10 @@
            ,monitoring_info = #{모니터링정보}
         WHERE resource_id = #{발전자원ID}
     </update>
+    <update id="setPlantBusiRsrDel"  parameterType="hashMap" >
+        DELETE FROM resource WHERE  id = #{발전자원ID}
+    </update>
+    <update id="setPlantBusiRsrMetaDel"  parameterType="hashMap" >
+        DELETE FROM resource_meta WHERE  resource_id = #{발전자원ID}
+    </update>
 </mapper>

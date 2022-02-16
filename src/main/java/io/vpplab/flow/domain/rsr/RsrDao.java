@@ -35,4 +35,6 @@ public interface RsrDao {
     HashMap getPlantBusiRsrDtl(HashMap<String, Object> paramMap);
     int setPlantBusiRsrSave(HashMap<String, Object> paramMap);
     int setPlantBusiRsrMetaSave(HashMap<String, Object> paramMap);
+    int setPlantBusiRsrDel(HashMap<String, Object> paramMap);
+    int setPlantBusiRsrMetaDel(HashMap<String, Object> paramMap);
 }
