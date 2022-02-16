@@ -716,10 +716,10 @@
                ,#{정산계좌은행}
                ,#{정산계좌번호}
                ,#{정산계좌명의}
-               ,#{KPX계량기설치여부}
+               ,#{ONM계약여부}
                ,#{계약기간시작일자}
                ,#{계약기간종료일자}
-               ,#{ONM계약여부}
+               ,#{REC계약여부}
                ,#{REC계약기간시작일자}
                ,#{REC계약기간종료일자}
                ,#{KPX계량기설치여부}
@@ -756,10 +756,10 @@
              ,B.bank AS 정산계좌은행
              ,B.bank_account AS 정산계좌번호
              ,B.bank_account_holder AS 정산계좌명의
-             ,B.has_o_and_m_contract AS KPX계량기설치여부
+             ,B.has_o_and_m_contract AS ONM계약여부
              ,B.contract_start_date AS 계약기간시작일자
              ,B.contract_end_date AS 계약기간종료일자
-             ,B.has_rec_contraction AS ONM계약여부
+             ,B.has_rec_contraction AS REC계약여부
              ,B.rec_contract_start_date AS REC계약기간시작일자
              ,B.rec_contract_end_date AS REC계약기간종료일자
              ,B.has_kpx_meter AS KPX계량기설치여부
@@ -799,10 +799,10 @@
            ,bank = #{정산계좌은행}
            ,bank_account = #{정산계좌번호}
            ,bank_account_holder = #{정산계좌명의}
-           ,has_o_and_m_contract = #{KPX계량기설치여부}
+           ,has_o_and_m_contract = #{ONM계약여부}
            ,contract_start_date = #{계약기간시작일자}
            ,contract_end_date = #{계약기간종료일자}
-           ,has_rec_contraction = #{ONM계약여부}
+           ,has_rec_contraction = #{REC계약여부}
            ,rec_contract_start_date = #{REC계약기간시작일자}
            ,rec_contract_end_date = #{REC계약기간종료일자}
            ,has_kpx_meter = #{KPX계량기설치여부}
