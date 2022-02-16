@@ -819,4 +819,96 @@
     <update id="setPlantBusiRsrMetaDel"  parameterType="hashMap" >
         DELETE FROM resource_meta WHERE  resource_id = #{발전자원ID}
     </update>
+
+    <select id="getPtrRsrList" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            A.id AS 참여자원ID
+             ,A.facility_type AS 설비구분
+             ,A.status AS 발전상태
+             ,A.capacity AS 설비용량
+             ,A.ess_status AS ESS상태
+             ,A.ess_capacity AS ESS용량
+             ,A.name AS 발전자원명
+             ,D.name AS 발전사업자명
+             ,E.avg_error_rate AS 평균오차율
+             ,F.kpx_resource_id AS 분산자원코드
+             ,F.contract_start_date AS 계약시작일
+             ,F.contract_end_date AS 계약종료일
+             ,C.name AS 집합자원그룹명
+        FROM resource A
+                 INNER JOIN resource_set_list B ON A.id = B.resource_id
+                 LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id
+                 LEFT OUTER JOIN generation_business_company D ON A.generation_business_company_id = D.id
+                 LEFT OUTER JOIN (SELECT
+                                      resource_id
+                                       ,SUM(error_rate) / COUNT(error_rate) AS avg_error_rate
+                                  FROM forecast_by_resource GROUP BY resource_id) E  ON A.id = E.resource_id
+                 LEFT OUTER JOIN resource_meta F ON A.id = F.resource_id
+
+       WHERE 1=1
+        <if test='facility_type != null and facility_type !=""'>
+            AND A.facility_type = #{facility_type}
+        </if>
+        <if test='status != null and status !=""'>
+            AND A.status = #{status}
+        </if>
+        <if test='ess_status != null and ess_status !=""'>
+            AND A.ess_status = #{ess_status}
+        </if>
+        <if test='name != null and name !=""'>
+            AND A.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='kpx_resource_id != null and kpx_resource_id !=""'>
+            AND F.kpx_resource_id = #{kpx_resource_id}
+        </if>
+        <if test='start_error_rate != null and start_error_rate !=""'>
+            AND E.start_error_rate <![CDATA[ >= ]]> #{start_error_rate}
+        </if>
+        <if test='end_error_rate != null and end_error_rate !=""'>
+            AND E.end_error_rate <![CDATA[ <= ]]> #{end_error_rate}
+        </if>
+        <if test='rsr_name != null and rsr_name !=""'>
+            AND C.rsr_name LIKE CONCAT('%',#{rsr_name},'%')
+        </if>
+        ORDER BY A.id
+        LIMIT #{페이지번호},#{행갯수}
+    </select>
+    <select id="getPtrRsrListCnt" parameterType="hashMap" resultType="int" >
+        SELECT
+            COUNT(A.id) AS CNT
+        FROM resource A
+                 INNER JOIN resource_set_list B ON A.id = B.resource_id
+                 LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id
+                 LEFT OUTER JOIN generation_business_company D ON A.generation_business_company_id = D.id
+                 LEFT OUTER JOIN (SELECT
+                                      resource_id
+                                       ,SUM(error_rate) / COUNT(error_rate) AS avg_error_rate
+                                  FROM forecast_by_resource GROUP BY resource_id) E  ON A.id = E.resource_id
+                 LEFT OUTER JOIN resource_meta F ON A.id = F.resource_id
+        WHERE 1=1
+        <if test='facility_type != null and facility_type !=""'>
+            AND A.facility_type = #{facility_type}
+        </if>
+        <if test='status != null and status !=""'>
+            AND A.status = #{status}
+        </if>
+        <if test='ess_status != null and ess_status !=""'>
+            AND A.ess_status = #{ess_status}
+        </if>
+        <if test='name != null and name !=""'>
+            AND A.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='kpx_resource_id != null and kpx_resource_id !=""'>
+            AND F.kpx_resource_id = #{kpx_resource_id}
+        </if>
+        <if test='start_error_rate != null and start_error_rate !=""'>
+            AND E.start_error_rate <![CDATA[ >= ]]> #{start_error_rate}
+        </if>
+        <if test='end_error_rate != null and end_error_rate !=""'>
+            AND E.end_error_rate <![CDATA[ <= ]]> #{end_error_rate}
+        </if>
+        <if test='rsr_name != null and rsr_name !=""'>
+            AND C.rsr_name LIKE CONCAT('%',#{rsr_name},'%')
+        </if>
+    </select>
 </mapper>

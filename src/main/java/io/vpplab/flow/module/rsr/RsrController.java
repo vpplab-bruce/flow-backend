@@ -100,4 +100,10 @@ public class RsrController {
         return rsrService.setPlantBusiRsrDel(paramMap,request);
     }
 
+    //참여자원
+    @RequestMapping("/rsr/getPtrRsrList")
+    public Map<String, Object> getPtrRsrList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.getPtrRsrList(paramMap,request);
+    }
+
 }
