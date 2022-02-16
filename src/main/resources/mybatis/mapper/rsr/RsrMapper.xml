@@ -571,6 +571,110 @@
               ,NOW()
               ,#{작성자}
            )
-
+        <selectKey keyProperty="id" resultType="hashmap" order="AFTER">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
     </update>
+    <select id="getPlantBusiRsrList" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            A.id AS 발전자원ID
+             ,A.facility_type AS  설비구분
+             ,A.status AS 발전상태
+             ,A.capacity AS 설비용량
+             ,A.ess_status AS ESS운영상태
+             ,A.ess_capacity AS ESS설비용량
+             ,A.name AS 발전자원명
+             ,B.has_rec_contraction AS 중개시장참여
+             ,B.previous_dealing_type AS 기존거래방식
+             ,A.address AS 주소
+        FROM resource A
+                 LEFT OUTER JOIN resource_meta B ON A.id = B.resource_id
+        WHERE 1=1
+          AND A.generation_business_company_id  =  #{발전사업자ID}
+        <if test='facility_type != null and facility_type !=""'>
+            AND A.facility_type = #{facility_type}
+        </if>
+        <if test='status != null and status !=""'>
+            AND A.status = #{status}
+        </if>
+        <if test='ess_status != null and ess_status !=""'>
+            AND A.ess_status = #{ess_status}
+        </if>
+        <if test='has_rec_contraction != null and has_rec_contraction !=""'>
+            AND B.has_rec_contraction = #{has_rec_contraction}
+        </if>
+        <if test='previous_dealing_type != null and previous_dealing_type !=""'>
+            AND B.previous_dealing_type = #{previous_dealing_type}
+        </if>
+        <if test='name != null and name !=""'>
+            AND A.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        ORDER BY A.id
+        LIMIT #{페이지번호},#{행갯수}
+    </select>
+    <select id="getPlantBusiRsrListCnt" parameterType="hashMap" resultType="int" >
+        SELECT
+           COUNT(A.id) AS CNT
+        FROM resource A
+                 LEFT OUTER JOIN resource_meta B ON A.id = B.resource_id
+        WHERE 1=1
+          AND A.generation_business_company_id  =  #{발전사업자ID}
+        <if test='facility_type != null and facility_type !=""'>
+            AND A.facility_type = #{facility_type}
+        </if>
+        <if test='status != null and status !=""'>
+            AND A.status = #{status}
+        </if>
+        <if test='ess_status != null and ess_status !=""'>
+            AND A.ess_status = #{ess_status}
+        </if>
+        <if test='has_rec_contraction != null and has_rec_contraction !=""'>
+            AND B.has_rec_contraction = #{has_rec_contraction}
+        </if>
+        <if test='previous_dealing_type != null and previous_dealing_type !=""'>
+            AND B.previous_dealing_type = #{previous_dealing_type}
+        </if>
+        <if test='name != null and name !=""'>
+            AND A.name LIKE CONCAT('%',#{name},'%')
+        </if>
+    </select>
+    <insert id="getPlantBusiRsrAdd" parameterType="hashMap">
+        INSERT INTO resource(
+                 generation_business_company_id
+                ,name
+                ,address
+                ,zip_code
+                ,latitude
+                ,longitude
+                ,facility_type
+                ,status
+                ,capacity
+                ,has_ess
+                ,ess_status
+                ,ess_capacity
+                ,area_type
+                ,created_at
+                ,created_by
+        )VALUES(
+                #{발전사업자ID}
+               ,#{발전자원명}
+               ,#{주소}
+               ,#{우편번호}
+               ,#{위도}
+               ,#{경도}
+               ,#{설비구분}
+               ,#{설비상태}
+               ,#{설비용량}
+               ,#{ESS유무}
+               ,#{ESS운영상태}
+               ,#{ESS설비용량}
+               ,#{지역구분}
+               ,NOW()
+               ,#{작성자}
+               )
+        <selectKey keyProperty="id" resultType="hashmap" order="AFTER">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+    </insert>
+
 </mapper>
