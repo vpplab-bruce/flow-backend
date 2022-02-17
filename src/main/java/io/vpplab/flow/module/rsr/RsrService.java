@@ -694,10 +694,11 @@ public class RsrService {
         Map<String, Object> multiMap = new HashMap<>();
 
         HashMap getPtrRsrDtl  =  rsrDao.getPtrRsrDtl(paramMap);
-
+        List<HashMap> getPtrRsrDtlList  =  rsrDao.getPtrRsrDtlList(paramMap);
         if(getPtrRsrDtl != null){
             multiMap.put("조회여부",true);
             multiMap.put("참여자원상세정보",getPtrRsrDtl);
+            multiMap.put("참여자원상세목록",getPtrRsrDtlList);
         }else{
             multiMap.put("조회여부",false);
         }
