@@ -335,6 +335,7 @@
         ) B ON  A.id = B.resource_id
                  LEFT OUTER JOIN resource_meta C ON A.id = C.resource_id
         WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list)
+        AND C.kpx_resource_id IS NOT NULL
         <if test='facility_type != null and facility_type !=""'>
         AND A.facility_type = #{facility_type}
         </if>
@@ -372,6 +373,7 @@
         ) B ON  A.id = B.resource_id
                 LEFT OUTER JOIN resource_meta C ON A.id = C.resource_id
         WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list)
+          AND C.kpx_resource_id IS NOT NULL
         <if test='facility_type != null and facility_type !=""'>
             AND A.facility_type = #{facility_type}
         </if>
@@ -836,7 +838,7 @@
              ,F.contract_end_date AS 계약종료일
              ,C.name AS 집합자원그룹명
         FROM resource A
-                 INNER JOIN resource_set_list B ON A.id = B.resource_id
+                 LEFT OUTER JOIN resource_set_list B ON A.id = B.resource_id
                  LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id
                  LEFT OUTER JOIN generation_business_company D ON A.generation_business_company_id = D.id
                  LEFT OUTER JOIN (SELECT
@@ -846,6 +848,7 @@
                  LEFT OUTER JOIN resource_meta F ON A.id = F.resource_id
 
        WHERE 1=1
+        AND F.kpx_resource_id IS NOT NULL
         <if test='facility_type != null and facility_type !=""'>
             AND A.facility_type = #{facility_type}
         </if>
@@ -877,7 +880,7 @@
         SELECT
             COUNT(A.id) AS CNT
         FROM resource A
-                 INNER JOIN resource_set_list B ON A.id = B.resource_id
+                 LEFT OUTER JOIN resource_set_list B ON A.id = B.resource_id
                  LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id
                  LEFT OUTER JOIN generation_business_company D ON A.generation_business_company_id = D.id
                  LEFT OUTER JOIN (SELECT
@@ -886,6 +889,7 @@
                                   FROM forecast_by_resource GROUP BY resource_id) E  ON A.id = E.resource_id
                  LEFT OUTER JOIN resource_meta F ON A.id = F.resource_id
         WHERE 1=1
+        AND F.kpx_resource_id IS NOT NULL
         <if test='facility_type != null and facility_type !=""'>
             AND A.facility_type = #{facility_type}
         </if>
@@ -925,6 +929,7 @@
         FROM resource A
         LEFT OUTER JOIN resource_meta B ON A.id = B.resource_id
         WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list)
+        AND B.kpx_resource_id IS NULL
         <if test='facility_type != null and facility_type !=""'>
             AND A.facility_type = #{facility_type}
         </if>
@@ -952,6 +957,7 @@
         FROM resource A
         LEFT OUTER JOIN resource_meta B ON A.id = B.resource_id
         WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list)
+        AND B.kpx_resource_id IS NULL
         <if test='facility_type != null and facility_type !=""'>
             AND A.facility_type = #{facility_type}
         </if>
