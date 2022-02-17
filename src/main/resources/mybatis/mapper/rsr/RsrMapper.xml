@@ -911,4 +911,65 @@
             AND C.rsr_name LIKE CONCAT('%',#{rsr_name},'%')
         </if>
     </select>
+    <select id="getPtrRsrListPop" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            A.id AS 자원ID
+            ,A.facility_type AS 설비구분
+            ,A.status AS 발전상태
+            ,A.capacity AS 설비용량
+            ,A.ess_status AS ESS상태
+            ,A.ess_capacity AS ESS용량
+            ,A.name AS 발전자원명
+            ,B.has_kpx_meter AS 중개시장참여
+            ,B.previous_dealing_type AS 기존거래방식
+        FROM resource A
+        LEFT OUTER JOIN resource_meta B ON A.id = B.resource_id
+        WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list)
+        <if test='facility_type != null and facility_type !=""'>
+            AND A.facility_type = #{facility_type}
+        </if>
+        <if test='status != null and status !=""'>
+            AND A.status = #{status}
+        </if>
+        <if test='ess_status != null and ess_status !=""'>
+            AND A.ess_status = #{ess_status}
+        </if>
+        <if test='name != null and name !=""'>
+            AND A.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='has_kpx_meter != null and has_kpx_meter !=""'>
+            AND B.has_kpx_meter = #{has_kpx_meter}
+        </if>
+        <if test='previous_dealing_type != null and previous_dealing_type !=""'>
+            AND B.previous_dealing_type = #{previous_dealing_type}
+        </if>
+        ORDER BY A.id
+        LIMIT #{페이지번호},#{행갯수}
+    </select>
+    <select id="getPtrRsrListPopCnt" parameterType="hashMap" resultType="int" >
+        SELECT
+         COUNT(A.id) AS CNT
+        FROM resource A
+        LEFT OUTER JOIN resource_meta B ON A.id = B.resource_id
+        WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list)
+        <if test='facility_type != null and facility_type !=""'>
+            AND A.facility_type = #{facility_type}
+        </if>
+        <if test='status != null and status !=""'>
+            AND A.status = #{status}
+        </if>
+        <if test='ess_status != null and ess_status !=""'>
+            AND A.ess_status = #{ess_status}
+        </if>
+        <if test='name != null and name !=""'>
+            AND A.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='has_kpx_meter != null and has_kpx_meter !=""'>
+            AND B.has_kpx_meter = #{has_kpx_meter}
+        </if>
+        <if test='previous_dealing_type != null and previous_dealing_type !=""'>
+            AND B.previous_dealing_type = #{previous_dealing_type}
+        </if>
+
+    </select>
 </mapper>

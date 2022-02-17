@@ -105,5 +105,9 @@ public class RsrController {
     public Map<String, Object> getPtrRsrList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.getPtrRsrList(paramMap,request);
     }
+    @RequestMapping("/rsr/getPtrRsrListPop")
+    public Map<String, Object> getPtrRsrListPop(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.getPtrRsrListPop(paramMap,request);
+    }
 
 }
