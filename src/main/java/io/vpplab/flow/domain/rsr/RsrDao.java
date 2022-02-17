@@ -41,5 +41,7 @@ public interface RsrDao {
     int getPtrRsrListCnt(HashMap<String, Object> paramMap);
     List<HashMap> getPtrRsrListPop(HashMap<String, Object> paramMap);
     int getPtrRsrListPopCnt(HashMap<String, Object> paramMap);
+    HashMap getPtrRsrAddDtl(HashMap<String, Object> paramMap);
+    int getPtrRsrAddSave(HashMap<String, Object> paramMap);
 
 }

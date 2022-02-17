@@ -653,4 +653,29 @@ public class RsrService {
         multiMap.put("페이지정보",pageInfo);
         return multiMap;
     }
+    public Map<String, Object> getPtrRsrAddDtl(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        HashMap getPtrRsrInfo  =  rsrDao.getPtrRsrAddDtl(paramMap);
+
+        if(getPtrRsrInfo != null){
+            multiMap.put("조회여부",true);
+            multiMap.put("참여자원발전소정보",getPtrRsrInfo);
+        }else{
+            multiMap.put("조회여부",false);
+        }
+        return multiMap;
+    }
+    public Map<String, Object> getPtrRsrAddSave(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        int cnt  =  rsrDao.getPtrRsrAddSave(paramMap);
+
+        if(cnt > 0){
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+        return multiMap;
+    }
 }

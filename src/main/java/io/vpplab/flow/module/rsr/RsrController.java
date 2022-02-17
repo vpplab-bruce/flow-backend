@@ -109,5 +109,14 @@ public class RsrController {
     public Map<String, Object> getPtrRsrListPop(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.getPtrRsrListPop(paramMap,request);
     }
+    @RequestMapping("/rsr/getPtrRsrAddDtl")
+    public Map<String, Object> getPtrRsrAddDtl(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.getPtrRsrAddDtl(paramMap,request);
+    }
+
+    @RequestMapping("/rsr/getPtrRsrAddSave")
+    public Map<String, Object> getPtrRsrAddSave(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.getPtrRsrAddSave(paramMap,request);
+    }
 
 }

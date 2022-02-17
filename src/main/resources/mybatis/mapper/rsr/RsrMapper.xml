@@ -990,4 +990,23 @@
         </if>
 
     </select>
+    <select id="getPtrRsrAddDtl" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            A.id AS 발전자원ID
+             ,A.name AS 발전자원명
+             ,B.has_brokerage_contract AS 중개시장참여
+             ,B.brokerage_contract_start_date AS 계약시작일자
+             ,B.brokerage_contract_end_date AS 계약종료일자
+             ,B.has_kpx_meter AS KPX계량기설치여부
+             ,B.previous_dealing_type AS 기존거래방식
+        FROM resource A
+                 LEFT OUTER JOIN resource_meta B ON A.id = B.resource_id
+        WHERE A.id = #{발전자원ID}
+
+    </select>
+    <update id="getPtrRsrAddSave" parameterType="hashMap">
+        UPDATE resource_meta SET
+            kpx_resource_id = #{분산자원코드}
+        WHERE  resource_id = #{발전자원ID}
+    </update>
 </mapper>
