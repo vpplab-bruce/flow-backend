@@ -363,7 +363,7 @@ public class RsrService {
         paramMap.put("facility_type",paramMap.get("설비구분"));
         paramMap.put("status",paramMap.get("발전상태"));
         paramMap.put("ess_status",paramMap.get("ESS운영상태"));
-        paramMap.put("has_rec_contraction",paramMap.get("중개시장참여"));
+        paramMap.put("has_brokerage_contract",paramMap.get("중개시장참여"));
         paramMap.put("previous_dealing_type",paramMap.get("기존거래방식"));
         paramMap.put("name",paramMap.get("발전자원명"));
 
@@ -462,7 +462,7 @@ public class RsrService {
         paramMap.put("facility_type",paramMap.get("설비구분"));
         paramMap.put("status",paramMap.get("발전상태"));
         paramMap.put("ess_status",paramMap.get("ESS운영상태"));
-        paramMap.put("has_rec_contraction",paramMap.get("중개시장참여"));
+        paramMap.put("has_brokerage_contract",paramMap.get("중개시장참여"));
         paramMap.put("previous_dealing_type",paramMap.get("기존거래방식"));
         paramMap.put("name",paramMap.get("발전자원명"));
 
@@ -628,7 +628,7 @@ public class RsrService {
         paramMap.put("status",paramMap.get("발전상태"));
         paramMap.put("ess_status",paramMap.get("ESS운영상태"));
         paramMap.put("name",paramMap.get("발전자원명"));
-        paramMap.put("has_kpx_meter",paramMap.get("중개시장참여"));
+        paramMap.put("has_brokerage_contract",paramMap.get("중개시장참여"));
         paramMap.put("previous_dealing_type",paramMap.get("기존거래방식"));
 
 

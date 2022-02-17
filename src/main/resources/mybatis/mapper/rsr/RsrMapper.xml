@@ -236,7 +236,7 @@
          ,C.avg_error_rate AS 평균오차율
          ,C.max_error_rate AS 최대오차율
          ,C.min_error_rate AS 최소오차율
-         ,D.contract_end_date AS 계약종료일시
+         ,D.brokerage_contract_end_date AS 계약종료일시
          ,B.created_at AS 자원추가일시
     FROM resource_set_list A
              INNER JOIN resource B ON  A.resource_id = B.id
@@ -323,7 +323,7 @@
              ,B.avg_error_rate AS 평균오차율
              ,B.max_error_rate AS 최대오차율
              ,B.min_error_rate AS 최소오차율
-             ,C.contract_end_date AS 계약종료일시
+             ,C.brokerage_contract_end_date AS 계약종료일시
              ,A.created_at AS 자원추가일시
         FROM resource A
                  LEFT OUTER JOIN ( SELECT
@@ -409,7 +409,7 @@
              ,C.avg_error_rate AS 평균오차율
              ,C.max_error_rate AS 최대오차율
              ,C.min_error_rate AS 최소오차율
-             ,D.contract_end_date AS 계약종료일시
+             ,D.brokerage_contract_end_date AS 계약종료일시
              ,B.created_at AS 자원추가일시
         FROM resource_set_list A
                  INNER JOIN resource B ON  A.resource_id = B.id
@@ -589,7 +589,7 @@
              ,A.ess_status AS ESS운영상태
              ,A.ess_capacity AS ESS설비용량
              ,A.name AS 발전자원명
-             ,B.has_rec_contraction AS 중개시장참여
+             ,B.has_brokerage_contract AS 중개시장참여
              ,B.previous_dealing_type AS 기존거래방식
              ,A.address AS 주소
         FROM resource A
@@ -605,8 +605,8 @@
         <if test='ess_status != null and ess_status !=""'>
             AND A.ess_status = #{ess_status}
         </if>
-        <if test='has_rec_contraction != null and has_rec_contraction !=""'>
-            AND B.has_rec_contraction = #{has_rec_contraction}
+        <if test='has_brokerage_contract != null and has_brokerage_contract !=""'>
+            AND B.has_brokerage_contract = #{has_brokerage_contract}
         </if>
         <if test='previous_dealing_type != null and previous_dealing_type !=""'>
             AND B.previous_dealing_type = #{previous_dealing_type}
@@ -633,8 +633,8 @@
         <if test='ess_status != null and ess_status !=""'>
             AND A.ess_status = #{ess_status}
         </if>
-        <if test='has_rec_contraction != null and has_rec_contraction !=""'>
-            AND B.has_rec_contraction = #{has_rec_contraction}
+        <if test='has_brokerage_contract != null and has_brokerage_contract !=""'>
+            AND B.has_brokerage_contract = #{has_brokerage_contract}
         </if>
         <if test='previous_dealing_type != null and previous_dealing_type !=""'>
             AND B.previous_dealing_type = #{previous_dealing_type}
@@ -703,6 +703,9 @@
              ,kpx_resource_id
              ,kepco_meter_code
              ,previous_dealing_type
+             ,has_brokerage_contract
+             ,brokerage_contract_start_date
+             ,brokerage_contract_end_date
              ,commission_rate
              ,monitoring_info
              ,created_at
@@ -728,6 +731,9 @@
                ,#{분산자원코드}
                ,#{한전계량기코드}
                ,#{기존거래방식}
+               ,#{중개시장참여}
+               ,#{전력중계계약시작일자}
+               ,#{전력중계계약종료일자}
                ,#{중개사업계약종류}
                ,#{모니터링정보}
                ,NOW()
@@ -764,6 +770,9 @@
              ,B.has_rec_contraction AS REC계약여부
              ,B.rec_contract_start_date AS REC계약기간시작일자
              ,B.rec_contract_end_date AS REC계약기간종료일자
+             ,B.has_brokerage_contract AS 중개시장참여
+             ,B.brokerage_contract_start_date AS 전력중계계약시작일자
+             ,B.brokerage_contract_end_date AS 전력중계계약종료일자
              ,B.has_kpx_meter AS KPX계량기설치여부
              ,B.kpx_resource_id AS 분산자원코드
              ,B.kepco_meter_code AS 한전계량기코드
@@ -811,6 +820,9 @@
            ,kpx_resource_id = #{분산자원코드}
            ,kepco_meter_code = #{한전계량기코드}
            ,previous_dealing_type = #{기존거래방식}
+           ,has_brokerage_contract = #{중개시장참여}
+           ,brokerage_contract_start_date = #{전력중계계약시작일자}
+           ,brokerage_contract_end_date = #{전력중계계약종료일자}
            ,commission_rate = #{중개사업계약종류}
            ,monitoring_info = #{모니터링정보}
         WHERE resource_id = #{발전자원ID}
@@ -834,8 +846,8 @@
              ,D.name AS 발전사업자명
              ,E.avg_error_rate AS 평균오차율
              ,F.kpx_resource_id AS 분산자원코드
-             ,F.contract_start_date AS 계약시작일
-             ,F.contract_end_date AS 계약종료일
+             ,F.brokerage_contract_start_date AS 전력중계계약시작일자
+             ,F.brokerage_contract_end_date AS 전력중계계약종료일자
              ,C.name AS 집합자원그룹명
         FROM resource A
                  LEFT OUTER JOIN resource_set_list B ON A.id = B.resource_id
@@ -924,7 +936,7 @@
             ,A.ess_status AS ESS상태
             ,A.ess_capacity AS ESS용량
             ,A.name AS 발전자원명
-            ,B.has_kpx_meter AS 중개시장참여
+            ,B.has_brokerage_contract AS 중개시장참여
             ,B.previous_dealing_type AS 기존거래방식
         FROM resource A
         LEFT OUTER JOIN resource_meta B ON A.id = B.resource_id
@@ -942,8 +954,8 @@
         <if test='name != null and name !=""'>
             AND A.name LIKE CONCAT('%',#{name},'%')
         </if>
-        <if test='has_kpx_meter != null and has_kpx_meter !=""'>
-            AND B.has_kpx_meter = #{has_kpx_meter}
+        <if test='has_brokerage_contract != null and has_brokerage_contract !=""'>
+            AND B.has_brokerage_contract = #{has_brokerage_contract}
         </if>
         <if test='previous_dealing_type != null and previous_dealing_type !=""'>
             AND B.previous_dealing_type = #{previous_dealing_type}
@@ -970,8 +982,8 @@
         <if test='name != null and name !=""'>
             AND A.name LIKE CONCAT('%',#{name},'%')
         </if>
-        <if test='has_kpx_meter != null and has_kpx_meter !=""'>
-            AND B.has_kpx_meter = #{has_kpx_meter}
+        <if test='has_brokerage_contract != null and has_brokerage_contract !=""'>
+            AND B.has_brokerage_contract = #{has_brokerage_contract}
         </if>
         <if test='previous_dealing_type != null and previous_dealing_type !=""'>
             AND B.previous_dealing_type = #{previous_dealing_type}
