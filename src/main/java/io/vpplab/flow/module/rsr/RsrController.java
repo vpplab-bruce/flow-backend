@@ -114,9 +114,21 @@ public class RsrController {
         return rsrService.getPtrRsrAddDtl(paramMap,request);
     }
 
-    @RequestMapping("/rsr/getPtrRsrAddSave")
-    public Map<String, Object> getPtrRsrAddSave(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
-        return rsrService.getPtrRsrAddSave(paramMap,request);
+    @RequestMapping("/rsr/setPtrRsrAddSave")
+    public Map<String, Object> setPtrRsrAddSave(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.setPtrRsrAddSave(paramMap,request);
+    }
+    @RequestMapping("/rsr/setPtrRsrAddDel")
+    public Map<String, Object> setPtrRsrAddDel(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.setPtrRsrAddDel(paramMap,request);
+    }
+    @RequestMapping("/rsr/getPtrRsrDtl")
+    public Map<String, Object> getPtrRsrDtl(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.getPtrRsrDtl(paramMap,request);
+    }
+    @RequestMapping("/rsr/getPtrRsrDtlList")
+    public Map<String, Object> getPtrRsrDtlList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.getPtrRsrDtlList(paramMap,request);
     }
 
 }

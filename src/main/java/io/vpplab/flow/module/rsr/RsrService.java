@@ -666,10 +666,10 @@ public class RsrService {
         }
         return multiMap;
     }
-    public Map<String, Object> getPtrRsrAddSave(HashMap<String,Object> paramMap, HttpServletRequest request) {
+    public Map<String, Object> setPtrRsrAddSave(HashMap<String,Object> paramMap, HttpServletRequest request) {
         Map<String, Object> multiMap = new HashMap<>();
 
-        int cnt  =  rsrDao.getPtrRsrAddSave(paramMap);
+        int cnt  =  rsrDao.setPtrRsrAddSave(paramMap);
 
         if(cnt > 0){
             multiMap.put("성공여부",true);
@@ -678,4 +678,43 @@ public class RsrService {
         }
         return multiMap;
     }
+    public Map<String, Object> setPtrRsrAddDel(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        int cnt  =  rsrDao.setPtrRsrAddDel(paramMap);
+
+        if(cnt > 0){
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+        return multiMap;
+    }
+    public Map<String, Object> getPtrRsrDtl(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        HashMap getPtrRsrDtl  =  rsrDao.getPtrRsrDtl(paramMap);
+
+        if(getPtrRsrDtl != null){
+            multiMap.put("조회여부",true);
+            multiMap.put("참여자원상세정보",getPtrRsrDtl);
+        }else{
+            multiMap.put("조회여부",false);
+        }
+        return multiMap;
+    }
+    public Map<String, Object> getPtrRsrDtlList(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        List<HashMap> getPtrRsrDtlList  =  rsrDao.getPtrRsrDtlList(paramMap);
+
+        if(getPtrRsrDtlList.size() > 0){
+            multiMap.put("조회여부",true);
+            multiMap.put("참여자원상세목록",getPtrRsrDtlList);
+        }else{
+            multiMap.put("조회여부",false);
+        }
+        return multiMap;
+    }
+
 }

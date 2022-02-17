@@ -995,8 +995,8 @@
             A.id AS 발전자원ID
              ,A.name AS 발전자원명
              ,B.has_brokerage_contract AS 중개시장참여
-             ,B.brokerage_contract_start_date AS 계약시작일자
-             ,B.brokerage_contract_end_date AS 계약종료일자
+             ,B.brokerage_contract_start_date AS 전력중계계약시작일자
+             ,B.brokerage_contract_end_date AS 전력중계계약종료일자
              ,B.has_kpx_meter AS KPX계량기설치여부
              ,B.previous_dealing_type AS 기존거래방식
         FROM resource A
@@ -1004,9 +1004,47 @@
         WHERE A.id = #{발전자원ID}
 
     </select>
-    <update id="getPtrRsrAddSave" parameterType="hashMap">
+    <update id="setPtrRsrAddSave" parameterType="hashMap">
         UPDATE resource_meta SET
             kpx_resource_id = #{분산자원코드}
         WHERE  resource_id = #{발전자원ID}
     </update>
+    <update id="setPtrRsrAddDel" parameterType="hashMap">
+        UPDATE resource_meta SET
+            kpx_resource_id = null
+        WHERE resource_id =  #{발전자원ID}
+    </update>
+
+    <select id="getPtrRsrDtl" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            A.id AS 발전자원ID
+             ,A.name AS 발전자원명
+             ,B.has_brokerage_contract AS 중개시장참여
+             ,B.brokerage_contract_start_date AS 전력중계계약시작일자
+             ,B.brokerage_contract_end_date AS 전력중계계약종료일자
+             ,B.has_kpx_meter AS KPX계량기설치여부
+             ,B.previous_dealing_type AS 기존거래방식
+             ,B.kpx_resource_id AS 분산자원코드
+             ,C.name AS 발전사업자명
+             ,B.business_registration_no AS 사업자등록번호
+             ,B.ceo AS 대표자명
+             ,B.ceo_contract AS 대표자전화번호
+             ,A.zip_code AS 우편번호
+             ,A.address AS 주소
+        FROM resource A
+                 LEFT OUTER JOIN resource_meta B ON A.id = B.resource_id
+                 LEFT OUTER JOIN generation_business_company C ON A.generation_business_company_id = C.id
+        WHERE A.id = #{발전자원ID}
+    </select>
+    <select id="getPtrRsrDtlList" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            A.base_time AS 측정시간
+             ,A.forecast_amount_1st AS 1차예측
+             ,A.forecast_amount_2nd AS 2차예측
+             ,A.generation_amount AS 실제발전량
+             ,A.error_rate AS 오차율
+        FROM forecast_by_resource A
+        WHERE A.resource_id = #{발전자원ID}
+          AND DATE_FORMAT(A.base_date,'%Y%m%d') = DATE_FORMAT(IFNULL(#{기준일자},NOW()),'%Y%m%d')
+    </select>
 </mapper>
