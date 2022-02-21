@@ -1031,9 +1031,23 @@
              ,B.ceo_contract AS 대표자전화번호
              ,A.zip_code AS 우편번호
              ,A.address AS 주소
+             ,A.status AS 발전상태
+             ,CASE WHEN facility_type = '01' then A.capacity ELSE '0' END AS PV설비용량
+             ,A.ess_capacity AS ESS용량
+             ,(CASE WHEN facility_type = '01' then A.capacity ELSE '0' END) + A.ess_capacity AS 설비용량합계
+             ,D.agv_error_rate AS 평균오차율
+             ,D.max_error_rate AS 최대오차율
+             ,D.min_error_rate AS 최소오차율
+
         FROM resource A
                  LEFT OUTER JOIN resource_meta B ON A.id = B.resource_id
                  LEFT OUTER JOIN generation_business_company C ON A.generation_business_company_id = C.id
+                 LEFT OUTER JOIN(SELECT
+                                     resource_id
+                                      ,SUM(error_rate) / COUNT(error_rate) AS agv_error_rate
+                                      ,MAX(error_rate) AS max_error_rate
+                                      ,MIN(error_rate) AS min_error_rate
+                                 FROM forecast_by_resource GROUP BY resource_id) D ON A.id = D.resource_id
         WHERE A.id = #{발전자원ID}
     </select>
     <select id="getPtrRsrDtlList" parameterType="hashMap" resultType="hashMap" >
