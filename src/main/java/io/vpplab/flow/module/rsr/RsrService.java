@@ -122,7 +122,14 @@ public class RsrService {
         pageInfo.put("페이지번호",pageNo);
         pageInfo.put("행갯수",rowCnt);
         /*****************페이징**********************/
-        List<HashMap> tab1List = rsrDao.tab1List(paramMap);
+        List<HashMap> tab1List = null;
+        if(paramMap.get("조회구분") == null || "".equals(paramMap.get("조회구분")) || "01".equals(paramMap.get("조회구분"))){
+             tab1List = rsrDao.tab1List01(paramMap);
+        }else if("02".equals(paramMap.get("조회구분"))){
+            tab1List = rsrDao.tab1List02(paramMap);
+        }else if("03".equals(paramMap.get("조회구분"))){
+             tab1List = rsrDao.tab1List03(paramMap);
+        }
         List<HashMap> tab2List = rsrDao.tab2List(paramMap);
         int tab2ListCnt  =  rsrDao.tab2ListCnt(paramMap);
 

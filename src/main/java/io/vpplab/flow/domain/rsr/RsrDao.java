@@ -10,7 +10,9 @@ public interface RsrDao {
     HashMap getClcRsrDtl(HashMap<String, Object> paramMap);
     List<HashMap> getClcRsrMemoList(HashMap<String, Object> paramMap);
     HashMap getRsrInfo(HashMap<String, Object> paramMap);
-    List<HashMap> tab1List(HashMap<String, Object> paramMap);
+    List<HashMap> tab1List01(HashMap<String, Object> paramMap);
+    List<HashMap> tab1List02(HashMap<String, Object> paramMap);
+    List<HashMap> tab1List03(HashMap<String, Object> paramMap);
     List<HashMap> tab2List(HashMap<String, Object> paramMap);
     int tab2ListCnt(HashMap<String, Object> paramMap);
     int setMemo(HashMap<String, Object> paramMap);

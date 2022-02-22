@@ -179,10 +179,8 @@
          ,A.status AS 운영상태
          ,A.apply_type AS 신청유형
          ,A.apply_status AS 처리상태
-         ,B.error_rate AS 평균오차율
          ,A.created_at AS 신청일시
     FROM resource_set A
-             LEFT OUTER JOIN forecast_by_resource_set B ON A.id = B.resource_set_id
     WHERE A.id= #{집합자원ID}
 </select>
 <select id="getClcRsrMemoList" parameterType="hashMap" resultType="hashMap" >
@@ -192,7 +190,7 @@
         ,requested_at AS 요청일시
         ,requested_name AS 요청자이름
         ,requested_phone AS 요청자전화번호
-        ,requested_memo AS 요청자이름
+        ,requested_memo AS 요청자메모
         ,approved_at AS 승인일시
         ,approved_name AS 승인자이름
         ,approved_phone AS 승인자전화번호
@@ -203,27 +201,105 @@
 </select>
 <update id="setMemo" parameterType="hashMap"  >
     UPDATE event SET
-        approved_memo = #{승인자메모}
+        requested_memo = #{요청자메모}
  WHERE id = #{이벤트ID}
 </update>
 <update id="setMemoDel" parameterType="hashMap"  >
     DELETE FROM event WHERE  id = #{이벤트ID}
 </update>
 
-<select id="tab1List" parameterType="hashMap" resultType="hashMap" >
+<select id="tab1List01" parameterType="hashMap" resultType="hashMap" >
     SELECT
-        B.base_date AS 측정일자
-         ,B.base_time AS 측정시간
-         ,B.forecast_amount_1st AS 1차예측
-         ,B.forecast_amount_2nd AS 2차예측
-         ,(B.forecast_amount_1st+B.forecast_amount_2nd) /2 AS 예측평균
-         ,B.generation_amount AS 발전값
-         ,B.resource_capacity AS 총설비용량
-         ,B.error_rate AS 오차율
-    FROM forecast_by_resource_set B
-    WHERE B.resource_set_id = #{집합자원ID}
-    ORDER BY B.base_date,B.base_time
+        A.base_date AS 측정일자
+        ,A.base_time AS 측정시간
+        ,A.forecast_amount_1st AS 1차예측
+        ,A.forecast_amount_2nd AS 2차예측
+        ,(A.forecast_amount_1st+A.forecast_amount_2nd) /2 AS 예측평균
+        ,A.generation_amount AS 발전값
+        ,A.resource_capacity AS 총설비용량
+        ,A.error_rate AS 오차율
+        ,C.id AS 메모갯수
+    FROM forecast_by_resource_set A
+    INNER JOIN resource_set_list B ON A.resource_set_id = B.resource_set_id
+    LEFT OUTER JOIN (
+                    SELECT
+                        BB.base_time
+                        ,count(AA.id) AS id
+                    FROM event AA
+                    LEFT OUTER JOIN forecast_by_resource_set BB ON 1=1 AND BB.resource_set_id =#{집합자원ID}  AND DATE_FORMAT(BB.base_date,'%Y%m%d') = DATE_FORMAT(IF(#{기준일자},#{기준일자},NOW()),'%Y%m%d')
+                    WHERE AA.requested_memo IS NOT NULL
+                    AND DATE_FORMAT(AA.requested_at,'%Y%m%d') = DATE_FORMAT(IF(#{기준일자},#{기준일자},NOW()),'%Y%m%d')
+                    AND DATE_FORMAT(BB.base_time,'%H%i')  <![CDATA[ >= ]]> DATE_FORMAT(AA.start_at,'%H%i') AND   DATE_FORMAT(BB.base_time,'%H%i')  <![CDATA[ <= ]]> DATE_FORMAT(AA.end_at,'%H%i')
+                    GROUP BY DATE_FORMAT(BB.base_time,'%H%i')
+                    ) C ON DATE_FORMAT(A.base_time,'%H%i')  = DATE_FORMAT(C.base_time,'%H%i')
+
+    WHERE 1=1
+    AND A.resource_set_id = #{집합자원ID}
+    AND DATE_FORMAT(A.base_date,'%Y%m%d') = DATE_FORMAT(IF(#{기준일자},#{기준일자},NOW()),'%Y%m%d')
+    GROUP BY DATE_FORMAT(A.base_time,'%H%i')
+    ORDER BY A.base_date,A.base_time
+
 </select>
+    <select id="tab1List02" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            A.base_date AS 측정일자
+             ,A.base_time AS 측정시간
+             ,A.forecast_amount_1st AS 1차예측
+             ,A.forecast_amount_2nd AS 2차예측
+             ,(A.forecast_amount_1st+A.forecast_amount_2nd) /2 AS 예측평균
+             ,A.generation_amount AS 발전값
+             ,A.resource_capacity AS 총설비용량
+             ,A.error_rate AS 오차율
+             ,C.id AS 메모갯수
+        FROM forecast_by_resource_set A
+                 INNER JOIN resource_set_list B ON A.resource_set_id = B.resource_set_id
+                 LEFT OUTER JOIN (
+            SELECT
+                count(AA.id) AS id
+                 ,AA.resource_id
+            FROM event AA
+            WHERE AA.requested_memo IS NOT NULL
+              AND DATE_FORMAT(AA.requested_at,'%Y%m') = DATE_FORMAT(IF(#{기준일자},#{기준일자},NOW()),'%Y%m')
+            GROUP BY DATE_FORMAT(AA.requested_at,'%Y%m%d')
+        ) C ON B.resource_id= C.resource_id
+
+        WHERE 1=1
+          AND A.resource_set_id =  #{집합자원ID}
+          AND DATE_FORMAT(A.base_date,'%Y%m') = DATE_FORMAT(IF(#{기준일자},#{기준일자},NOW()),'%Y%m')
+        GROUP BY DATE_FORMAT(A.base_date,'%Y%m%d')
+        ORDER BY A.base_date,A.base_time
+
+    </select>
+    <select id="tab1List03" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            DATE_FORMAT(A.base_date,'%Y%m') AS 측정일자
+             ,A.base_time AS 측정시간
+             ,A.forecast_amount_1st AS 1차예측
+             ,A.forecast_amount_2nd AS 2차예측
+             ,(A.forecast_amount_1st+A.forecast_amount_2nd) /2 AS 예측평균
+             ,A.generation_amount AS 발전값
+             ,A.resource_capacity AS 총설비용량
+             ,A.error_rate AS 오차율
+             ,C.id  AS 메모갯수
+        FROM forecast_by_resource_set A
+                 INNER JOIN resource_set_list B ON A.resource_set_id = B.resource_set_id
+                 LEFT OUTER JOIN (
+            SELECT
+                count(AA.id) AS id
+                 ,AA.resource_id
+            FROM event AA
+            WHERE AA.requested_memo IS NOT NULL
+              AND DATE_FORMAT(AA.requested_at,'%Y') = DATE_FORMAT(IF(#{기준일자},#{기준일자},NOW()),'%Y')
+            GROUP BY DATE_FORMAT(AA.requested_at,'%Y%m')
+        ) C ON B.resource_id= C.resource_id
+
+        WHERE 1=1
+          AND A.resource_set_id = #{집합자원ID}
+          AND DATE_FORMAT(A.base_date,'%Y') = DATE_FORMAT(IF(#{기준일자},#{기준일자},NOW()),'%Y')
+        GROUP BY DATE_FORMAT(A.base_date,'%Y%m')
+        ORDER BY A.base_date,A.base_time
+
+    </select>
 <select id="tab2List" parameterType="hashMap" resultType="hashMap" >
     SELECT
         B.id AS 자원ID
