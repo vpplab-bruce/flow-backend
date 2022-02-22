@@ -1059,6 +1059,6 @@
              ,A.error_rate AS 오차율
         FROM forecast_by_resource A
         WHERE A.resource_id = #{발전자원ID}
-          AND DATE_FORMAT(A.base_date,'%Y%m%d') = DATE_FORMAT(IFNULL(#{기준일자},NOW()),'%Y%m%d')
+          AND DATE_FORMAT(A.base_date,'%Y%m%d') = DATE_FORMAT(IF(#{기준일자},#{기준일자},NOW()),'%Y%m%d')
     </select>
 </mapper>
