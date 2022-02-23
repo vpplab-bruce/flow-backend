@@ -145,7 +145,25 @@ public class RsrService {
 
         HashMap rsrInfo = rsrDao.getRsrInfo(paramMap);
         HashMap clcRsrDtl = rsrDao.getClcRsrDtl(paramMap);
+
+        if("".equals(paramMap.get("메모행갯수")) || null == paramMap.get("메모행갯수")){
+            pageInfo.put("메모행갯수",10+"");
+            paramMap.put("메모행갯수",10+"");
+        }else{
+            int getClcRsrMemoListCnt = rsrDao.getClcRsrMemoListCnt(paramMap);
+            if(getClcRsrMemoListCnt > Integer.parseInt(paramMap.get("메모행갯수").toString()) ){
+                pageInfo.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10) +"");
+                paramMap.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10) +"");
+            }
+
+        }
+
         List<HashMap> clcRsrMemoList = rsrDao.getClcRsrMemoList(paramMap);
+
+
+
+
+
         clcRsrDtl.put("메모",clcRsrMemoList);
         if(clcRsrDtl != null){
             multiMap.put("조회여부",true);
@@ -159,6 +177,52 @@ public class RsrService {
             multiMap.put("조회여부",false);
         }
         multiMap.put("페이지정보",pageInfo);
+        return multiMap;
+    }
+    public Map<String, Object> getClcRsrMemoList(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+        HashMap<String,String> pageInfo = new HashMap<>();
+
+        if("".equals(paramMap.get("메모행갯수")) || null == paramMap.get("메모행갯수")){
+            pageInfo.put("메모행갯수",10+"");
+            paramMap.put("메모행갯수",10+"");
+        }else{
+            int getClcRsrMemoListCnt = rsrDao.getClcRsrMemoListCnt(paramMap);
+            if(getClcRsrMemoListCnt > Integer.parseInt(paramMap.get("메모행갯수").toString()) ){
+                pageInfo.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10) +"");
+                paramMap.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10) +"");
+            }
+
+        }
+
+        List<HashMap> clcRsrMemoList = rsrDao.getClcRsrMemoList(paramMap);
+        multiMap.put("메모",clcRsrMemoList);
+        multiMap.put("페이지정보",pageInfo);
+        return multiMap;
+    }
+
+    public Map<String, Object> setClcRsrMemo(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        int cnt = rsrDao.setClcRsrMemo(paramMap);
+        if(cnt > 0){
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+
+        return multiMap;
+    }
+    public Map<String, Object> setClcRsrMemoDel(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        int cnt = rsrDao.setClcRsrMemoDel(paramMap);
+        if(cnt > 0){
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+
         return multiMap;
     }
     public Map<String, Object> setMemo(HashMap<String,Object> paramMap, HttpServletRequest request) {

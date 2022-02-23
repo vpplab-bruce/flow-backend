@@ -36,17 +36,20 @@
                     ,(CASE WHEN C.error_rate >= 0 AND C.error_rate     <![CDATA[ <= ]]> 6 THEN '좋음'
                         WHEN C.error_rate > 6 AND C.error_rate     <![CDATA[ <= ]]> 8 THEN '보통'
                         WHEN C.error_rate > 8 THEN '나쁨' END) AS 오차율평가
-                    ,'' AS 거래가능기간
+                    ,B.brokerage_contract_end_date AS 거래가능기간
                     ,A.created_at AS 신청일자
                 FROM resource_set A
                 LEFT OUTER JOIN ( SELECT
                                     AA.resource_set_id
-                                    ,COUNT(resource_id) AS  resource_cnt
+                                    ,COUNT(AA.resource_id) AS  resource_cnt
                                     ,((CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) ELSE 0 END)+SUM(ess_capacity))  AS capacity
                                     ,CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) END AS capacityPvWt
                                     ,SUM(BB.ess_capacity) AS ess_capacity
+                                    ,MIN(CC.brokerage_contract_end_date) AS brokerage_contract_end_date
                                 FROM resource_set_list AA
-                                LEFT OUTER JOIN resource BB ON AA.resource_id = BB.id  GROUP BY AA.resource_set_id) B ON A.id = B.resource_set_id
+                                LEFT OUTER JOIN resource BB ON AA.resource_id = BB.id
+                                LEFT OUTER JOIN resource_meta CC ON BB.id = CC.resource_id
+                                GROUP BY AA.resource_set_id) B ON A.id = B.resource_set_id
                 LEFT OUTER JOIN forecast_by_resource_set C ON A.id = C.resource_set_id
                 ) CC
         WHERE 1=1
@@ -104,7 +107,6 @@
                 ,(CASE WHEN C.error_rate >= 0 AND C.error_rate     <![CDATA[ <= ]]> 6 THEN '좋음'
                 WHEN C.error_rate > 6 AND C.error_rate     <![CDATA[ <= ]]> 8 THEN '보통'
                 WHEN C.error_rate > 8 THEN '나쁨' END) AS 오차율평가
-                ,'' AS 거래가능기간
                 ,A.created_at AS 신청일자
             FROM resource_set A
                 LEFT OUTER JOIN ( SELECT
@@ -184,26 +186,96 @@
     WHERE A.id= #{집합자원ID}
 </select>
 <select id="getClcRsrMemoList" parameterType="hashMap" resultType="hashMap" >
-    SELECT
-        id AS 이벤트ID
-        ,type AS 요청구분
-        ,requested_at AS 요청일시
-        ,requested_name AS 요청자이름
-        ,requested_phone AS 요청자전화번호
-        ,requested_memo AS 요청자메모
-        ,approved_at AS 승인일시
-        ,approved_name AS 승인자이름
-        ,approved_phone AS 승인자전화번호
-        ,approved_memo AS 승인자메모
-    FROM event
-    WHERE resource_id = #{집합자원ID}
-    ORDER BY approved_at
+    (SELECT
+         B.id AS 메모ID
+          ,B.type AS 요청구분
+          ,B.requested_at AS 요청일시
+          ,B.requested_name AS 요청자이름
+          ,B.requested_phone AS 요청자전화번호
+          ,B.requested_memo AS 요청자메모
+          ,B.approved_at AS 승인일시
+          ,B.approved_name AS 승인자이름
+          ,B.approved_phone AS 승인자전화번호
+          ,B.approved_memo AS 승인자메모
+          ,B.status AS 처리상태
+          ,'0' AS 집합자원메모여부
+     FROM resource_set_list A
+              INNER JOIN event B ON A.resource_id = B.resource_id
+     WHERE 1=1
+       AND A.resource_set_id = #{집합자원ID}
+     UNION ALL
+     SELECT
+         A.id AS 메모ID
+          ,null AS  요청구분
+          ,A.created_at AS  요청일시
+          ,B.name AS 요청자이름
+          ,B.phone AS 요청자전화번호
+          ,A.content 요청자메모
+          ,null AS 승인일시
+          ,null AS 승인자이름
+          ,null AS 승인자전화번호
+          ,null AS 승인자메모
+          ,null AS 처리상태
+          ,'1' AS 집합자원메모여부
+     FROM resource_set_memo_log A
+              LEFT OUTER JOIN user B ON A.created_by = B.id
+     WHERE 1=1
+       AND resource_set_id = #{집합자원ID})
+        ORDER BY 요청일시 DESC
+       LIMIT 0,#{행갯수}
+</select>
+<select id="getClcRsrMemoListCnt" parameterType="hashMap" resultType="int" >
+SELECT
+       COUNT(메모ID) AS CNT
+FROM(SELECT
+         B.id AS 메모ID
+          ,B.type AS 요청구분
+          ,B.requested_at AS 요청일시
+          ,B.requested_name AS 요청자이름
+          ,B.requested_phone AS 요청자전화번호
+          ,B.requested_memo AS 요청자메모
+          ,B.approved_at AS 승인일시
+          ,B.approved_name AS 승인자이름
+          ,B.approved_phone AS 승인자전화번호
+          ,B.approved_memo AS 승인자메모
+          ,B.status AS 처리상태
+          ,'0' AS 집합자원메모여부
+     FROM resource_set_list A
+              INNER JOIN event B ON A.resource_id = B.resource_id
+     WHERE 1=1
+       AND A.resource_set_id = #{집합자원ID}
+     UNION ALL
+     SELECT
+         A.id AS 메모ID
+          ,null AS  요청구분
+          ,A.created_at AS  요청일시
+          ,B.name AS 요청자이름
+          ,B.phone AS 요청자전화번호
+          ,A.content 요청자메모
+          ,null AS 승인일시
+          ,null AS 승인자이름
+          ,null AS 승인자전화번호
+          ,null AS 승인자메모
+          ,null AS 처리상태
+          ,'1' AS 집합자원메모여부
+     FROM resource_set_memo_log A
+              LEFT OUTER JOIN user B ON A.created_by = B.id
+     WHERE 1=1
+       AND resource_set_id = #{집합자원ID}) A
 </select>
 <update id="setMemo" parameterType="hashMap"  >
     UPDATE event SET
         requested_memo = #{요청자메모}
  WHERE id = #{이벤트ID}
 </update>
+<update id="setClcRsrMemo" parameterType="hashMap"  >
+    UPDATE resource_set_memo_log SET
+        content = #{메모내용}
+ WHERE id = #{메모ID}
+</update>
+    <update id="setClcRsrMemoDel" parameterType="hashMap"  >
+        DELETE FROM resource_set_memo_log WHERE  id =  #{메모ID}
+    </update>
 <update id="setMemoDel" parameterType="hashMap"  >
     DELETE FROM event WHERE  id = #{이벤트ID}
 </update>

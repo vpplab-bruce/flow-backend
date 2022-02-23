@@ -9,6 +9,7 @@ public interface RsrDao {
     int setClcRsr(HashMap<String, Object> paramMap);
     HashMap getClcRsrDtl(HashMap<String, Object> paramMap);
     List<HashMap> getClcRsrMemoList(HashMap<String, Object> paramMap);
+    int getClcRsrMemoListCnt(HashMap<String, Object> paramMap);
     HashMap getRsrInfo(HashMap<String, Object> paramMap);
     List<HashMap> tab1List01(HashMap<String, Object> paramMap);
     List<HashMap> tab1List02(HashMap<String, Object> paramMap);
@@ -16,6 +17,8 @@ public interface RsrDao {
     List<HashMap> tab2List(HashMap<String, Object> paramMap);
     int tab2ListCnt(HashMap<String, Object> paramMap);
     int setMemo(HashMap<String, Object> paramMap);
+    int setClcRsrMemo(HashMap<String, Object> paramMap);
+    int setClcRsrMemoDel(HashMap<String, Object> paramMap);
     int setMemoDel(HashMap<String, Object> paramMap);
     int setRsrPlantDel(HashMap<String, Object> paramMap);
     List<HashMap> getRsrPlantONList(HashMap<String, Object> paramMap);

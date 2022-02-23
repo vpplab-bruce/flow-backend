@@ -130,5 +130,18 @@ public class RsrController {
     public Map<String, Object> getPtrRsrDtlList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.getPtrRsrDtlList(paramMap,request);
     }
+    @RequestMapping("/rsr/getClcRsrMemoList")
+    public Map<String, Object> getClcRsrMemoList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.getClcRsrMemoList(paramMap,request);
+    }
+
+    @RequestMapping("/rsr/setClcRsrMemo")
+    public Map<String, Object> setClcRsrMemo(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.setClcRsrMemo(paramMap,request);
+    }
+    @RequestMapping("/rsr/setClcRsrMemoDel")
+    public Map<String, Object> setClcRsrMemoDel(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.setClcRsrMemoDel(paramMap,request);
+    }
 
 }
