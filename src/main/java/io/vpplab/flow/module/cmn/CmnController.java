@@ -37,4 +37,16 @@ public class CmnController {
     public Map<String, Object> getPltfMngDtl(@RequestBody HashMap<String,Object> paramMap,HttpServletRequest request) {
         return cmnService.getPltfMngDtl(paramMap,request);
     }
+    @RequestMapping("/cmn/getAgencyBusiChk")
+    public Map<String, Object> getAgencyBusiChk(@RequestBody HashMap<String,Object> paramMap,HttpServletRequest request) {
+        return cmnService.getAgencyBusiChk(paramMap,request);
+    }
+    @RequestMapping("/cmn/setPltfMngSave")
+    public Map<String, Object> setPltfMngSave(@RequestBody HashMap<String,Object> paramMap,HttpServletRequest request) {
+        return cmnService.setPltfMngSave(paramMap,request);
+    }
+    @RequestMapping("/cmn/setPltfMngDel")
+    public Map<String, Object> setPltfMngDel(@RequestBody HashMap<String,Object> paramMap,HttpServletRequest request) {
+        return cmnService.setPltfMngDel(paramMap,request);
+    }
 }

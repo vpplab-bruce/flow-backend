@@ -13,4 +13,7 @@ public interface CmnDao {
     List<HashMap> getPltfMng(HashMap<String, Object> paramMap);
     int getPltfMngCnt(HashMap<String, Object> paramMap);
     HashMap getPltfMngDtl(HashMap<String, Object> paramMap);
+    int getAgencyBusiChk(HashMap<String, Object> paramMap);
+    int setPltfMngSave(HashMap<String, Object> paramMap);
+    int setPltfMngDel(HashMap<String, Object> paramMap);
 }

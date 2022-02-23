@@ -88,7 +88,6 @@
              ,A.email AS 대표이메일
              ,A.business_registration_no AS 사업자번호
              ,B.CNT AS 회원수
-             ,'' AS 계약일자
              ,C.CNT AS 발전소수
              ,'' AS 최종로그인
              ,A.address AS 주소
@@ -159,4 +158,25 @@
         WHERE 1=1
           AND A.id = #{중개사업자ID}
     </select>
+    <select id="getAgencyBusiChk" parameterType="hashMap" resultType="int" >
+        SELECT
+            COUNT(id) AS CNT
+        FROM agency
+        WHERE 1=1
+          AND business_registration_no = #{사업자등록번호}
+    </select>
+    <update id="setPltfMngSave"  parameterType="hashMap" >
+        UPDATE agency SET
+            name = #{중개사업사명}
+            ,phone = #{대표전화번호}
+            ,email = #{대표이메일}
+            ,business_registration_no = #{사업자등록번호}
+            ,address = #{주소}
+            ,zip_code = #{우편번호}
+            ,status = #{상태}
+        WHERE id = #{중개사업사ID}
+    </update>
+    <update id="setPltfMngDel"  parameterType="hashMap" >
+        DELETE FROM agency  WHERE id = #{중개사업사ID}
+    </update>
 </mapper>

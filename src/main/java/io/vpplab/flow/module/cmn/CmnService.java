@@ -188,4 +188,40 @@ public class CmnService {
         }
         return multiMap;
     }
+    public Map<String, Object> getAgencyBusiChk(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        int cnt  =  cmnDao.getAgencyBusiChk(paramMap);
+        ;
+        if(cnt > 0){
+            multiMap.put("중복여부",true);
+        }else{
+            multiMap.put("중복여부",false);
+        }
+        return multiMap;
+    }
+    public Map<String, Object> setPltfMngSave(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        int cnt  =  cmnDao.setPltfMngSave(paramMap);
+        ;
+        if(cnt > 0){
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+        return multiMap;
+    }
+    public Map<String, Object> setPltfMngDel(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        int cnt  =  cmnDao.setPltfMngDel(paramMap);
+        ;
+        if(cnt > 0){
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+        return multiMap;
+    }
 }
