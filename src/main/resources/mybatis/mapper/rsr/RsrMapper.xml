@@ -50,7 +50,11 @@
                                 LEFT OUTER JOIN resource BB ON AA.resource_id = BB.id
                                 LEFT OUTER JOIN resource_meta CC ON BB.id = CC.resource_id
                                 GROUP BY AA.resource_set_id) B ON A.id = B.resource_set_id
-                LEFT OUTER JOIN forecast_by_resource_set C ON A.id = C.resource_set_id
+
+                LEFT OUTER JOIN(SELECT
+                                    resource_set_id
+                                    ,(SUM(error_rate) / COUNT(error_rate)) * 100 AS error_rate
+                                FROM  forecast_by_resource_set GROUP BY resource_set_id ) C ON A.id = C.resource_set_id
                 ) CC
         WHERE 1=1
         AND CC.중개사업자ID = #{중개사업자ID}
@@ -117,7 +121,10 @@
                                     ,SUM(BB.ess_capacity) AS ess_capacity
                                 FROM resource_set_list AA
                                 LEFT OUTER JOIN resource BB ON AA.resource_id = BB.id  GROUP BY AA.resource_set_id) B ON A.id = B.resource_set_id
-                LEFT OUTER JOIN forecast_by_resource_set C ON A.id = C.resource_set_id
+        LEFT OUTER JOIN(SELECT
+                            resource_set_id
+                            ,(SUM(error_rate) / COUNT(error_rate)) * 100 AS error_rate
+                        FROM  forecast_by_resource_set GROUP BY resource_set_id ) C ON A.id = C.resource_set_id
             ) CC
         WHERE 1=1
         AND CC.중개사업자ID = #{중개사업자ID}

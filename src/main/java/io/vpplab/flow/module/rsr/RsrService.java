@@ -64,9 +64,6 @@ public class RsrService {
 
         List<HashMap> clcRsrMap  =  rsrDao.getClcRsrList(paramMap);
         int clcRsrTotCnt  =  rsrDao.getClcRsrListCnt(paramMap);
-
-
-;
         if(clcRsrMap.size() > 0){
             for(int i = 0 ; i < clcRsrMap.size() ; i++){
                 clcRsrMap.get(i).put("NO",clcRsrTotCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));

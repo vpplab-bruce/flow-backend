@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.vpplab.flow.domain.bid.BidDao">
+    <select id="getBidList" parameterType="hashMap" resultType="hashMap">
+        SELECT
+            CC.입찰일자
+            ,CC.집합자원ID
+            ,CC.운영상태
+            ,CC.집합자원그룹명
+            ,CC.집합자원구분
+            ,CC.구성수
+            ,CC.자원용량
+            ,CC.평균오차율
+            ,CC.오차율평가
+            ,CC.입찰상태
+            ,CC.1차입찰
+            ,CC.2차입찰
+            ,CC.생성일자
+        FROM(SELECT
+                A.base_date AS 입찰일자
+                ,D.id AS 집합자원ID
+                ,D.status AS 운영상태
+                ,D.name AS 집합자원그룹명
+                ,D.type AS 집합자원구분
+                ,B.resource_cnt AS 구성수
+                ,B.capacity AS 자원용량
+                ,C.error_rate AS 평균오차율
+                ,(CASE WHEN C.error_rate >= 0 AND C.error_rate   <![CDATA[ <= ]]>  6 THEN '좋음'
+                WHEN C.error_rate > 6 AND C.error_rate    <![CDATA[ <= ]]>   8 THEN '보통'
+                WHEN C.error_rate > 8 THEN '나쁨' END) AS 오차율평가
+                ,CASE WHEN MAX(A.type) = '2차' THEN '2차입찰' WHEN MAX(A.type) = '1차' THEN '1차입찰' ELSE '미입찰' END AS 입찰상태
+                ,CASE WHEN MIN(A.type) = '1차' THEN '입찰완료' ELSE '입찰하기' END AS 1차입찰
+                ,CASE WHEN MAX(A.type) = '2차' THEN '입찰완료' ELSE '입찰하기' END AS 2차입찰
+                ,A.base_date AS 생성일자
+            FROM bid A
+            LEFT OUTER JOIN ( SELECT
+                                AA.resource_set_id
+                                ,COUNT(AA.resource_id) AS  resource_cnt
+                                ,((CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) ELSE 0 END)+SUM(ess_capacity))  AS capacity
+                            FROM resource_set_list AA
+                            LEFT OUTER JOIN resource BB ON AA.resource_id = BB.id
+                            GROUP BY AA.resource_set_id) B ON A.resource_set_id = B.resource_set_id
+            LEFT OUTER JOIN(SELECT
+                                resource_set_id
+                                ,(SUM(error_rate) / COUNT(error_rate)) * 100 AS error_rate
+                            FROM  forecast_by_resource_set GROUP BY resource_set_id ) C ON A.resource_set_id = C.resource_set_id
+            LEFT OUTER JOIN	resource_set D ON A.resource_set_id = D.id
+            WHERE 1=1
+            AND 	A.resource_set_id = #{집합자원ID}
+            GROUP BY 	A.resource_set_id ) CC
+        WHERE 1=1
+        <if test='base_date != null and base_date !=""'>
+            AND CC.입찰일자 = #{base_date}
+        </if>
+        <if test='id != null and id !=""'>
+            AND CC.집합자원ID LIKE CONCAT('%',#{id},'%')
+        </if>
+        <if test='status != null and status !=""'>
+            AND CC.운영상태= #{status}
+        </if>
+        <if test='name != null and name !=""'>
+            AND CC.집합자원그룹명 LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='type != null and type !=""'>
+            AND CC.집합자원구분 =  #{type}
+        </if>
+        <if test='error_rate_cd != null and error_rate_cd !=""'>
+            AND CC.오차율평가=   #{error_rate_cd}
+        </if>
+        <if test='bid_type != null and bid_type !=""'>
+            AND CC.입찰상태 =  #{bid_type}
+        </if>
+        ORDER BY CC.입찰일자 DESC
+        LIMIT #{페이지번호},#{행갯수}
+    </select>
+    <select id="getBidListCnt" parameterType="hashMap" resultType="int">
+        SELECT
+        COUNT(CC.입찰일자) AS 춨
+        FROM(SELECT
+            A.base_date AS 입찰일자
+            ,D.id AS 집합자원ID
+            ,D.status AS 운영상태
+            ,D.name AS 집합자원그룹명
+            ,D.type AS 집합자원구분
+            ,B.resource_cnt AS 구성수
+            ,B.capacity AS 자원용량
+            ,C.error_rate AS 평균오차율
+            ,(CASE WHEN C.error_rate >= 0 AND C.error_rate   <![CDATA[ <= ]]>  6 THEN '좋음'
+            WHEN C.error_rate > 6 AND C.error_rate    <![CDATA[ <= ]]>   8 THEN '보통'
+            WHEN C.error_rate > 8 THEN '나쁨' END) AS 오차율평가
+            ,CASE WHEN MAX(A.type) = '2차' THEN '2차입찰' WHEN MAX(A.type) = '1차' THEN '1차입찰' ELSE '미입찰' END AS 입찰상태
+            ,CASE WHEN MIN(A.type) = '1차' THEN '입찰완료' ELSE '입찰하기' END AS 1차입찰
+            ,CASE WHEN MAX(A.type) = '2차' THEN '입찰완료' ELSE '입찰하기' END AS 2차입찰
+            ,A.base_date AS 생성일자
+        FROM bid A
+        LEFT OUTER JOIN ( SELECT
+                                AA.resource_set_id
+                                ,COUNT(AA.resource_id) AS  resource_cnt
+                                ,((CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) ELSE 0 END)+SUM(ess_capacity))  AS capacity
+                            FROM resource_set_list AA
+                            LEFT OUTER JOIN resource BB ON AA.resource_id = BB.id
+                            GROUP BY AA.resource_set_id) B ON A.resource_set_id = B.resource_set_id
+        LEFT OUTER JOIN(SELECT
+                            resource_set_id
+                            ,(SUM(error_rate) / COUNT(error_rate)) * 100 AS error_rate
+                        FROM  forecast_by_resource_set GROUP BY resource_set_id ) C ON A.resource_set_id = C.resource_set_id
+        LEFT OUTER JOIN	resource_set D ON A.resource_set_id = D.id
+        WHERE 1=1
+        AND 	A.resource_set_id = #{집합자원ID}
+        GROUP BY 	A.resource_set_id ) CC
+        WHERE 1=1
+        <if test='base_date != null and base_date !=""'>
+            AND CC.입찰일자 = #{base_date}
+        </if>
+        <if test='id != null and id !=""'>
+            AND CC.집합자원ID LIKE CONCAT('%',#{id},'%')
+        </if>
+        <if test='status != null and status !=""'>
+            AND CC.운영상태= #{status}
+        </if>
+        <if test='name != null and name !=""'>
+            AND CC.집합자원그룹명 LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='type != null and type !=""'>
+            AND CC.집합자원구분 =  #{type}
+        </if>
+        <if test='error_rate_cd != null and error_rate_cd !=""'>
+            AND CC.오차율평가=   #{error_rate_cd}
+        </if>
+        <if test='bid_type != null and bid_type !=""'>
+            AND CC.입찰상태 =  #{bid_type}
+        </if>
+    </select>
+
+
+
+
+</mapper>
+
+
