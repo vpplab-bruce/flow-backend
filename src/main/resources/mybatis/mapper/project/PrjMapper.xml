@@ -52,6 +52,7 @@
              ,B.name AS 권한관리명
              ,A.sign_up_at AS 가입일시
              ,A.agency_id AS 중개사업자ID
+             ,CASE WHEN B.has_read_auth = '1' AND B.has_modify_auth = '1' THEN '1' ELSE '0' END AS 관리자여부
         FROM user A
                  LEFT OUTER JOIN authorization B ON A.authorization_id = B.id
         WHERE A.agency_id = #{중개사업자ID}
@@ -79,6 +80,7 @@
              ,B.name AS 권한관리명
              ,A.sign_up_at AS 가입일시
              ,A.agency_id AS 중개사업자ID
+             ,CASE WHEN B.has_read_auth = '1' AND B.has_modify_auth = '1' THEN '1' ELSE '0' END AS 관리자여부
         FROM user A
                  LEFT OUTER JOIN authorization B ON A.authorization_id = B.id
         WHERE A.id = #{사용자ID}
