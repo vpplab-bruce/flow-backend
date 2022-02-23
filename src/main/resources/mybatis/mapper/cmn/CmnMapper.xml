@@ -118,21 +118,7 @@
     </select>
     <select id="getPltfMngCnt" parameterType="hashMap" resultType="int">
         SELECT
-            A.id AS 중개사업자ID
-             ,A.status AS 상태
-             ,F.login_id AS 관라자ID
-             ,A.name AS 중개사업자명
-             ,F.name AS 대표자명
-             ,A.phone AS 대표전화번호
-             ,A.email AS 대표이메일
-             ,A.business_registration_no AS 사업자번호
-             ,B.CNT AS 회원수
-             ,'' AS 계약일자
-             ,C.CNT AS 발전소수
-             ,'' AS 최종로그인
-             ,A.address AS 주소
-             ,A.zip_code AS 우편번호
-             ,A.created_at AS 가입일자
+            COUNT(A.id) AS CNT
         FROM agency A
                  LEFT OUTER JOIN (
             SELECT
