@@ -146,9 +146,11 @@ public class PrjService {
     public Map<String, Object> getUserDtl(HashMap<String,Object> paramMap, HttpServletRequest request) {
         Map<String, Object> multiMap = new HashMap<>();
         HashMap userMap  =  prjDao.getUserDtl(paramMap);
+        List<HashMap> getBoxLvl  =  prjDao.getBoxLvl(paramMap);
         if(userMap != null){
             multiMap.put("조회여부",true);
             multiMap.put("사용자정보",userMap);
+            multiMap.put("권한레벨",getBoxLvl);
         }else{
             multiMap.put("조회여부",false);
         }

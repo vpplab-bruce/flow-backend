@@ -8,6 +8,7 @@ public interface PrjDao {
     int setMyInfo(HashMap<String, Object> paramMap);
     int getWithdrawal(HashMap<String, Object> paramMap);
     List<HashMap> getUserList(HashMap<String, Object> paramMap);
+    List<HashMap> getBoxLvl(HashMap<String, Object> paramMap);
     int getUserListCnt(HashMap<String, Object> paramMap);
     HashMap getUserDtl(HashMap<String, Object> paramMap);
     int setUserSave(HashMap<String, Object> paramMap);

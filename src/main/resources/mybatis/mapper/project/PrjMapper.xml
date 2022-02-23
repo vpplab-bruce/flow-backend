@@ -134,7 +134,15 @@
      )
 
     </insert>
-
+    <select id="getBoxLvl" parameterType="hashMap" resultType="int">
+        SELECT
+           A.id AS 권한레벨
+        ,A.name AS 권한명
+        FROM authorization A
+        WHERE A.agency_id = #{중개사업자ID}
+        AND A.has_read_auth NOT IN('1')
+        AND A.has_modify_auth NOT IN('1')
+    </select>
 </mapper>
 
 
