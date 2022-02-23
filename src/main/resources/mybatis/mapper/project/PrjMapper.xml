@@ -134,7 +134,7 @@
      )
 
     </insert>
-    <select id="getBoxLvl" parameterType="hashMap" resultType="int">
+    <select id="getBoxLvl" parameterType="hashMap" resultType="hashMap">
         SELECT
            A.id AS 권한레벨
         ,A.name AS 권한명
