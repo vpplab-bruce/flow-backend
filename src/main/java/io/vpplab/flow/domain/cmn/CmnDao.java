@@ -10,4 +10,7 @@ public interface CmnDao {
     List<HashMap> getMenuMng(HashMap<String, Object> paramMap);
     List<HashMap> getAdminCode();
     String getMsg(HashMap<String, Object> paramMap);
+    List<HashMap> getPltfMng(HashMap<String, Object> paramMap);
+    int getPltfMngCnt(HashMap<String, Object> paramMap);
+    HashMap getPltfMngDtl(HashMap<String, Object> paramMap);
 }

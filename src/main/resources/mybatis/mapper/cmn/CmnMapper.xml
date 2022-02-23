@@ -77,5 +77,100 @@
         FROM admin_common_code
         ORDER BY category, sequence
     </select>
-
+    <select id="getPltfMng" parameterType="hashMap" resultType="hashMap">
+        SELECT
+            A.id AS 중개사업자ID
+             ,A.status AS 상태
+             ,F.login_id AS 관라자ID
+             ,A.name AS 중개사업자명
+             ,F.name AS 대표자명
+             ,A.phone AS 대표전화번호
+             ,A.email AS 대표이메일
+             ,A.business_registration_no AS 사업자번호
+             ,B.CNT AS 회원수
+             ,'' AS 계약일자
+             ,C.CNT AS 발전소수
+             ,'' AS 최종로그인
+             ,A.address AS 주소
+             ,A.zip_code AS 우편번호
+             ,A.created_at AS 가입일자
+        FROM agency A
+                 LEFT OUTER JOIN (
+            SELECT
+                AA.agency_id
+                 ,COUNT(AA.id) AS CNT
+            FROM user AA
+            GROUP BY AA.agency_id
+        ) B ON A.id = B.agency_id
+                 LEFT OUTER JOIN (
+                                SELECT
+                                    AA.agency_id
+                                     ,COUNT(CC.id) AS CNT
+                                FROM resource_set AA
+                                         LEFT OUTER JOIN resource_set_list BB ON AA.id = BB.resource_set_id
+                                         LEFT OUTER JOIN resource CC ON BB.resource_id = CC.id
+                                GROUP BY AA.agency_id
+                            ) C ON A.id = C.agency_id
+                 LEFT OUTER JOIN authorization D ON A.id = D.agency_id	AND D.has_read_auth = '1'	AND D.has_modify_auth = '1'
+                 LEFT OUTER JOIN user F ON D.id = F.authorization_id
+        ORDER BY A.id
+        LIMIT #{페이지번호},#{행갯수}
+    </select>
+    <select id="getPltfMngCnt" parameterType="hashMap" resultType="int">
+        SELECT
+            A.id AS 중개사업자ID
+             ,A.status AS 상태
+             ,F.login_id AS 관라자ID
+             ,A.name AS 중개사업자명
+             ,F.name AS 대표자명
+             ,A.phone AS 대표전화번호
+             ,A.email AS 대표이메일
+             ,A.business_registration_no AS 사업자번호
+             ,B.CNT AS 회원수
+             ,'' AS 계약일자
+             ,C.CNT AS 발전소수
+             ,'' AS 최종로그인
+             ,A.address AS 주소
+             ,A.zip_code AS 우편번호
+             ,A.created_at AS 가입일자
+        FROM agency A
+                 LEFT OUTER JOIN (
+            SELECT
+                AA.agency_id
+                 ,COUNT(AA.id) AS CNT
+            FROM user AA
+            GROUP BY AA.agency_id
+        ) B ON A.id = B.agency_id
+                 LEFT OUTER JOIN (
+                                SELECT
+                                    AA.agency_id
+                                     ,COUNT(CC.id) AS CNT
+                                FROM resource_set AA
+                                         LEFT OUTER JOIN resource_set_list BB ON AA.id = BB.resource_set_id
+                                         LEFT OUTER JOIN resource CC ON BB.resource_id = CC.id
+                                GROUP BY AA.agency_id
+                            ) C ON A.id = C.agency_id
+                 LEFT OUTER JOIN authorization D ON A.id = D.agency_id	AND D.has_read_auth = '1'	AND D.has_modify_auth = '1'
+                 LEFT OUTER JOIN user F ON D.id = F.authorization_id
+    </select>
+    <select id="getPltfMngDtl" parameterType="hashMap" resultType="hashMap">
+        SELECT
+            A.id AS 중개사업자ID
+             ,A.status AS 상태
+             ,F.login_id AS 관라자ID
+             ,A.name AS 중개사업자명
+             ,F.name AS 대표자명
+             ,A.phone AS 대표전화번호
+             ,A.email AS 대표이메일
+             ,A.business_registration_no AS 사업자번호
+             ,A.address AS 주소
+             ,A.zip_code AS 우편번호
+             ,A.created_at AS 가입일자
+             ,F.login_failure_count AS 비밀번호오류횟수
+        FROM agency A
+                 LEFT OUTER JOIN authorization D ON A.id = D.agency_id	AND D.has_read_auth = '1'	AND D.has_modify_auth = '1'
+                 LEFT OUTER JOIN user F ON D.id = F.authorization_id
+        WHERE 1=1
+          AND A.id = #{중개사업자ID}
+    </select>
 </mapper>

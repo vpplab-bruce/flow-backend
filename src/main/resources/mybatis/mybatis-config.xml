@@ -8,5 +8,6 @@
         <mapper resource="project/PrjMapper.xml"/>
         <mapper resource="rsr/RsrMapper.xml"/>
         <mapper resource="event/EventMapper.xml"/>
+        <mapper resource="bid/BidMapper.xml"/>
     </mappers>
 </configuration>

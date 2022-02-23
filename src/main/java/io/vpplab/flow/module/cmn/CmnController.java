@@ -29,4 +29,12 @@ public class CmnController {
     public Map<String, Object> setPswdInit(@RequestBody HashMap<String,Object> paramMap,HttpServletRequest request) {
         return cmnService.setPswdInit(paramMap,request);
     }
+    @RequestMapping("/cmn/getPltfMng")
+    public Map<String, Object> getPltfMng(@RequestBody HashMap<String,Object> paramMap,HttpServletRequest request) {
+        return cmnService.getPltfMng(paramMap,request);
+    }
+    @RequestMapping("/cmn/getPltfMngDtl")
+    public Map<String, Object> getPltfMngDtl(@RequestBody HashMap<String,Object> paramMap,HttpServletRequest request) {
+        return cmnService.getPltfMngDtl(paramMap,request);
+    }
 }

@@ -2,6 +2,7 @@ package io.vpplab.flow.module.cmn;
 
 import io.vpplab.flow.domain.cmn.CmnDao;
 import io.vpplab.flow.domain.utils.MailUtil;
+import io.vpplab.flow.domain.utils.PagingUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
@@ -133,5 +134,58 @@ public class CmnService {
         return multiMap;
     }
 
+    public Map<String, Object> getPltfMng(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+        HttpSession session = request.getSession();
+        /******************페이징*********************/
+        String pageNo = "1";
+        String rowCnt = "10";
+        if(paramMap.get("페이지번호") != null){
+            pageNo = paramMap.get("페이지번호").toString();
+        }
+        if(paramMap.get("행갯수") != null){
+            rowCnt = paramMap.get("행갯수").toString();
+        }
+        paramMap.put("페이지번호", PagingUtil.schPageNo(Integer.parseInt(pageNo),Integer.parseInt(rowCnt)));
+        paramMap.put("행갯수",Integer.parseInt(rowCnt));
 
+        HashMap<String,String> pageInfo = new HashMap<>();
+        pageInfo.put("페이지번호",pageNo);
+        pageInfo.put("행갯수",rowCnt);
+        /*****************페이징**********************/
+
+        List<HashMap> getPltfMng  =  cmnDao.getPltfMng(paramMap);
+        int getPltfMngCnt  =  cmnDao.getPltfMngCnt(paramMap);
+        ;
+        if(getPltfMng.size() > 0){
+            for(int i = 0 ; i < getPltfMng.size() ; i++){
+                getPltfMng.get(i).put("NO",getPltfMngCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
+            }
+            multiMap.put("조회여부",true);
+            multiMap.put("플랫폼등록관리",getPltfMng);
+        }else{
+            multiMap.put("조회여부",false);
+        }
+
+        /******************페이징*********************/
+        pageInfo.put("전체페이지갯수", PagingUtil.pageCnt(getPltfMngCnt,Integer.parseInt(rowCnt))+"");
+        pageInfo.put("전체갯수",getPltfMngCnt+"");
+        /*****************페이징*********************/
+
+        multiMap.put("페이지정보",pageInfo);
+        return multiMap;
+    }
+    public Map<String, Object> getPltfMngDtl(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        HashMap getPltfMngDtl  =  cmnDao.getPltfMngDtl(paramMap);
+        ;
+        if(getPltfMngDtl != null){
+            multiMap.put("조회여부",true);
+            multiMap.put("플랫폼등록관리상세",getPltfMngDtl);
+        }else{
+            multiMap.put("조회여부",false);
+        }
+        return multiMap;
+    }
 }
