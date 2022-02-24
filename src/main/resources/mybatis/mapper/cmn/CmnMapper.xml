@@ -144,7 +144,7 @@
              ,A.status AS 상태
              ,F.login_id AS 관라자ID
              ,A.name AS 중개사업자명
-             ,F.name AS 대표자명
+             ,A.ceo_name AS 대표자명
              ,A.phone AS 대표전화번호
              ,A.email AS 대표이메일
              ,A.business_registration_no AS 사업자번호
@@ -169,6 +169,7 @@
         UPDATE agency SET
             name = #{중개사업사명}
             ,phone = #{대표전화번호}
+            ,ceo_name = #{대표자명}
             ,email = #{대표이메일}
             ,business_registration_no = #{사업자등록번호}
             ,address = #{주소}
