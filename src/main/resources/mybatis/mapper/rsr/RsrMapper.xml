@@ -474,6 +474,7 @@ FROM(SELECT
              ,A.capacity AS 설비용량
              ,A.ess_status AS ESS상태
              ,A.ess_capacity AS ESS용량
+             ,(A.capacity+A.ess_capacity) AS 합산용량
              ,A.name AS 발전자원명
              ,B.avg_error_rate AS 평균오차율
              ,B.max_error_rate AS 최대오차율
@@ -560,6 +561,7 @@ FROM(SELECT
              ,B.capacity AS 설비용량
              ,B.ess_status AS ESS상태
              ,B.ess_capacity AS ESS용량
+             ,(B.capacity+B.ess_capacity) AS 합산용량
              ,B.name AS 발전자원명
              ,C.avg_error_rate AS 평균오차율
              ,C.max_error_rate AS 최대오차율
