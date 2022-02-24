@@ -145,7 +145,7 @@ public class RsrService {
 
         if("".equals(paramMap.get("메모행갯수")) || null == paramMap.get("메모행갯수")){
             pageInfo.put("메모행갯수",10+"");
-            paramMap.put("메모행갯수",10+"");
+            paramMap.put("메모행갯수",10);
         }else{
             int getClcRsrMemoListCnt = rsrDao.getClcRsrMemoListCnt(paramMap);
             if(getClcRsrMemoListCnt > Integer.parseInt(paramMap.get("메모행갯수").toString()) ){
@@ -182,7 +182,7 @@ public class RsrService {
 
         if("".equals(paramMap.get("메모행갯수")) || null == paramMap.get("메모행갯수")){
             pageInfo.put("메모행갯수",10+"");
-            paramMap.put("메모행갯수",10+"");
+            paramMap.put("메모행갯수",10);
         }else{
             int getClcRsrMemoListCnt = rsrDao.getClcRsrMemoListCnt(paramMap);
             if(getClcRsrMemoListCnt > Integer.parseInt(paramMap.get("메모행갯수").toString()) ){
