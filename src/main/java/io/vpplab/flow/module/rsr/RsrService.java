@@ -149,8 +149,8 @@ public class RsrService {
         }else{
             int getClcRsrMemoListCnt = rsrDao.getClcRsrMemoListCnt(paramMap);
             if(getClcRsrMemoListCnt > Integer.parseInt(paramMap.get("메모행갯수").toString()) ){
-                pageInfo.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10) +"");
-                paramMap.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10) +"");
+                pageInfo.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10)+"");
+                paramMap.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10));
             }
 
         }
@@ -187,7 +187,7 @@ public class RsrService {
             int getClcRsrMemoListCnt = rsrDao.getClcRsrMemoListCnt(paramMap);
             if(getClcRsrMemoListCnt > Integer.parseInt(paramMap.get("메모행갯수").toString()) ){
                 pageInfo.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10) +"");
-                paramMap.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10) +"");
+                paramMap.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10));
             }
 
         }

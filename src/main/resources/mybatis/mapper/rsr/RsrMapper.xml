@@ -229,7 +229,7 @@
      WHERE 1=1
        AND resource_set_id = #{집합자원ID})
         ORDER BY 요청일시 DESC
-       LIMIT 0,#{행갯수}
+       LIMIT 0,#{메모행갯수}
 </select>
 <select id="getClcRsrMemoListCnt" parameterType="hashMap" resultType="int" >
 SELECT
