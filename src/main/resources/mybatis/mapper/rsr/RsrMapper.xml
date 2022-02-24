@@ -514,7 +514,7 @@ FROM(SELECT
             AND B.avg_error_rate <![CDATA[ <= ]]>  #{end_avg_error_rate}
         </if>
         ORDER BY A.id
-        LIMIT #{페이지번호},#{행갯수}
+        LIMIT 0,#{행갯수}
     </select>
     <select id="getRsrPlantListCnt" parameterType="hashMap" resultType="int" >
         SELECT

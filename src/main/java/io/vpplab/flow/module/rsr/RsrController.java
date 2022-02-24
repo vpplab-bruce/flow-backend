@@ -49,6 +49,10 @@ public class RsrController {
     public Map<String, Object> getRsrPlantList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.getRsrPlantList(paramMap,request);
     }
+    @RequestMapping("/rsr/getRsrPlantSchList")
+    public Map<String, Object> getRsrPlantSchList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.getRsrPlantSchList(paramMap,request);
+    }
     @RequestMapping("/rsr/setRsrPlant")
     public Map<String, Object> setRsrPlant(@RequestBody List<HashMap<String,Object>> paramMap, HttpServletRequest request) {
         return rsrService.setRsrPlant(paramMap,request);
