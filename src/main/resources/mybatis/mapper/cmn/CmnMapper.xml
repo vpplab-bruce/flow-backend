@@ -180,4 +180,54 @@
     <update id="setPltfMngDel"  parameterType="hashMap" >
         DELETE FROM agency  WHERE id = #{중개사업사ID}
     </update>
+    <insert id="setAgencyAdd" parameterType="hashMap">
+        INSERT INTO agency(
+               name
+              ,ceo_name
+              ,phone
+              ,email
+              ,business_registration_no
+              ,address
+              ,zip_code
+              ,status
+              ,created_at
+        )VALUES(
+               #{중개사업자명}
+               ,#{대표자명}
+               ,#{대표전화번호}
+               ,#{대표이메일}
+               ,#{사업자등록번호}
+               ,#{주소}
+               ,#{우편번호}
+               ,#{상태}
+               ,NOW()
+               )
+        <selectKey keyProperty="agency_id" resultType="hashmap" order="AFTER">
+            SELECT LAST_INSERT_ID() AS agency_id
+        </selectKey>
+    </insert>
+    <insert id="setAuthorizationAdd" parameterType="hashMap">
+        INSERT INTO authorization(
+            agency_id
+            ,name
+            ,has_read_auth
+            ,has_modify_auth
+        )VALUES(
+            #{중개사업자ID}
+            ,'admin'
+            ,'1'
+            ,'1'
+        )
+        <selectKey keyProperty="auth_id" resultType="hashmap" order="AFTER">
+            SELECT LAST_INSERT_ID() AS auth_id
+        </selectKey>
+    </insert>
+    <insert id="setauthMenuMappingAdd" parameterType="hashMap">
+        INSERT INTO auth_menu_mapping(
+                                      auth_id
+                                     ,menu_id
+                                     ,has_read_auth
+                                     ,has_modify_auth
+        )SELECT #{권한레벨},id,'1','1' FROM menu WHERE 1=1 and has_admin_auth = '1'
+    </insert>
 </mapper>

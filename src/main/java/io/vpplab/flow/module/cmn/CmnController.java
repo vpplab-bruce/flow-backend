@@ -49,4 +49,8 @@ public class CmnController {
     public Map<String, Object> setPltfMngDel(@RequestBody HashMap<String,Object> paramMap,HttpServletRequest request) {
         return cmnService.setPltfMngDel(paramMap,request);
     }
+    @RequestMapping("/cmn/setAgencyAdd")
+    public Map<String, Object> setAgencyAdd(@RequestBody HashMap<String,Object> paramMap,HttpServletRequest request) {
+        return cmnService.setAgencyAdd(paramMap,request);
+    }
 }

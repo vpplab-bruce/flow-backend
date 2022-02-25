@@ -16,4 +16,7 @@ public interface CmnDao {
     int getAgencyBusiChk(HashMap<String, Object> paramMap);
     int setPltfMngSave(HashMap<String, Object> paramMap);
     int setPltfMngDel(HashMap<String, Object> paramMap);
+    int setAgencyAdd(HashMap<String, Object> paramMap);
+    int setAuthorizationAdd(HashMap<String, Object> paramMap);
+    int setauthMenuMappingAdd(HashMap<String, Object> paramMap);
 }

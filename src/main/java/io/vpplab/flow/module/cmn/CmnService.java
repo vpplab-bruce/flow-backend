@@ -1,6 +1,7 @@
 package io.vpplab.flow.module.cmn;
 
 import io.vpplab.flow.domain.cmn.CmnDao;
+import io.vpplab.flow.domain.project.PrjDao;
 import io.vpplab.flow.domain.utils.MailUtil;
 import io.vpplab.flow.domain.utils.PagingUtil;
 import lombok.SneakyThrows;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.SecureRandom;
@@ -26,6 +28,8 @@ public class CmnService {
 
     @Autowired
     private CmnDao cmnDao;
+    @Autowired
+    private PrjDao prjDao;
 
     @Autowired
     JavaMailSender javaMailSender;
@@ -219,6 +223,65 @@ public class CmnService {
         ;
         if(cnt > 0){
             multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+        return multiMap;
+    }
+
+    @SneakyThrows
+    public Map<String, Object> setAgencyAdd(HashMap<String,Object> paramMap, HttpServletRequest request)  {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        int cnt  =  cmnDao.setAgencyAdd(paramMap);
+
+        if(cnt > 0){
+            paramMap.put("중개사업자ID",paramMap.get("agency_id"));
+            int authCnt  =  cmnDao.setAuthorizationAdd(paramMap);
+            if(authCnt> 0){
+                HashMap<String, Object> userMap = new HashMap<>();
+                String pswdInit = "";
+                SecureRandom random = new SecureRandom ();
+                String certNumCreate = random.nextInt(10)+""
+                        + random.nextInt(10)+""
+                        + random.nextInt(10)+""
+                        + random.nextInt(10)+""
+                        + random.nextInt(10)+""
+                        + random.nextInt(10);
+                pswdInit = certNumCreate;
+                userMap.put("로그인비밀번호",pswdInit);
+                userMap.put("중개사업자ID",paramMap.get("중개사업자ID"));
+                userMap.put("로그인ID",paramMap.get("관리자ID"));
+                userMap.put("소속",paramMap.get("중개사업자명"));
+                userMap.put("권한레벨",paramMap.get("auth_id"));
+                userMap.put("전화번호",paramMap.get("대표전화번호"));
+                userMap.put("이메일",paramMap.get("대표이메일"));
+                userMap.put("이름",paramMap.get("대표자명"));
+                userMap.put("직위","관리자");
+                int userCnt  =  prjDao.setUserAdd(userMap);
+                cmnDao.setauthMenuMappingAdd(userMap);
+                if(userCnt > 0){
+
+                    HashMap<String, Object> msgMap = new HashMap<>();
+                    msgMap.put("코드","M_01");
+                    String msg =  cmnDao.getMsg(msgMap);
+                    msg =  msg.replace("{{pswdInit}}",pswdInit);
+                    msg =  msg.replace("\n","<br/>");
+                    MailUtil mailHandler = new MailUtil(javaMailSender);
+                    mailHandler.setTo(userMap.get("이메일").toString());
+                    mailHandler.setFrom(mailAddr);
+                    mailHandler.setSubject("[VPPLAB 임시비밀번호 안내]");
+                    String htmlContent = "<p>"+msg+"<p>";
+                    mailHandler.setText(htmlContent, true);
+                    mailHandler.send();
+                    multiMap.put("성공여부",true);
+                }else{
+                    multiMap.put("성공여부",false);
+                }
+            }else{
+                multiMap.put("성공여부",false);
+            }
+
         }else{
             multiMap.put("성공여부",false);
         }
