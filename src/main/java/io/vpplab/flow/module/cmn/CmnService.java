@@ -287,4 +287,52 @@ public class CmnService {
         }
         return multiMap;
     }
+
+    public Map<String, Object> getCodeList(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+        paramMap.put("category",paramMap.get("그룹코드명"));
+        List<HashMap> getCodeList  =  cmnDao.getCodeList(paramMap);
+        if(getCodeList.size() > 0){
+            multiMap.put("조회여부",true);
+            multiMap.put("공통코드목록",getCodeList);
+        }else{
+            multiMap.put("조회여부",false);
+        }
+        return multiMap;
+    }
+    public Map<String, Object> getCodeDtl(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+        paramMap.put("category",paramMap.get("그룹코드명"));
+        List<HashMap> getCodeDtl  =  cmnDao.getCodeDtl(paramMap);
+        if(getCodeDtl.size() > 0 ){
+            multiMap.put("조회여부",true);
+            multiMap.put("공통코드상세",getCodeDtl);
+        }else{
+            multiMap.put("조회여부",false);
+        }
+        return multiMap;
+    }
+    public Map<String, Object> setCodeSave(List<HashMap<String,Object>> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+        int cnt = 1;
+        for(int i = 0 ;i < paramMap.size(); i++){
+            HashMap<String, Object> addMap = new HashMap<>();
+            addMap.put("코드명",paramMap.get(i).get("코드명"));
+            addMap.put("코드설명",paramMap.get(i).get("코드설명"));
+            addMap.put("순서",paramMap.get(i).get("순서"));
+            addMap.put("사용여부",paramMap.get(i).get("사용여부"));
+            addMap.put("그룹코드ID",paramMap.get(i).get("그룹코드ID"));
+            addMap.put("코드ID",paramMap.get(i).get("코드ID"));
+            int rowcnt = cmnDao.setCodeSave(addMap);
+            if(rowcnt == 0){
+                cnt = 0;
+            }
+        }
+        if(cnt > 0 ){
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+        return multiMap;
+    }
 }

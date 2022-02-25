@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -52,5 +53,17 @@ public class CmnController {
     @RequestMapping("/cmn/setAgencyAdd")
     public Map<String, Object> setAgencyAdd(@RequestBody HashMap<String,Object> paramMap,HttpServletRequest request) {
         return cmnService.setAgencyAdd(paramMap,request);
+    }
+    @RequestMapping("/cmn/getCodeList")
+    public Map<String, Object> getCodeList(@RequestBody HashMap<String,Object> paramMap,HttpServletRequest request) {
+        return cmnService.getCodeList(paramMap,request);
+    }
+    @RequestMapping("/cmn/getCodeDtl")
+    public Map<String, Object> getCodeDtl(@RequestBody HashMap<String,Object> paramMap,HttpServletRequest request) {
+        return cmnService.getCodeDtl(paramMap,request);
+    }
+    @RequestMapping("/cmn/setCodeSave")
+    public Map<String, Object> setCodeSave(@RequestBody List<HashMap<String,Object>> paramMap, HttpServletRequest request) {
+        return cmnService.setCodeSave(paramMap,request);
     }
 }

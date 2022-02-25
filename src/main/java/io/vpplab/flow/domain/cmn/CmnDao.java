@@ -19,4 +19,7 @@ public interface CmnDao {
     int setAgencyAdd(HashMap<String, Object> paramMap);
     int setAuthorizationAdd(HashMap<String, Object> paramMap);
     int setauthMenuMappingAdd(HashMap<String, Object> paramMap);
+    int setCodeSave(HashMap<String, Object> paramMap);
+    List<HashMap> getCodeList(HashMap<String, Object> paramMap);
+    List<HashMap> getCodeDtl(HashMap<String, Object> paramMap);
 }

@@ -75,6 +75,7 @@
             ,code AS 코드
             ,name AS 코드명
         FROM admin_common_code
+        WHERE is_usable = '1'
         ORDER BY category, sequence
     </select>
     <select id="getPltfMng" parameterType="hashMap" resultType="hashMap">
@@ -230,4 +231,38 @@
                                      ,has_modify_auth
         )SELECT #{권한레벨},id,'1','1' FROM menu WHERE 1=1 and has_admin_auth = '1'
     </insert>
+
+    <select id="getCodeList" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            category AS 그룹코드ID
+             ,definition AS 코드설명
+        FROM admin_common_code
+        WHERE 1=1
+        <if test='category != null and category !=""'>
+            AND category LIKE CONCAT('%',#{category},'%')
+        </if>
+        GROUP BY category
+        ORDER BY category
+    </select>
+    <select id="getCodeDtl" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            category AS 그룹코드ID
+             ,code AS 코드ID
+             ,name AS 코드명
+             ,definition AS 코드설명
+             ,sequence AS 순서
+             ,is_usable AS 사용여부
+        FROM admin_common_code
+        WHERE category = #{그룹코드ID}
+        ORDER BY  sequence
+    </select>
+    <update id="setCodeSave"  parameterType="hashMap" >
+        UPDATE admin_common_code SET
+            name = #{코드명}
+            ,definition = #{코드설명}
+            ,sequence = #{순서}
+            ,is_usable = #{사용여부}
+        WHERE category = #{그룹코드ID}
+          AND code = #{코드ID}
+    </update>
 </mapper>
