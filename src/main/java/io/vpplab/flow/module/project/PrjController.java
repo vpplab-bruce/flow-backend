@@ -52,5 +52,21 @@ public class PrjController {
     public Map<String, Object> setUserAdd(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return prjService.setUserAdd(paramMap,request);
     }
+    @RequestMapping("/project/getUserAuth")
+    public Map<String, Object> getUserAuth(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return prjService.getUserAuth(paramMap,request);
+    }
+    @RequestMapping("/project/getUserAuthMenuList")
+    public Map<String, Object> getUserAuthMenuList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return prjService.getUserAuthMenuList(paramMap,request);
+    }
+    @RequestMapping("/project/getUserAuthMenuDel")
+    public Map<String, Object> getUserAuthMenuDel(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return prjService.getUserAuthMenuDel(paramMap,request);
+    }
+    @RequestMapping("/project/getUserAuthMenuSave")
+    public Map<String, Object> getUserAuthMenuSave(@RequestBody Map<String,Object> paramMap, HttpServletRequest request) {
+        return prjService.getUserAuthMenuSave(paramMap,request);
+    }
 
 }

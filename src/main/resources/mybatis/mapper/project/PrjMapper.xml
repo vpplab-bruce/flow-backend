@@ -143,6 +143,58 @@
         AND A.has_read_auth NOT IN('1')
         AND A.has_modify_auth NOT IN('1')
     </select>
+    <select id="getUserAuthMenuList" parameterType="hashMap" resultType="hashMap">
+        SELECT
+            A.id AS 메뉴ID
+             ,A.category AS 2차메뉴
+             ,A.sub_category AS 2차메뉴
+             ,A.url AS URL주소
+             ,A.view_name AS 화면명
+             ,A.is_view AS 화면여부
+             ,CASE WHEN B.has_read_auth = '1' THEN '1' ELSE '0' END AS 기본메뉴권한
+             ,CASE WHEN B.has_modify_auth = '1' THEN '1' ELSE '0' END  AS 메뉴수정권한
+        FROM menu A
+                 LEFT OUTER JOIN auth_menu_mapping B ON A.id = B.menu_id AND B.auth_id = #{권한레벨}
+        WHERE 1=1
+          AND A.has_admin_auth = '1'
+    </select>
+    <update id="getUserAuthMenuDel" parameterType="hashMap">
+        DELETE FROM auth_menu_mapping WHERE  auth_id = #{권한레벨}
+    </update>
+    <update id="getUserAuthMenuSave" parameterType="hashMap">
+        INSERT INTO auth_menu_mapping(
+            auth_id
+            ,menu_id
+            ,has_read_auth
+            ,has_modify_auth
+        )VALUES(
+            #{권한레벨}
+            ,#{메뉴ID}
+            ,#{기본메뉴권한}
+            ,#{메뉴수정권한}
+        )
+    </update>
+    <insert id="setAuthorizationAdd" parameterType="hashMap">
+        INSERT INTO authorization(
+              agency_id
+             ,name
+             ,has_read_auth
+             ,has_modify_auth
+        )VALUES(
+                #{중개사업자ID}
+               ,#{권한명}
+               ,'0'
+               ,'0'
+               )
+        <selectKey keyProperty="auth_id" resultType="hashmap" order="AFTER">
+            SELECT LAST_INSERT_ID() AS auth_id
+        </selectKey>
+    </insert>
+    <update id="setAuthorizationSave" parameterType="hashMap">
+      UPDATE authorization SET
+          name = #{권한명}
+      WHERE id =  #{권한레벨}
+    </update>
 </mapper>
 
 

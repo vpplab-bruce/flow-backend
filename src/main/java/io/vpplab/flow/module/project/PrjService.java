@@ -259,5 +259,107 @@ public class PrjService {
         }
         return multiMap;
     }
+
+    public Map<String, Object> getUserAuth(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+        HttpSession session = request.getSession();
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        paramMap.put("중개사업자ID",loginInfo.get("중개사업자ID"));
+            List<HashMap> getBoxLvl  =  prjDao.getBoxLvl(paramMap);
+            if(getBoxLvl.size() > 0){
+                multiMap.put("조회여부",true);
+                multiMap.put("권한레벨",getBoxLvl);
+            }else{
+                multiMap.put("조회여부",false);
+            }
+        return multiMap;
+    }
+    public Map<String, Object> getUserAuthMenuList(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+            List<HashMap> getUserAuthMenuList  =  prjDao.getUserAuthMenuList(paramMap);
+            if(getUserAuthMenuList.size() > 0){
+                multiMap.put("조회여부",true);
+                multiMap.put("권한메뉴",getUserAuthMenuList);
+            }else{
+                multiMap.put("조회여부",false);
+            }
+        return multiMap;
+    }
+    public Map<String, Object> getUserAuthMenuDel(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+            int cnt  =  prjDao.getUserAuthMenuDel(paramMap);
+            if(cnt > 0){
+                multiMap.put("성공여부",true);
+            }else{
+                multiMap.put("성공여부",false);
+            }
+        return multiMap;
+    }
+    public Map<String, Object> getUserAuthMenuSave(Map<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+        HttpSession session = request.getSession();
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        paramMap.put("중개사업자ID",loginInfo.get("중개사업자ID"));
+        List<HashMap> menuList = (List<HashMap>) paramMap.get("메뉴리스트");
+        if("".equals(paramMap.get("권한레벨")) || paramMap.get("권한레벨") == null){
+            HashMap<String, Object> authorizationMap = new HashMap<>();
+            authorizationMap.put("중개사업자ID",loginInfo.get("중개사업자ID"));
+            authorizationMap.put("권한명",paramMap.get("권한명"));
+            int cnt  =  prjDao.setAuthorizationAdd(authorizationMap);
+            if(cnt > 0){
+                int menuCnt = 0;
+                for(int i= 0; i < menuList.size(); i++){
+                    HashMap<String, Object> authMenuMap = new HashMap<>();
+                    authMenuMap.put("권한레벨",authorizationMap.get("auth_id"));
+                    authMenuMap.put("메뉴ID",menuList.get(i).get("메뉴ID"));
+                    authMenuMap.put("기본메뉴권한",menuList.get(i).get("기본메뉴권한"));
+                    authMenuMap.put("메뉴수정권한",menuList.get(i).get("메뉴수정권한"));
+                  int  rowCnt = prjDao.getUserAuthMenuSave(authMenuMap);
+                    menuCnt += rowCnt;
+                }
+                if(menuCnt == menuList.size()){
+                    multiMap.put("성공여부",true);
+                }else{
+                    multiMap.put("성공여부",false);
+                }
+            }else{
+                multiMap.put("성공여부",false);
+            }
+        }else{
+            if(!"".equals(paramMap.get("권한명")) && paramMap.get("권한명") != null){
+                HashMap<String, Object> authorization2Map = new HashMap<>();
+                authorization2Map.put("권한레벨",paramMap.get("권한레벨"));
+                authorization2Map.put("권한명",paramMap.get("권한명"));
+                prjDao.setAuthorizationSave(authorization2Map);
+            }
+            HashMap<String, Object> menuDelMap = new HashMap<>();
+            menuDelMap.put("권한레벨",paramMap.get("권한레벨"));
+            int cnt  =  prjDao.getUserAuthMenuDel(menuDelMap);
+            if(cnt > 0){
+                int menuCnt = 0;
+                for(int i= 0; i < menuList.size(); i++){
+                    HashMap<String, Object> authMenuMap = new HashMap<>();
+                    authMenuMap.put("권한레벨",paramMap.get("권한레벨"));
+                    authMenuMap.put("메뉴ID",menuList.get(i).get("메뉴ID"));
+                    authMenuMap.put("기본메뉴권한",menuList.get(i).get("기본메뉴권한"));
+                    authMenuMap.put("메뉴수정권한",menuList.get(i).get("메뉴수정권한"));
+                    int  rowCnt = prjDao.getUserAuthMenuSave(authMenuMap);
+                    menuCnt += rowCnt;
+                }
+                if(menuCnt == menuList.size()){
+                    multiMap.put("성공여부",true);
+                }else{
+                    multiMap.put("성공여부",false);
+                }
+            }else{
+                multiMap.put("성공여부",false);
+            }
+        }
+
+
+        return multiMap;
+    }
 }
 
