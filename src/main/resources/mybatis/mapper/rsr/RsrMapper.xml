@@ -92,6 +92,39 @@
         ORDER BY CC.집합자원ID
         LIMIT #{페이지번호},#{행갯수}
     </select>
+    <select id="getClcRsrInfo"  parameterType="hashMap" resultType="hashMap">
+        SELECT
+            MAX(C.운영상태) AS 운영상태
+             ,SUM(C.운영구성수) AS 운영구성수
+             ,SUM(C.운영자원용량) AS 운영자원용량
+             ,MAX(C.정지상태) AS 정지상태
+             ,SUM(C.정지구성수) AS 정지구성수
+             ,SUM(C.정지자원용량) AS 정지자원용량
+             ,MAX(C.시험상태) AS 시험상태
+             ,SUM(C.시험구성수) AS 시험구성수
+             ,SUM(C.시험자원용량) AS 시험자원용량
+        FROM(SELECT
+                 A.agency_id AS 중개사업자ID
+                  ,CASE WHEN A.status = '01' THEN '01' END AS  운영상태
+                  ,CASE WHEN A.status = '01' THEN SUM(B.resource_cnt) END AS  운영구성수
+                  ,CASE WHEN A.status = '01' THEN SUM(B.capacity) END AS  운영자원용량
+                  ,CASE WHEN A.status = '02' THEN '02' END AS 정지상태
+                  ,CASE WHEN A.status = '02' THEN SUM(B.resource_cnt) END AS  정지구성수
+                  ,CASE WHEN A.status = '02' THEN SUM(B.capacity) END AS  정지자원용량
+                  ,CASE WHEN A.status = '03' THEN '03' END AS  시험상태
+                  ,CASE WHEN A.status = '03' THEN SUM(B.resource_cnt) END AS 시험구성수
+                  ,CASE WHEN A.status = '03' THEN SUM(B.capacity) END AS 시험자원용량
+             FROM resource_set A
+                      LEFT OUTER JOIN ( SELECT
+                                            AA.resource_set_id
+                                             ,COUNT(AA.resource_id) AS  resource_cnt
+                                             ,((CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) ELSE 0 END)+SUM(ess_capacity))  AS capacity
+                                        FROM resource_set_list AA
+                                                 LEFT OUTER JOIN resource BB ON AA.resource_id = BB.id
+                                        GROUP BY AA.resource_set_id) B ON A.id = B.resource_set_id
+             WHERE A.agency_id =  #{중개사업자ID}
+             GROUP BY A.status ) C
+    </select>
     <select id="getClcRsrListCnt" parameterType="hashMap" resultType="int">
         SELECT
           COUNT(*) AS cnt

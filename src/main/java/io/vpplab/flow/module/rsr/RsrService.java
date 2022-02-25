@@ -61,7 +61,7 @@ public class RsrService {
         paramMap.put("apply_status",paramMap.get("처리상태"));
         paramMap.put("error_rate_cd",paramMap.get("오차율평가"));
 
-
+        HashMap getClcRsrInfo  =  rsrDao.getClcRsrInfo(paramMap);
         List<HashMap> clcRsrMap  =  rsrDao.getClcRsrList(paramMap);
         int clcRsrTotCnt  =  rsrDao.getClcRsrListCnt(paramMap);
         if(clcRsrMap.size() > 0){
@@ -73,6 +73,7 @@ public class RsrService {
         }else{
             multiMap.put("조회여부",false);
         }
+        multiMap.put("집합자원운영상태",getClcRsrInfo);
 
         /******************페이징*********************/
         pageInfo.put("전체페이지갯수", PagingUtil.pageCnt(clcRsrTotCnt,Integer.parseInt(rowCnt))+"");
