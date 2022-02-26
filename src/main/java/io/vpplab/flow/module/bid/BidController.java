@@ -24,4 +24,8 @@ public class BidController {
     public Map<String, Object> getBidList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return bidService.getBidList(paramMap,request);
     }
+    @RequestMapping("/bid/getSettlementList")
+    public Map<String, Object> getSettlementList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return bidService.getSettlementList(paramMap,request);
+    }
 }

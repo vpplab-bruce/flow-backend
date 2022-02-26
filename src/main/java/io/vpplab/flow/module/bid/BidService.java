@@ -88,6 +88,51 @@ public class BidService {
         multiMap.put("페이지정보",pageInfo);
         return multiMap;
     }
+    public Map<String, Object> getSettlementList(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        /******************페이징*********************/
+        String pageNo = "1";
+        String rowCnt = "10";
+        if(paramMap.get("페이지번호") != null){
+            pageNo = paramMap.get("페이지번호").toString();
+        }
+        if(paramMap.get("행갯수") != null){
+            rowCnt = paramMap.get("행갯수").toString();
+        }
+        paramMap.put("페이지번호", PagingUtil.schPageNo(Integer.parseInt(pageNo),Integer.parseInt(rowCnt)));
+        paramMap.put("행갯수",Integer.parseInt(rowCnt));
+
+        HashMap<String,Object> pageInfo = new HashMap<>();
+        pageInfo.put("페이지번호",pageNo);
+        pageInfo.put("행갯수",rowCnt);
+        /*****************페이징**********************/
+        paramMap.put("id",paramMap.get("발전자원ID"));
+        paramMap.put("name",paramMap.get("발전자원명"));
+        paramMap.put("grp_name",paramMap.get("집합자원그룹명"));
+        paramMap.put("type",paramMap.get("정산구분"));
+        paramMap.put("kpx_settlement_date",paramMap.get("KPX정산일"));
+        paramMap.put("commission_rate",paramMap.get("계약타입"));
+        List<HashMap> getSettlementList  =  bidDao.getSettlementList(paramMap);
+        int getSettlementListCnt  =  bidDao.getSettlementListCnt(paramMap);
+        if(getSettlementList.size() > 0){
+            for(int i = 0 ; i < getSettlementList.size() ; i++){
+                getSettlementList.get(i).put("NO",getSettlementListCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
+            }
+            multiMap.put("조회여부",true);
+            multiMap.put("정산관리",getSettlementList);
+        }else{
+            multiMap.put("조회여부",false);
+        }
+
+        /******************페이징*********************/
+        pageInfo.put("전체페이지갯수", PagingUtil.pageCnt(getSettlementListCnt,Integer.parseInt(rowCnt))+"");
+        pageInfo.put("전체갯수",getSettlementListCnt+"");
+        /*****************페이징*********************/
+
+        multiMap.put("페이지정보",pageInfo);
+        return multiMap;
+    }
 
 
 }
