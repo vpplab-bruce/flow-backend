@@ -8,4 +8,5 @@ public interface BidDao {
     int getBidListCnt(HashMap<String, Object> paramMap);
     List<HashMap> getSettlementList(HashMap<String, Object> paramMap);
     int getSettlementListCnt(HashMap<String, Object> paramMap);
+    List<HashMap> getSettlementExcelList(HashMap<String, Object> paramMap);
 }

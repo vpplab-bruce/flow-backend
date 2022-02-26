@@ -6,6 +6,8 @@ import io.vpplab.flow.domain.utils.MailUtil;
 import io.vpplab.flow.domain.utils.PagingUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +15,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -132,6 +136,162 @@ public class BidService {
 
         multiMap.put("페이지정보",pageInfo);
         return multiMap;
+    }
+    public void getSettlementExcelList( HttpServletRequest request, HttpServletResponse response) {
+        HashMap<String,Object> paramMap = new HashMap<>();
+        paramMap.put("id",request.getParameter("발전자원ID"));
+        paramMap.put("name",request.getParameter("발전자원명"));
+        paramMap.put("grp_name",request.getParameter("집합자원그룹명"));
+        paramMap.put("type",request.getParameter("정산구분"));
+        paramMap.put("kpx_settlement_date",request.getParameter("KPX정산일"));
+        paramMap.put("commission_rate",request.getParameter("계약타입"));
+        List<HashMap> getSettlementList  =  bidDao.getSettlementExcelList(paramMap);
+
+        if(getSettlementList.size() > 0){
+            for(int i = 0 ; i < getSettlementList.size() ; i++){
+                getSettlementList.get(i).put("NO",getSettlementList.size() - i);
+            }
+            try {
+                Workbook wb = new XSSFWorkbook();
+                CellStyle TestStyle = wb.createCellStyle();
+                TestStyle.setAlignment(HorizontalAlignment.CENTER);
+                TestStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+                TestStyle.setWrapText(true);
+                CellStyle TestStyle2 = wb.createCellStyle();
+                TestStyle2.setAlignment(HorizontalAlignment.LEFT);
+                TestStyle2.setVerticalAlignment(VerticalAlignment.CENTER);
+                TestStyle2.setWrapText(true);
+                Sheet sheet = wb.createSheet("정산관리");
+                sheet.setColumnWidth(0,3000);
+                sheet.setColumnWidth(1,3500);
+                sheet.setColumnWidth(2,10000);
+                sheet.setColumnWidth(3,10000);
+                sheet.setColumnWidth(4,3000);
+                sheet.setColumnWidth(5,4000);
+                sheet.setColumnWidth(6,3000);
+                sheet.setColumnWidth(7,4000);
+                sheet.setColumnWidth(8,3000);
+                sheet.setColumnWidth(9,4000);
+                sheet.setColumnWidth(10,3000);
+                sheet.setColumnWidth(11,4000);
+                sheet.setColumnWidth(12,3000);
+                sheet.setColumnWidth(13,4000);
+                sheet.setColumnWidth(14,3000);
+                Row row = null;
+                Cell cell = null;
+                int rowNum = 0;
+
+                // Header
+                row = sheet.createRow(rowNum++);
+                cell = row.createCell(0);
+                cell.setCellValue("No");
+                cell.setCellStyle(TestStyle);
+                cell = row.createCell(1);
+                cell.setCellValue("발전자원ID");
+                cell.setCellStyle(TestStyle);
+                cell = row.createCell(2);
+                cell.setCellValue("발전자원명");
+                cell.setCellStyle(TestStyle);
+                cell = row.createCell(3);
+                cell.setCellValue("집합자원그룹명");
+                cell.setCellStyle(TestStyle);
+                cell = row.createCell(4);
+                cell.setCellValue("정산구분");
+                cell.setCellStyle(TestStyle);
+                cell = row.createCell(5);
+                cell.setCellValue("KPX정산일");
+                cell.setCellStyle(TestStyle);
+                cell = row.createCell(6);
+                cell.setCellValue("전력시장발전기명");
+                cell.setCellStyle(TestStyle);
+                cell = row.createCell(7);
+                cell.setCellValue("전력시장ID");
+                cell.setCellStyle(TestStyle);
+                cell = row.createCell(8);
+                cell.setCellValue("계량전력량(kWh)");
+                cell.setCellStyle(TestStyle);
+                cell = row.createCell(9);
+                cell.setCellValue("전력정산금(원)");
+                cell.setCellStyle(TestStyle);
+                cell = row.createCell(10);
+                cell.setCellValue("계약타입");
+                cell.setCellStyle(TestStyle);
+                cell = row.createCell(11);
+                cell.setCellValue("수수료");
+                cell.setCellStyle(TestStyle);
+                cell = row.createCell(12);
+                cell.setCellValue("세금");
+                cell.setCellStyle(TestStyle);
+                cell = row.createCell(13);
+                cell.setCellValue("정산금(원)");
+                cell.setCellStyle(TestStyle);
+                cell = row.createCell(14);
+                cell.setCellValue("입금일");
+                cell.setCellStyle(TestStyle);
+
+                // Body
+                for (int i=0; i<getSettlementList.size(); i++) {
+                    row = sheet.createRow(rowNum++);
+                    cell = row.createCell(0);
+                    cell.setCellValue(""+getSettlementList.get(i).get("NO"));
+                    cell = row.createCell(1);
+                    cell.setCellValue(""+getSettlementList.get(i).get("발전자원ID"));
+                    cell = row.createCell(2);
+                    cell.setCellValue(""+getSettlementList.get(i).get("발전자원명"));
+                    cell.setCellStyle(TestStyle2);
+                    cell = row.createCell(3);
+                        cell.setCellValue(""+getSettlementList.get(i).get("집합자원그룹명"));
+                    cell.setCellStyle(TestStyle);
+                    cell = row.createCell(4);
+                    cell.setCellValue(""+getSettlementList.get(i).get("정산구분"));
+                    cell.setCellStyle(TestStyle);
+                    cell = row.createCell(5);
+                    cell.setCellValue(""+getSettlementList.get(i).get("KPX정산일"));
+                    cell.setCellStyle(TestStyle);
+
+                    cell = row.createCell(6);
+                    cell.setCellValue(""+getSettlementList.get(i).get("전력시장발전기명"));
+                    cell.setCellStyle(TestStyle);
+                    cell = row.createCell(7);
+                    cell.setCellValue(""+getSettlementList.get(i).get("전력시장ID"));
+                    cell.setCellStyle(TestStyle);
+                    cell = row.createCell(8);
+                    cell.setCellValue(""+getSettlementList.get(i).get("계량전력량"));
+                    cell.setCellStyle(TestStyle);
+                    cell = row.createCell(9);
+                    cell.setCellValue(""+getSettlementList.get(i).get("전력정산금"));
+                    cell.setCellStyle(TestStyle);
+                    cell = row.createCell(10);
+                    cell.setCellValue(""+getSettlementList.get(i).get("계약타입"));
+                    cell.setCellStyle(TestStyle);
+                    cell = row.createCell(11);
+                    cell.setCellValue(""+getSettlementList.get(i).get("수수료"));
+                    cell.setCellStyle(TestStyle);
+                    cell = row.createCell(12);
+                    cell.setCellValue(""+getSettlementList.get(i).get("세금"));
+                    cell.setCellStyle(TestStyle);
+                    cell = row.createCell(13);
+                    cell.setCellValue(""+getSettlementList.get(i).get("정산금"));
+                    cell.setCellStyle(TestStyle);
+                    cell = row.createCell(14);
+                    cell.setCellValue(""+getSettlementList.get(i).get("입금일"));
+                    cell.setCellStyle(TestStyle);
+                }
+
+                // 컨텐츠 타입과 파일명 지정
+                response.setContentType("ms-vnd/excel");
+                //        response.setHeader("Content-Disposition", "attachment;filename=sendMng.xls");
+                response.setHeader("Content-Disposition", "attachment;filename=settlementList.xlsx");
+
+                // Excel File Output
+
+                wb.write(response.getOutputStream());
+                wb.close();
+            } catch (IOException e) {
+            }
+
+        }
+
     }
 
 

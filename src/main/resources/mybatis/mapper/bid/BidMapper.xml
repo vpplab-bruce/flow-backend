@@ -164,7 +164,7 @@
         <if test='name != null and name !=""'>
             AND D.name LIKE CONCAT('%',#{name},'%')
         </if>
-        <if test='grp_name != null grp_name id !=""'>
+        <if test='grp_name != null and grp_name !=""'>
             AND E.name LIKE CONCAT('%',#{grp_name},'%')
         </if>
         <if test='type != null and type !=""'>
@@ -195,7 +195,7 @@
         <if test='name != null and name !=""'>
             AND D.name LIKE CONCAT('%',#{name},'%')
         </if>
-        <if test='grp_name != null grp_name id !=""'>
+        <if test='grp_name != null and grp_name !=""'>
             AND E.name LIKE CONCAT('%',#{grp_name},'%')
         </if>
         <if test='type != null and type !=""'>
@@ -209,7 +209,50 @@
         </if>
 
     </select>
-
+    <select id="getSettlementExcelList" parameterType="hashMap" resultType="hashMap" >
+        SELECT
+            A.id AS 정산ID
+            ,D.id AS 발전자원ID
+            ,D.name AS 발전자원명
+            ,E.name AS 집합자원그룹명
+            ,A.type AS 정산구분
+            ,B.kpx_settlement_date AS KPX정산일
+            ,B.gen_nm AS 전력시장발전기명
+            ,F.kpx_resource_id AS 전력시장ID
+            ,A.meter_amount AS 계량전력량
+            ,A.settlement_amount AS 전력정산금
+            ,F.commission_rate AS 계약타입
+            ,A.commission_amount AS 수수료
+            ,A.tax_amount AS 세금
+            ,A.final_settlement_amount AS 정산금
+            ,A.deposit_date AS 입금일
+        FROM settlement_list A
+        LEFT OUTER JOIN settlement B ON A.settlement_id = B.id
+        LEFT OUTER JOIN resource_set_list C ON B.resource_set_id = C.resource_set_id
+        LEFT OUTER JOIN resource D ON C.resource_id = D.id
+        LEFT OUTER JOIN resource_set E ON C.resource_set_id = E.id
+        LEFT OUTER JOIN resource_meta F ON F.resource_id = D.id
+        WHERE 1=1
+        <if test='id != null and id !=""'>
+            AND D.id = #{id}
+        </if>
+        <if test='name != null and name !=""'>
+            AND D.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='grp_name != null and grp_name !=""'>
+            AND E.name LIKE CONCAT('%',#{grp_name},'%')
+        </if>
+        <if test='type != null and type !=""'>
+            AND A.type = #{type}
+        </if>
+        <if test='kpx_settlement_date != null and kpx_settlement_date !=""'>
+            AND B.kpx_settlement_date = #{kpx_settlement_date}
+        </if>
+        <if test='commission_rate != null and commission_rate !=""'>
+            AND F.commission_rate = #{commission_rate}
+        </if>
+        ORDER BY D.id
+    </select>
 </mapper>
 
 
