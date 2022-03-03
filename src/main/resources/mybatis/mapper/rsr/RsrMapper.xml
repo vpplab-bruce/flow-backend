@@ -55,8 +55,10 @@
                                     resource_set_id
                                     ,(SUM(error_rate) / COUNT(error_rate)) * 100 AS error_rate
                                 FROM  forecast_by_resource_set GROUP BY resource_set_id ) C ON A.id = C.resource_set_id
+                WHERE A.is_simulation = '0'
                 ) CC
         WHERE 1=1
+
         AND CC.중개사업자ID = #{중개사업자ID}
         <if test='id != null and id !=""'>
             AND CC.집합자원ID = #{id}
@@ -123,6 +125,7 @@
                                                  LEFT OUTER JOIN resource BB ON AA.resource_id = BB.id
                                         GROUP BY AA.resource_set_id) B ON A.id = B.resource_set_id
              WHERE A.agency_id =  #{중개사업자ID}
+             AND A.is_simulation = '0'
              GROUP BY A.status ) C
     </select>
     <select id="getClcRsrListCnt" parameterType="hashMap" resultType="int">
@@ -154,10 +157,11 @@
                                     ,SUM(BB.ess_capacity) AS ess_capacity
                                 FROM resource_set_list AA
                                 LEFT OUTER JOIN resource BB ON AA.resource_id = BB.id  GROUP BY AA.resource_set_id) B ON A.id = B.resource_set_id
-        LEFT OUTER JOIN(SELECT
-                            resource_set_id
-                            ,(SUM(error_rate) / COUNT(error_rate)) * 100 AS error_rate
-                        FROM  forecast_by_resource_set GROUP BY resource_set_id ) C ON A.id = C.resource_set_id
+                LEFT OUTER JOIN(SELECT
+                                    resource_set_id
+                                    ,(SUM(error_rate) / COUNT(error_rate)) * 100 AS error_rate
+                                FROM  forecast_by_resource_set GROUP BY resource_set_id ) C ON A.id = C.resource_set_id
+                WHERE A.is_simulation = '0'
             ) CC
         WHERE 1=1
         AND CC.중개사업자ID = #{중개사업자ID}
@@ -203,6 +207,7 @@
             ,apply_status
             ,created_at
             ,created_by
+            ,is_simulation
         )VALUES(
            #{중개사업자ID}
            ,#{집합자원그룹명}
@@ -212,6 +217,7 @@
            ,#{처리상태}
            ,DATE_FORMAT(REPLACE(#{신청일자},'.',''),'%Y%m%d')
            ,#{작성자}
+           ,'0'
        )
     </insert>
 <select id="getClcRsrDtl" parameterType="hashMap" resultType="hashMap" >
@@ -224,6 +230,7 @@
          ,A.created_at AS 신청일시
     FROM resource_set A
     WHERE A.id= #{집합자원ID}
+    AND A.is_simulation = '0'
 </select>
 <select id="getClcRsrMemoList" parameterType="hashMap" resultType="hashMap" >
     (SELECT

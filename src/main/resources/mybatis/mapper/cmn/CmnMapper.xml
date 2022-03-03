@@ -109,6 +109,7 @@
                                 FROM resource_set AA
                                          LEFT OUTER JOIN resource_set_list BB ON AA.id = BB.resource_set_id
                                          LEFT OUTER JOIN resource CC ON BB.resource_id = CC.id
+                                WHERE AA.is_simulation = '0'
                                 GROUP BY AA.agency_id
                             ) C ON A.id = C.agency_id
                  LEFT OUTER JOIN authorization D ON A.id = D.agency_id	AND D.has_read_auth = '1'	AND D.has_modify_auth = '1'
