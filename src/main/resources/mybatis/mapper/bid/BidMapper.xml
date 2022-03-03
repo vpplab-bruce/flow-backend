@@ -46,7 +46,7 @@
                                 resource_set_id
                                 ,(SUM(error_rate) / COUNT(error_rate)) * 100 AS error_rate
                             FROM  forecast_by_resource_set GROUP BY resource_set_id ) C ON A.resource_set_id = C.resource_set_id
-            LEFT OUTER JOIN	resource_set D ON A.resource_set_id = D.id
+            LEFT OUTER JOIN	resource_set D ON A.resource_set_id = D.id AND D.is_simulation = '0'
             WHERE 1=1
             AND 	A.resource_set_id = #{집합자원ID}
             GROUP BY 	A.resource_set_id ) CC
@@ -106,7 +106,7 @@
                             resource_set_id
                             ,(SUM(error_rate) / COUNT(error_rate)) * 100 AS error_rate
                         FROM  forecast_by_resource_set GROUP BY resource_set_id ) C ON A.resource_set_id = C.resource_set_id
-        LEFT OUTER JOIN	resource_set D ON A.resource_set_id = D.id
+        LEFT OUTER JOIN	resource_set D ON A.resource_set_id = D.id  AND D.is_simulation = '0'
         WHERE 1=1
         AND 	A.resource_set_id = #{집합자원ID}
         GROUP BY 	A.resource_set_id ) CC
@@ -146,7 +146,7 @@
             ,F.kpx_resource_id AS 전력시장ID
             ,A.meter_amount AS 계량전력량
             ,A.settlement_amount AS 전력정산금
-            ,F.commission_rate AS 계약타입
+            ,F.commission_rate_code AS 계약타입
             ,A.commission_amount AS 수수료
             ,A.tax_amount AS 세금
             ,A.final_settlement_amount AS 정산금
@@ -155,7 +155,7 @@
         LEFT OUTER JOIN settlement B ON A.settlement_id = B.id
         LEFT OUTER JOIN resource_set_list C ON B.resource_set_id = C.resource_set_id
         LEFT OUTER JOIN resource D ON C.resource_id = D.id
-        LEFT OUTER JOIN resource_set E ON C.resource_set_id = E.id
+        LEFT OUTER JOIN resource_set E ON C.resource_set_id = E.id  AND E.is_simulation = '0'
         LEFT OUTER JOIN resource_meta F ON F.resource_id = D.id
         WHERE 1=1
         <if test='id != null and id !=""'>
@@ -174,7 +174,7 @@
             AND B.kpx_settlement_date = #{kpx_settlement_date}
         </if>
         <if test='commission_rate != null and commission_rate !=""'>
-            AND F.commission_rate = #{commission_rate}
+            AND F.commission_rate_code = #{commission_rate}
         </if>
         ORDER BY D.id
         LIMIT #{페이지번호},#{행갯수}
@@ -186,7 +186,7 @@
         LEFT OUTER JOIN settlement B ON A.settlement_id = B.id
         LEFT OUTER JOIN resource_set_list C ON B.resource_set_id = C.resource_set_id
         LEFT OUTER JOIN resource D ON C.resource_id = D.id
-        LEFT OUTER JOIN resource_set E ON C.resource_set_id = E.id
+        LEFT OUTER JOIN resource_set E ON C.resource_set_id = E.id  AND E.is_simulation = '0'
         LEFT OUTER JOIN resource_meta F ON F.resource_id = D.id
         WHERE 1=1
         <if test='id != null and id !=""'>
@@ -205,7 +205,7 @@
             AND B.kpx_settlement_date = #{kpx_settlement_date}
         </if>
         <if test='commission_rate != null and commission_rate !=""'>
-            AND F.commission_rate = #{commission_rate}
+            AND F.commission_rate_code = #{commission_rate}
         </if>
 
     </select>
@@ -221,7 +221,7 @@
             ,F.kpx_resource_id AS 전력시장ID
             ,A.meter_amount AS 계량전력량
             ,A.settlement_amount AS 전력정산금
-            ,F.commission_rate AS 계약타입
+            ,F.commission_rate_code AS 계약타입
             ,A.commission_amount AS 수수료
             ,A.tax_amount AS 세금
             ,A.final_settlement_amount AS 정산금
@@ -230,7 +230,7 @@
         LEFT OUTER JOIN settlement B ON A.settlement_id = B.id
         LEFT OUTER JOIN resource_set_list C ON B.resource_set_id = C.resource_set_id
         LEFT OUTER JOIN resource D ON C.resource_id = D.id
-        LEFT OUTER JOIN resource_set E ON C.resource_set_id = E.id
+        LEFT OUTER JOIN resource_set E ON C.resource_set_id = E.id  AND E.is_simulation = '0'
         LEFT OUTER JOIN resource_meta F ON F.resource_id = D.id
         WHERE 1=1
         <if test='id != null and id !=""'>
@@ -249,7 +249,7 @@
             AND B.kpx_settlement_date = #{kpx_settlement_date}
         </if>
         <if test='commission_rate != null and commission_rate !=""'>
-            AND F.commission_rate = #{commission_rate}
+            AND F.commission_rate_code = #{commission_rate}
         </if>
         ORDER BY D.id
     </select>

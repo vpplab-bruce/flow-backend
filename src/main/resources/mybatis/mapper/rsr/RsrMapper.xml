@@ -896,7 +896,7 @@ FROM(SELECT
              ,has_brokerage_contract
              ,brokerage_contract_start_date
              ,brokerage_contract_end_date
-             ,commission_rate
+             ,commission_rate_code
              ,monitoring_info
              ,created_at
              ,created_by
@@ -967,7 +967,7 @@ FROM(SELECT
              ,B.kpx_resource_id AS 분산자원코드
              ,B.kepco_meter_code AS 한전계량기코드
              ,B.previous_dealing_type AS 기존거래방식
-             ,B.commission_rate AS 중개사업계약종류
+             ,B.commission_rate_code AS 중개사업계약종류
              ,B.monitoring_info AS 모니터링정보
         FROM resource A
                  LEFT OUTER JOIN resource_meta B ON A.id = B.resource_id
@@ -1013,7 +1013,7 @@ FROM(SELECT
            ,has_brokerage_contract = #{중개시장참여}
            ,brokerage_contract_start_date = #{전력중계계약시작일자}
            ,brokerage_contract_end_date = #{전력중계계약종료일자}
-           ,commission_rate = #{중개사업계약종류}
+           ,commission_rate_code = #{중개사업계약종류}
            ,monitoring_info = #{모니터링정보}
         WHERE resource_id = #{발전자원ID}
     </update>
@@ -1041,7 +1041,7 @@ FROM(SELECT
              ,C.name AS 집합자원그룹명
         FROM resource A
                  LEFT OUTER JOIN resource_set_list B ON A.id = B.resource_id
-                 LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id
+                 LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id  AND C.is_simulation = '0'
                  LEFT OUTER JOIN generation_business_company D ON A.generation_business_company_id = D.id
                  LEFT OUTER JOIN (SELECT
                                       resource_id
@@ -1083,7 +1083,7 @@ FROM(SELECT
             COUNT(A.id) AS CNT
         FROM resource A
                  LEFT OUTER JOIN resource_set_list B ON A.id = B.resource_id
-                 LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id
+                 LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id  AND C.is_simulation = '0'
                  LEFT OUTER JOIN generation_business_company D ON A.generation_business_company_id = D.id
                  LEFT OUTER JOIN (SELECT
                                       resource_id

@@ -23,7 +23,7 @@
              ,D.name AS 발전자원명
         FROM event A
                  LEFT OUTER JOIN resource_set_list B ON A.resource_id = B.resource_id
-                 LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id
+                 LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id AND C.is_simulation = '0'
                  LEFT OUTER JOIN resource D ON A.resource_id = D.id
         WHERE 1=1
         <if test='name != null and name !=""'>
@@ -56,7 +56,7 @@
             COUNT(A.id) AS CNT
         FROM event A
                  LEFT OUTER JOIN resource_set_list B ON A.resource_id = B.resource_id
-                 LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id
+                 LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id  AND C.is_simulation = '0'
                  LEFT OUTER JOIN resource D ON A.resource_id = D.id
         WHERE 1=1
         <if test='name != null and name !=""'>
@@ -103,7 +103,7 @@
              ,D.id AS 발전자원ID
         FROM event A
                  LEFT OUTER JOIN resource_set_list B ON A.resource_id = B.resource_id
-                 LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id
+                 LEFT OUTER JOIN resource_set C ON B.resource_set_id = C.id  AND C.is_simulation = '0'
                  LEFT OUTER JOIN resource D ON A.resource_id = D.id
         WHERE  A.id = #{이벤트ID}
     </select>
