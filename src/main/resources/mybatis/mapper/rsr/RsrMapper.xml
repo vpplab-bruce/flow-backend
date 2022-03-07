@@ -1281,4 +1281,7 @@ FROM(SELECT
         WHERE A.resource_id = #{발전자원ID}
           AND DATE_FORMAT(A.base_date,'%Y%m%d') = DATE_FORMAT(IF(#{기준일자},#{기준일자},NOW()),'%Y%m%d')
     </select>
+    <update id="setRsrPlantListDel" parameterType="hashMap"  >
+        DELETE FROM resource_set_list   WHERE resource_set_id = #{집합자원ID} AND resource_id = {자원ID}
+    </update>
 </mapper>

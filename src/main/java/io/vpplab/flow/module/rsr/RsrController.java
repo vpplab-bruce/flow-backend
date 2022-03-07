@@ -33,6 +33,10 @@ public class RsrController {
     public Map<String, Object> getClcRsrDtl(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.getClcRsrDtl(paramMap,request);
     }
+    @RequestMapping("/rsr/getClcRsrDtlList")
+    public Map<String, Object> getClcRsrDtlList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.getClcRsrDtlList(paramMap,request);
+    }
     @RequestMapping("/rsr/setClcRsrSave")
     public Map<String, Object> setClcRsrSave(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.setClcRsrSave(paramMap,request);
@@ -66,7 +70,11 @@ public class RsrController {
     public Map<String, Object> setRsrPlant(@RequestBody List<HashMap<String,Object>> paramMap, HttpServletRequest request) {
         return rsrService.setRsrPlant(paramMap,request);
     }
-    
+    @RequestMapping("/rsr/setRsrPlantListDel")
+    public Map<String, Object> setRsrPlantListDel(@RequestBody List<HashMap<String,Object>> paramMap, HttpServletRequest request) {
+        return rsrService.setRsrPlantListDel(paramMap,request);
+    }
+
     //발전자원등록관리 조회
     @RequestMapping("/rsr/getPlantBusiList")
     public Map<String, Object> getPlantBusiList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
