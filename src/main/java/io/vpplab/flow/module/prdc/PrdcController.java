@@ -20,4 +20,9 @@ public class PrdcController {
     public Map<String, Object> getPrdcAnlyList(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return prdcService.getPrdcAnlyList(paramMap,request);
     }
+
+    @RequestMapping("/prdc/getPrdcAnlyDtl")
+    public Map<String, Object> getPrdcAnlyDtl(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return prdcService.getPrdcAnlyDtl(paramMap,request);
+    }
 }

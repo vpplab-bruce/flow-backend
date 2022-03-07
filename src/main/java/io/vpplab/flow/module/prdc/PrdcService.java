@@ -1,6 +1,7 @@
 package io.vpplab.flow.module.prdc;
 
 import io.vpplab.flow.domain.prdc.PrdcDao;
+import io.vpplab.flow.domain.rsr.RsrDao;
 import io.vpplab.flow.domain.utils.MailUtil;
 import io.vpplab.flow.domain.utils.PagingUtil;
 import lombok.SneakyThrows;
@@ -25,6 +26,8 @@ public class PrdcService {
 
     @Autowired
     private PrdcDao prdcDao;
+    @Autowired
+    private RsrDao rsrDao;
 
 
     public Map<String, Object> getPrdcAnlyList(HashMap<String,Object> paramMap, HttpServletRequest request) {
@@ -88,6 +91,80 @@ public class PrdcService {
         return multiMap;
     }
 
+
+    public Map<String, Object> getPrdcAnlyDtl(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        Map<String, Object> multiMap = new HashMap<>();
+
+        /******************페이징*********************/
+        String pageNo = "1";
+        String rowCnt = "10";
+        if(paramMap.get("페이지번호") != null){
+            pageNo = paramMap.get("페이지번호").toString();
+        }
+        if(paramMap.get("행갯수") != null){
+            rowCnt = paramMap.get("행갯수").toString();
+        }
+        paramMap.put("페이지번호", PagingUtil.schPageNo(Integer.parseInt(pageNo),Integer.parseInt(rowCnt)));
+        paramMap.put("행갯수",Integer.parseInt(rowCnt));
+
+        HashMap<String,String> pageInfo = new HashMap<>();
+        pageInfo.put("페이지번호",pageNo);
+        pageInfo.put("행갯수",rowCnt);
+        /*****************페이징**********************/
+        List<HashMap> tab1List = null;
+        if(paramMap.get("조회구분") == null || "".equals(paramMap.get("조회구분")) || "01".equals(paramMap.get("조회구분"))){
+            tab1List = prdcDao.tab1PrdcList01(paramMap);
+        }else if("02".equals(paramMap.get("조회구분"))){
+            tab1List = prdcDao.tab1PrdcList02(paramMap);
+        }else if("03".equals(paramMap.get("조회구분"))){
+            tab1List = prdcDao.tab1PrdcList03(paramMap);
+        }
+        List<HashMap> tab2List = prdcDao.tab2PrdcList(paramMap);
+        int tab2ListCnt  =  prdcDao.tab2PrdcListCnt(paramMap);
+
+        if(tab2List.size() > 0){
+            for(int i = 0 ; i < tab2List.size() ; i++){
+                tab2List.get(i).put("NO",tab2ListCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
+            }
+        }
+        /******************페이징*********************/
+        pageInfo.put("전체페이지갯수", PagingUtil.pageCnt(tab2ListCnt,Integer.parseInt(rowCnt))+"");
+        pageInfo.put("전체갯수",tab2ListCnt+"");
+        /*****************페이징*********************/
+
+        HashMap rsrInfo = prdcDao.getPrdcAnlyRsrInfo(paramMap);
+        HashMap clcRsrDtl = prdcDao.getPrdcAnlyDtl(paramMap);
+
+        if("".equals(paramMap.get("메모행갯수")) || null == paramMap.get("메모행갯수")){
+            pageInfo.put("메모행갯수",10+"");
+            paramMap.put("메모행갯수",10);
+        }else{
+            int getClcRsrMemoListCnt = rsrDao.getClcRsrMemoListCnt(paramMap);
+            if(getClcRsrMemoListCnt > Integer.parseInt(paramMap.get("메모행갯수").toString()) ){
+                pageInfo.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10)+"");
+                paramMap.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10));
+            }
+
+        }
+
+        List<HashMap> clcRsrMemoList = rsrDao.getClcRsrMemoList(paramMap);
+
+
+        clcRsrDtl.put("메모",clcRsrMemoList);
+        if(clcRsrDtl != null){
+            multiMap.put("조회여부",true);
+            multiMap.put("집합자원상세",clcRsrDtl);
+            multiMap.put("발전량예측분석통계",rsrInfo);
+            multiMap.put("발전량예측분석",tab1List);
+            multiMap.put("소속자원관리",tab2List);
+        }else{
+            multiMap.put("발전량예측분석",null);
+            multiMap.put("소속자원관리",null);
+            multiMap.put("조회여부",false);
+        }
+        multiMap.put("페이지정보",pageInfo);
+        return multiMap;
+    }
 
 }
 
