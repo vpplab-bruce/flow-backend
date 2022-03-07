@@ -135,22 +135,6 @@ public class PrdcService {
         HashMap rsrInfo = prdcDao.getPrdcAnlyRsrInfo(paramMap);
         HashMap clcRsrDtl = prdcDao.getPrdcAnlyDtl(paramMap);
 
-        if("".equals(paramMap.get("메모행갯수")) || null == paramMap.get("메모행갯수")){
-            pageInfo.put("메모행갯수",10+"");
-            paramMap.put("메모행갯수",10);
-        }else{
-            int getClcRsrMemoListCnt = rsrDao.getClcRsrMemoListCnt(paramMap);
-            if(getClcRsrMemoListCnt > Integer.parseInt(paramMap.get("메모행갯수").toString()) ){
-                pageInfo.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10)+"");
-                paramMap.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10));
-            }
-
-        }
-
-        List<HashMap> clcRsrMemoList = rsrDao.getClcRsrMemoList(paramMap);
-
-
-        clcRsrDtl.put("메모",clcRsrMemoList);
         if(clcRsrDtl != null){
             multiMap.put("조회여부",true);
             multiMap.put("집합자원상세",clcRsrDtl);
@@ -165,6 +149,54 @@ public class PrdcService {
         multiMap.put("페이지정보",pageInfo);
         return multiMap;
     }
+    public Map<String, Object> setPrdcAnly(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Map<String, Object> multiMap = new HashMap<>();
 
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        paramMap.put("중개사업자ID",loginInfo.get("중개사업자ID"));
+        paramMap.put("작성자",loginInfo.get("사용자식별자"));
+        int cnt = prdcDao.setPrdcAnly(paramMap);
+        if(cnt > 0){
+            paramMap.put("집합자원ID",paramMap.get("id"));
+            int menocnt = prdcDao.setPrdcAnlyMeno(paramMap);
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+        return multiMap;
+    }
+    public Map<String, Object> setPrdcAnlySave(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Map<String, Object> multiMap = new HashMap<>();
+
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        paramMap.put("중개사업자ID",loginInfo.get("중개사업자ID"));
+        paramMap.put("작성자",loginInfo.get("사용자식별자"));
+        int cnt = prdcDao.setPrdcAnlySave(paramMap);
+        if(cnt > 0){
+            int menocnt = prdcDao.setPrdcAnlyMenoSave(paramMap);
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+        return multiMap;
+    }
+    public Map<String, Object> setPrdcAnlyDel(HashMap<String,Object> paramMap, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Map<String, Object> multiMap = new HashMap<>();
+
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        paramMap.put("중개사업자ID",loginInfo.get("중개사업자ID"));
+        int cnt = prdcDao.setPrdcAnlyDel(paramMap);
+        if(cnt > 0){
+            prdcDao.setPrdcAnlyListDel(paramMap);
+            prdcDao.setPrdcAnlyMenoDel(paramMap);
+            multiMap.put("성공여부",true);
+        }else{
+            multiMap.put("성공여부",false);
+        }
+        return multiMap;
+    }
 }
 

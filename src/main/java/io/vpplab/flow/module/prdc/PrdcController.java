@@ -25,4 +25,17 @@ public class PrdcController {
     public Map<String, Object> getPrdcAnlyDtl(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return prdcService.getPrdcAnlyDtl(paramMap,request);
     }
+
+    @RequestMapping("/prdc/setPrdcAnlyAdd")
+    public Map<String, Object> setPrdcAnlyAdd(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return prdcService.setPrdcAnly(paramMap,request);
+    }
+    @RequestMapping("/prdc/setPrdcAnlySave")
+    public Map<String, Object> setPrdcAnlySave(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return prdcService.setPrdcAnlySave(paramMap,request);
+    }
+    @RequestMapping("/prdc/setPrdcAnlyDel")
+    public Map<String, Object> setPrdcAnlyDel(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return prdcService.setPrdcAnlyDel(paramMap,request);
+    }
 }

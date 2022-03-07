@@ -33,6 +33,11 @@ public class RsrController {
     public Map<String, Object> getClcRsrDtl(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.getClcRsrDtl(paramMap,request);
     }
+    @RequestMapping("/rsr/setClcRsrSave")
+    public Map<String, Object> setClcRsrSave(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
+        return rsrService.setClcRsrSave(paramMap,request);
+    }
+
     @RequestMapping("/rsr/setMemo")
     public Map<String, Object> setMemo(@RequestBody HashMap<String,Object> paramMap, HttpServletRequest request) {
         return rsrService.setMemo(paramMap,request);

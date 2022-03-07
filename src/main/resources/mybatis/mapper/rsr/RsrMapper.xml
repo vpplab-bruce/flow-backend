@@ -317,14 +317,31 @@ FROM(SELECT
         requested_memo = #{요청자메모}
  WHERE id = #{이벤트ID}
 </update>
+<update id="setClcRsrDel" parameterType="hashMap"  >
+    DELETE FROM resource_set   WHERE agency_id = #{중개사업자ID} AND id = #{집합자원ID}
+</update>
+<update id="setClcRsrListDel" parameterType="hashMap"  >
+    DELETE FROM resource_set_list   WHERE resource_set_id = #{집합자원ID}
+</update>
+<update id="setClcRsrSave" parameterType="hashMap"  >
+    UPDATE resource_set SET
+        name = #{집합자원그룹명}
+        ,status = #{운영상태}
+        ,type = #{집합자원구분}
+        ,apply_type = #{신청유형}
+        ,apply_status = #{처리상태}
+        ,created_at = DATE_FORMAT(REPLACE(#{신청일자},'.',''),'%Y%m%d')
+    WHERE agency_id = #{중개사업자ID}
+      AND id = #{집합자원ID}
+</update>
 <update id="setClcRsrMemo" parameterType="hashMap"  >
     UPDATE resource_set_memo_log SET
-        content = #{메모내용}
+        agency_id = #{메모내용}
  WHERE id = #{메모ID}
 </update>
-    <update id="setClcRsrMemoDel" parameterType="hashMap"  >
-        DELETE FROM resource_set_memo_log WHERE  id =  #{메모ID}
-    </update>
+<update id="setClcRsrMemoDel" parameterType="hashMap"  >
+    DELETE FROM resource_set_memo_log WHERE  id =  #{메모ID}
+</update>
 <update id="setMemoDel" parameterType="hashMap"  >
     DELETE FROM event WHERE  id = #{이벤트ID}
 </update>
