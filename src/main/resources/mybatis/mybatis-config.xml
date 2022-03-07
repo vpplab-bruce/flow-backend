@@ -9,5 +9,6 @@
         <mapper resource="rsr/RsrMapper.xml"/>
         <mapper resource="event/EventMapper.xml"/>
         <mapper resource="bid/BidMapper.xml"/>
+        <mapper resource="prdc/PrdcMapper.xml"/>
     </mappers>
 </configuration>
