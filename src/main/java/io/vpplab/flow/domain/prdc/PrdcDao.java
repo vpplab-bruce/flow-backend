@@ -22,5 +22,11 @@ public interface PrdcDao {
     int setPrdcAnlyDel(HashMap<String, Object> paramMap);
     int setPrdcAnlyListDel(HashMap<String, Object> paramMap);
     int setPrdcAnlyMenoDel(HashMap<String, Object> paramMap);
+    List<HashMap> getPrdcAnlyPlantONList(HashMap<String, Object> paramMap);
+    List<HashMap> getPrdcAnlyPlantList(HashMap<String, Object> paramMap);
+    int getPrdcAnlyPlantListCnt(HashMap<String, Object> paramMap);
+    int setPrdcAnlyPlant(HashMap<String, Object> paramMap);
+    int setPrdcAnlyPlantDel(HashMap<String, Object> paramMap);
+
 }
 
