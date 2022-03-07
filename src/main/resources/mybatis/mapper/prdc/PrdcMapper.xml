@@ -3,7 +3,200 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="io.vpplab.flow.domain.prdc.PrdcDao">
+    <select id="getPrdcAnlyList" parameterType="hashMap" resultType="hashMap">
+        SELECT
+        CC.집합자원ID
+        ,CC.중개사업자ID
+        ,CC.집합자원그룹명
+        ,CC.집합자원구분
+        ,CC.운영상태
+        ,CC.신청유형
+        ,CC.처리상태
+        ,CC.구성수
+        ,CC.자원용량
+        ,CC.PVWT용량
+        ,CC.ESS용량
+        ,CC.평균오차율
+        ,CC.오차율평가
+        ,CC.거래가능기간
+        ,CC.신청일자
+        FROM(SELECT
+                A.id AS 집합자원ID
+                ,A.agency_id AS 중개사업자ID
+                ,A.name AS 집합자원그룹명
+                ,A.type AS 집합자원구분
+                ,A.status AS 운영상태
+                ,A.apply_type AS 신청유형
+                ,A.apply_status AS 처리상태
+                ,B.resource_cnt AS 구성수
+                ,B.capacity AS 자원용량
+                ,B.capacityPvWt AS PVWT용량
+                ,B.ess_capacity AS ESS용량
+                ,C.error_rate AS 평균오차율
+                ,(CASE WHEN C.error_rate >= 0 AND C.error_rate     <![CDATA[ <= ]]> 6 THEN '좋음'
+                WHEN C.error_rate > 6 AND C.error_rate     <![CDATA[ <= ]]> 8 THEN '보통'
+                WHEN C.error_rate > 8 THEN '나쁨' END) AS 오차율평가
+                ,B.brokerage_contract_end_date AS 거래가능기간
+                ,A.created_at AS 신청일자
+            FROM resource_set A
+            LEFT OUTER JOIN ( SELECT
+                                AA.resource_set_id
+                                ,COUNT(AA.resource_id) AS  resource_cnt
+                                ,((CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) ELSE 0 END)+SUM(ess_capacity))  AS capacity
+                                ,CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) END AS capacityPvWt
+                                ,SUM(BB.ess_capacity) AS ess_capacity
+                                ,MIN(CC.brokerage_contract_end_date) AS brokerage_contract_end_date
+                            FROM resource_set_list AA
+                            LEFT OUTER JOIN resource BB ON AA.resource_id = BB.id
+                            LEFT OUTER JOIN resource_meta CC ON BB.id = CC.resource_id
+                            GROUP BY AA.resource_set_id) B ON A.id = B.resource_set_id
 
+            LEFT OUTER JOIN(SELECT
+                                resource_set_id
+                                ,(SUM(error_rate) / COUNT(error_rate)) * 100 AS error_rate
+                            FROM  forecast_by_resource_set GROUP BY resource_set_id ) C ON A.id = C.resource_set_id
+                            WHERE A.is_simulation = '1'
+            ) CC
+        WHERE 1=1
+
+        AND CC.중개사업자ID = #{중개사업자ID}
+        <if test='id != null and id !=""'>
+            AND CC.집합자원ID = #{id}
+        </if>
+        <if test='type != null and type !=""'>
+            AND CC.집합자원구분 = #{type}
+        </if>
+        <if test='status != null and status !=""'>
+            AND CC.운영상태 = #{status}
+        </if>
+        <if test='name != null and name !=""'>
+            AND CC.집합자원그룹명 LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='apply_type != null and apply_type !=""'>
+            AND CC.신청유형 = #{apply_type}
+        </if>
+        <if test='apply_status != null and apply_status !=""'>
+            AND CC.처리상태 = #{apply_status}
+        </if>
+        <if test='error_rate_cd != null and error_rate_cd !=""'>
+            <if test='error_rate_cd !="01"'>
+                AND CC.오차율평가 >= 0
+                AND CC.오차율평가 <![CDATA[ <= ]]> 6
+            </if>
+            <if test='error_rate_cd !="02"'>
+                AND CC.오차율평가 > 6
+                AND CC.오차율평가 <![CDATA[ <= ]]> 8
+            </if>
+            <if test='error_rate_cd !="03"'>
+                AND CC.오차율평가 > 8
+            </if>
+        </if>
+        ORDER BY CC.집합자원ID
+        LIMIT #{페이지번호},#{행갯수}
+    </select>
+    <select id="getPrdcAnlyInfo"  parameterType="hashMap" resultType="hashMap">
+        SELECT
+            MAX(C.운영상태) AS 운영상태
+             ,SUM(C.운영구성수) AS 운영구성수
+             ,SUM(C.운영자원용량) AS 운영자원용량
+             ,MAX(C.정지상태) AS 정지상태
+             ,SUM(C.정지구성수) AS 정지구성수
+             ,SUM(C.정지자원용량) AS 정지자원용량
+             ,MAX(C.시험상태) AS 시험상태
+             ,SUM(C.시험구성수) AS 시험구성수
+             ,SUM(C.시험자원용량) AS 시험자원용량
+        FROM(SELECT
+                 A.agency_id AS 중개사업자ID
+                  ,CASE WHEN A.status = '01' THEN '01' END AS  운영상태
+                  ,CASE WHEN A.status = '01' THEN SUM(B.resource_cnt) END AS  운영구성수
+                  ,CASE WHEN A.status = '01' THEN SUM(B.capacity) END AS  운영자원용량
+                  ,CASE WHEN A.status = '02' THEN '02' END AS 정지상태
+                  ,CASE WHEN A.status = '02' THEN SUM(B.resource_cnt) END AS  정지구성수
+                  ,CASE WHEN A.status = '02' THEN SUM(B.capacity) END AS  정지자원용량
+                  ,CASE WHEN A.status = '03' THEN '03' END AS  시험상태
+                  ,CASE WHEN A.status = '03' THEN SUM(B.resource_cnt) END AS 시험구성수
+                  ,CASE WHEN A.status = '03' THEN SUM(B.capacity) END AS 시험자원용량
+             FROM resource_set A
+                      LEFT OUTER JOIN ( SELECT
+                                            AA.resource_set_id
+                                             ,COUNT(AA.resource_id) AS  resource_cnt
+                                             ,((CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) ELSE 0 END)+SUM(ess_capacity))  AS capacity
+                                        FROM resource_set_list AA
+                                                 LEFT OUTER JOIN resource BB ON AA.resource_id = BB.id
+                                        GROUP BY AA.resource_set_id) B ON A.id = B.resource_set_id
+             WHERE A.agency_id =  #{중개사업자ID}
+               AND A.is_simulation = '1'
+             GROUP BY A.status ) C
+    </select>
+    <select id="getPrdcAnlyListCnt" parameterType="hashMap" resultType="int">
+        SELECT
+        COUNT(*) AS cnt
+        FROM(SELECT
+                A.id AS 집합자원ID
+                ,A.agency_id AS 중개사업자ID
+                ,A.name AS 집합자원그룹명
+                ,A.type AS 집합자원구분
+                ,A.status AS 운영상태
+                ,A.apply_type AS 신청유형
+                ,A.apply_status AS 처리상태
+                ,B.resource_cnt AS 구성수
+                ,B.capacity AS 자원용량
+                ,B.capacityPvWt AS PVWT용량
+                ,B.ess_capacity AS ESS용량
+                ,C.error_rate AS 평균오차율
+                ,(CASE WHEN C.error_rate >= 0 AND C.error_rate     <![CDATA[ <= ]]> 6 THEN '좋음'
+                WHEN C.error_rate > 6 AND C.error_rate     <![CDATA[ <= ]]> 8 THEN '보통'
+                WHEN C.error_rate > 8 THEN '나쁨' END) AS 오차율평가
+                ,A.created_at AS 신청일자
+            FROM resource_set A
+            LEFT OUTER JOIN ( SELECT
+                                AA.resource_set_id
+                                ,COUNT(resource_id) AS  resource_cnt
+                                ,((CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) ELSE 0 END)+SUM(ess_capacity))  AS capacity
+                                ,CASE WHEN BB.facility_type ='01' OR BB.facility_type = '02' THEN SUM(BB.capacity) END AS capacityPvWt
+                                ,SUM(BB.ess_capacity) AS ess_capacity
+                            FROM resource_set_list AA
+                            LEFT OUTER JOIN resource BB ON AA.resource_id = BB.id  GROUP BY AA.resource_set_id) B ON A.id = B.resource_set_id
+            LEFT OUTER JOIN(SELECT
+                            resource_set_id
+                            ,(SUM(error_rate) / COUNT(error_rate)) * 100 AS error_rate
+                        FROM  forecast_by_resource_set GROUP BY resource_set_id ) C ON A.id = C.resource_set_id
+                        WHERE A.is_simulation = '1'
+            ) CC
+        WHERE 1=1
+        AND CC.중개사업자ID = #{중개사업자ID}
+        <if test='id != null and id !=""'>
+            AND CC.집합자원ID = #{id}
+        </if>
+        <if test='type != null and type !=""'>
+            AND CC.집합자원구분 = #{type}
+        </if>
+        <if test='status != null and status !=""'>
+            AND CC.운영상태 = #{status}
+        </if>
+        <if test='name != null and name !=""'>
+            AND CC.집합자원그룹명 LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test='apply_type != null and apply_type !=""'>
+            AND CC.신청유형 = #{apply_type}
+        </if>
+        <if test='apply_status != null and apply_status !=""'>
+            AND CC.처리상태 = #{apply_status}
+        </if>
+        <if test='error_rate_cd != null and error_rate_cd !=""'>
+            <if test='error_rate_cd !="01"'>
+                AND CC.오차율평가 >= 0
+                AND CC.오차율평가 <![CDATA[ <= ]]> 6
+            </if>
+            <if test='error_rate_cd !="02"'>
+                AND CC.오차율평가 > 6
+                AND CC.오차율평가 <![CDATA[ <= ]]> 8
+            </if>
+            <if test='error_rate_cd !="03"'>
+                AND CC.오차율평가 > 8
+            </if>
+        </if>
+    </select>
 </mapper>
 
 
