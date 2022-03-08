@@ -47,7 +47,10 @@ public class CmnService {
 
         int cnt =0;
         if(loginMap != null){
+       /*     String pswd = paramMap.get("로그인암호").toString();
+            if(pswd.equals(loginMap.get("로그인암호"))){
 
+            }*/
             //비밀번호 비교 비밀번호실패시 비밀번호 오류건수 업데이트
             //비밀번호 비교 암호화 확인 필요
 
