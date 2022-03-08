@@ -483,7 +483,6 @@
         ) B ON  A.id = B.resource_id
         LEFT OUTER JOIN resource_meta C ON A.id = C.resource_id
         WHERE 1=1
-        AND C.kpx_resource_id IS NOT NULL
         <if test='facility_type != null and facility_type !=""'>
             AND A.facility_type = #{facility_type}
         </if>
@@ -521,7 +520,6 @@
         ) B ON  A.id = B.resource_id
         LEFT OUTER JOIN resource_meta C ON A.id = C.resource_id
         WHERE 1=1
-        AND C.kpx_resource_id IS NOT NULL
         <if test='facility_type != null and facility_type !=""'>
             AND A.facility_type = #{facility_type}
         </if>
