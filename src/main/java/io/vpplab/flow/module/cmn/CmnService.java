@@ -2,6 +2,7 @@ package io.vpplab.flow.module.cmn;
 
 import io.vpplab.flow.domain.cmn.CmnDao;
 import io.vpplab.flow.domain.project.PrjDao;
+import io.vpplab.flow.domain.utils.HashUtil;
 import io.vpplab.flow.domain.utils.MailUtil;
 import io.vpplab.flow.domain.utils.PagingUtil;
 import lombok.SneakyThrows;
@@ -47,16 +48,19 @@ public class CmnService {
 
         int cnt =0;
         if(loginMap != null){
-       /*     String pswd = paramMap.get("로그인암호").toString();
-            if(pswd.equals(loginMap.get("로그인암호"))){
+            String  inputPwsd =   HashUtil.getEncrypt(paramMap.get("로그인암호").toString(), paramMap.get("로그인ID").toString());
+            String  outputPwsd =   loginMap.get("로그인암호").toString();
 
-            }*/
-            //비밀번호 비교 비밀번호실패시 비밀번호 오류건수 업데이트
-            //비밀번호 비교 암호화 확인 필요
+              if(inputPwsd.equals(outputPwsd)){
+                  System.out.println("성공");
+                  session.setAttribute("사용자정보", loginMap);
+              }else{
+                multiMap.put("로그인정보",null);
+                multiMap.put("1차메뉴",null);
+                multiMap.put("조회여부",false);
+                  return multiMap;
+            }
 
-
-            // 비번이 맞을경우
-            session.setAttribute("사용자정보", loginMap);
             if(menuList.size() > 0){
                 for(int i = 0; i < menuList.size(); i++){
                     if("1".equals(menuList.get(i).get("기본메뉴여부").toString())){

@@ -2,6 +2,7 @@ package io.vpplab.flow.module.project;
 
 import io.vpplab.flow.domain.cmn.CmnDao;
 import io.vpplab.flow.domain.project.PrjDao;
+import io.vpplab.flow.domain.utils.HashUtil;
 import io.vpplab.flow.domain.utils.MailUtil;
 import io.vpplab.flow.domain.utils.PagingUtil;
 import lombok.SneakyThrows;
@@ -65,9 +66,11 @@ public class PrjService {
             multiMap.put("성공여부",false);
             return multiMap;
         }
+
         String userId = loginInfo.get("로그인ID").toString();
         paramMap.put("로그인ID",userId);
-        paramMap.put("login_password",paramMap.get("로그인암호"));
+        String  inputPwsd =   HashUtil.getEncrypt(paramMap.get("로그인암호").toString(), userId);
+        paramMap.put("login_password",inputPwsd);
 
         int cnt  =  prjDao.setMyInfo(paramMap);
         if(cnt > 0){
@@ -187,8 +190,9 @@ public class PrjService {
             pswdInit = certNumCreate;
             // pswdInit 암호화 체크
             HashMap<String, Object> infoMap = new HashMap<>();
-            infoMap.put("로그인비밀번호",pswdInit);
             infoMap.put("사용자ID",paramMap.get("사용자ID"));
+            String  inputPwsd =   HashUtil.getEncrypt(pswdInit, paramMap.get("사용자ID").toString());
+            infoMap.put("로그인비밀번호",inputPwsd);
             int cnt = prjDao.setUserPswd(infoMap);
             HashMap userInfoMap  =  prjDao.getUserDtl(paramMap);
             if(cnt > 0){
@@ -237,7 +241,8 @@ public class PrjService {
                 + random.nextInt(10)+""
                 + random.nextInt(10);
         pswdInit = certNumCreate;
-        paramMap.put("로그인비밀번호",pswdInit);
+        String  inputPwsd =   HashUtil.getEncrypt(pswdInit, paramMap.get("로그인ID").toString());
+        paramMap.put("로그인비밀번호",inputPwsd);
         int cnt  =  prjDao.setUserAdd(paramMap);
         if(cnt > 0){
 
