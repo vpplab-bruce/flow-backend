@@ -230,10 +230,10 @@ public class PrdcService {
 
         HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
         paramMap.put("중개사업자ID",loginInfo.get("중개사업자ID"));
-        int cnt = prdcDao.setPrdcAnlyDel(paramMap);
+        prdcDao.setPrdcAnlyMenoDel(paramMap);
+        prdcDao.setPrdcAnlyListDel(paramMap);
+        int cnt =  prdcDao.setPrdcAnlyDel(paramMap);
         if(cnt > 0){
-            prdcDao.setPrdcAnlyListDel(paramMap);
-            prdcDao.setPrdcAnlyMenoDel(paramMap);
             multiMap.put("성공여부",true);
         }else{
             multiMap.put("성공여부",false);
