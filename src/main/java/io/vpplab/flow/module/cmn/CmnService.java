@@ -117,8 +117,9 @@ public class CmnService {
             pswdInit = certNumCreate;
             // pswdInit 암호화 체크
             HashMap<String, Object> infoMap = new HashMap<>();
-            infoMap.put("로그인비밀번호",pswdInit);
             infoMap.put("로그인ID",paramMap.get("로그인ID").toString());
+            String  inputPwsd =   HashUtil.getEncrypt(pswdInit, paramMap.get("로그인ID").toString());
+            infoMap.put("로그인비밀번호",inputPwsd);
             infoMap.put("이메일",paramMap.get("이메일").toString());
             int cnt = cmnDao.setMyPswd(infoMap);
             if(cnt > 0){
