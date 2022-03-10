@@ -387,7 +387,7 @@
             A.agency_id AS 중개사업자ID
              ,A.name AS 집합자원그룹명
              ,A.status AS 운영상태
-             ,A.type AS 신청유형
+             ,A.type AS 집합자원구분
              ,A.created_at AS 신청일시
              ,B.content AS 메모
         FROM resource_set A
