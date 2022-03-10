@@ -387,8 +387,7 @@
             A.agency_id AS 중개사업자ID
              ,A.name AS 집합자원그룹명
              ,A.status AS 운영상태
-             ,A.apply_type AS 신청유형
-             ,A.apply_status AS 처리상태
+             ,A.type AS 신청유형
              ,A.created_at AS 신청일시
              ,B.content AS 메모
         FROM resource_set A
@@ -410,8 +409,8 @@
         )VALUES(
                 #{중개사업자ID}
                ,#{집합자원그룹명}
-               ,#{집합자원구분}
                ,#{운영상태}
+               ,#{집합자원구분}
                ,'01'
                ,'01'
                ,DATE_FORMAT(NOW(),'%Y%m%d')
@@ -440,6 +439,7 @@
         UPDATE resource_set SET
             name = #{집합자원그룹명}
           ,status = #{운영상태}
+          ,type = #{집합자원구분}
         WHERE agency_id = #{중개사업자ID}
           AND id = #{집합자원ID}
     </update>
