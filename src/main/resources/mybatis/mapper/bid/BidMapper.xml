@@ -146,7 +146,7 @@
             ,F.kpx_resource_id AS 전력시장ID
             ,A.meter_amount AS 계량전력량
             ,A.settlement_amount AS 전력정산금
-            ,CONCAT(F.commission_rate_code, '(',G.name,')')  AS 계약타입
+            ,CONCAT(F.commission_rate_code, '(',G.name,'%)')  AS 계약타입
             ,((A.settlement_amount * G.name)/100)  AS 수수료
             ,((A.settlement_amount * 3.3)/100) AS 세금
             ,((A.settlement_amount -((A.settlement_amount * G.name)/100) -((A.settlement_amount * 3.3)/100) ) *((((CASE WHEN D.facility_type = '01' then D.capacity ELSE '0' END) + D.ess_capacity)/A.meter_amount) * 100)) /100 AS 정산금
@@ -177,7 +177,7 @@
         <if test='commission_rate != null and commission_rate !=""'>
             AND F.commission_rate_code = #{commission_rate}
         </if>
-        ORDER BY D.id
+        ORDER BY A.id DESC, D.id
         LIMIT #{페이지번호},#{행갯수}
     </select>
     <select id="getSettlementListCnt" parameterType="hashMap" resultType="int" >
@@ -222,7 +222,7 @@
             ,F.kpx_resource_id AS 전력시장ID
             ,A.meter_amount AS 계량전력량
             ,A.settlement_amount AS 전력정산금
-            ,CONCAT(F.commission_rate_code, '(',G.name,')')  AS 계약타입
+            ,CONCAT(F.commission_rate_code, '(',G.name,'%)')  AS 계약타입
             ,((A.settlement_amount * G.name)/100)  AS 수수료
             ,((A.settlement_amount * 3.3)/100) AS 세금
             ,((A.settlement_amount -((A.settlement_amount * G.name)/100) -((A.settlement_amount * 3.3)/100) ) *((((CASE WHEN D.facility_type = '01' then D.capacity ELSE '0' END) + D.ess_capacity)/A.meter_amount) * 100)) /100 AS 정산금
@@ -253,7 +253,7 @@
         <if test='commission_rate != null and commission_rate !=""'>
             AND F.commission_rate_code = #{commission_rate}
         </if>
-        ORDER BY D.id
+        ORDER BY A.id DESC, D.id
     </select>
 </mapper>
 
