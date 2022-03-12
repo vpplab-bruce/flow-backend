@@ -1160,7 +1160,7 @@ FROM(SELECT
             ,B.previous_dealing_type AS 기존거래방식
         FROM resource A
         LEFT OUTER JOIN resource_meta B ON A.id = B.resource_id
-        WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list)
+        WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list C INNER JOIN resource_set D ON C.resource_set_id = D.id AND D.is_simulation = '0')
         AND B.kpx_resource_id IS NULL
         <if test='facility_type != null and facility_type !=""'>
             AND A.facility_type = #{facility_type}
@@ -1188,7 +1188,7 @@ FROM(SELECT
          COUNT(A.id) AS CNT
         FROM resource A
         LEFT OUTER JOIN resource_meta B ON A.id = B.resource_id
-        WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list)
+        WHERE A.id NOT IN(SELECT resource_id FROM resource_set_list C INNER JOIN resource_set D ON C.resource_set_id = D.id AND D.is_simulation = '0')
         AND B.kpx_resource_id IS NULL
         <if test='facility_type != null and facility_type !=""'>
             AND A.facility_type = #{facility_type}
