@@ -28,7 +28,6 @@ public class RsrService {
 
         HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
 
-
         if(loginInfo == null){
             multiMap.put("조회여부",false);
             return multiMap;
@@ -190,13 +189,9 @@ public class RsrService {
                 pageInfo.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10)+"");
                 paramMap.put("메모행갯수",(Integer.parseInt(paramMap.get("메모행갯수").toString())+10));
             }
-
         }
 
         List<HashMap> clcRsrMemoList = rsrDao.getClcRsrMemoList(paramMap);
-
-
-
 
 
         clcRsrDtl.put("메모",clcRsrMemoList);
@@ -531,8 +526,6 @@ public class RsrService {
         List<HashMap> getPlantBusiList  =  rsrDao.getPlantBusiList(paramMap);
         int getPlantBusiListCnt  =  rsrDao.getPlantBusiListCnt(paramMap);
 
-
-        ;
         if(getPlantBusiList.size() > 0){
             for(int i = 0 ; i < getPlantBusiList.size() ; i++){
                 getPlantBusiList.get(i).put("NO",getPlantBusiListCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
@@ -608,7 +601,6 @@ public class RsrService {
         /*****************페이징*********************/
 
         multiMap.put("페이지정보",pageInfo);
-
 
         if(getPlantBusiDtl != null){
             multiMap.put("조회여부",true);

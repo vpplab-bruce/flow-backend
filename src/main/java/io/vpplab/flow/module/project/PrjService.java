@@ -126,7 +126,6 @@ public class PrjService {
 
         List<HashMap> userListMap  =  prjDao.getUserList(paramMap);
         int userListCnt  =  prjDao.getUserListCnt(paramMap);
-        ;
         if(userListMap.size() > 0){
             for(int i = 0 ; i < userListMap.size() ; i++){
                 userListMap.get(i).put("NO",userListCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));

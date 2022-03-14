@@ -168,7 +168,6 @@ public class CmnService {
 
         List<HashMap> getPltfMng  =  cmnDao.getPltfMng(paramMap);
         int getPltfMngCnt  =  cmnDao.getPltfMngCnt(paramMap);
-        ;
         if(getPltfMng.size() > 0){
             for(int i = 0 ; i < getPltfMng.size() ; i++){
                 getPltfMng.get(i).put("NO",getPltfMngCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
@@ -191,7 +190,6 @@ public class CmnService {
         Map<String, Object> multiMap = new HashMap<>();
 
         HashMap getPltfMngDtl  =  cmnDao.getPltfMngDtl(paramMap);
-        ;
         if(getPltfMngDtl != null){
             multiMap.put("조회여부",true);
             multiMap.put("플랫폼등록관리상세",getPltfMngDtl);
@@ -204,7 +202,6 @@ public class CmnService {
         Map<String, Object> multiMap = new HashMap<>();
 
         int cnt  =  cmnDao.getAgencyBusiChk(paramMap);
-        ;
         if(cnt > 0){
             multiMap.put("중복여부",true);
         }else{
@@ -216,7 +213,6 @@ public class CmnService {
         Map<String, Object> multiMap = new HashMap<>();
 
         int cnt  =  cmnDao.setPltfMngSave(paramMap);
-        ;
         if(cnt > 0){
             multiMap.put("성공여부",true);
         }else{
@@ -228,7 +224,6 @@ public class CmnService {
         Map<String, Object> multiMap = new HashMap<>();
 
         int cnt  =  cmnDao.setPltfMngDel(paramMap);
-        ;
         if(cnt > 0){
             multiMap.put("성공여부",true);
         }else{

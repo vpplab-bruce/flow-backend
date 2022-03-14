@@ -60,7 +60,6 @@ public class EventService {
 
         List<HashMap> eventList  =  eventDao.getEventList(paramMap);
         int eventListCnt  =  eventDao.getEventListCnt(paramMap);
-        ;
         if(eventList.size() > 0){
             for(int i = 0 ; i < eventList.size() ; i++){
                 eventList.get(i).put("NO",eventListCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
@@ -86,7 +85,6 @@ public class EventService {
         Map<String, Object> multiMap = new HashMap<>();
 
         HashMap eventDtl  =  eventDao.getEventDtl(paramMap);
-        ;
         if(eventDtl != null){
             multiMap.put("조회여부",true);
             multiMap.put("이벤트정보상세",eventDtl);
@@ -99,7 +97,6 @@ public class EventService {
         Map<String, Object> multiMap = new HashMap<>();
 
          int cnt =  eventDao.setEventSave(paramMap);
-        ;
         if(cnt > 0){
             multiMap.put("성공여부",true);
         }else{
@@ -137,7 +134,6 @@ public class EventService {
 
         List<HashMap> getEventRsrList  =  eventDao.getEventRsrList(paramMap);
         int getEventRsrListCnt  =  eventDao.getEventRsrListCnt(paramMap);
-        ;
         if(getEventRsrList.size() > 0){
             for(int i = 0 ; i < getEventRsrList.size() ; i++){
                 getEventRsrList.get(i).put("NO",getEventRsrListCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
