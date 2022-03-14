@@ -65,8 +65,11 @@ public class EventService {
             for(int i = 0 ; i < eventList.size() ; i++){
                 eventList.get(i).put("NO",eventListCnt - (((Integer.parseInt(pageNo)-1)*Integer.parseInt(rowCnt))+i));
             }
+            paramMap.put("이벤트ID",eventList.get(0).get("이벤트ID"));
+            HashMap eventDtl  =  eventDao.getEventDtl(paramMap);
             multiMap.put("조회여부",true);
             multiMap.put("이벤트정보",eventList);
+            multiMap.put("이벤트상세정보",eventDtl);
         }else{
             multiMap.put("조회여부",false);
         }
