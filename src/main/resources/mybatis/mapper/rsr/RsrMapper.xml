@@ -973,8 +973,8 @@ FROM(SELECT
              ,A.status AS 설비상태
              ,A.capacity AS 설비용량
              ,A.has_ess AS ESS유무
-             ,A.ess_status AS ESS운영상태
-             ,A.ess_capacity AS ESS설비용량
+             ,A.ess_status AS ESS상태
+             ,A.ess_capacity AS ESS용량
              ,A.area_type AS 지역구분
              ,B.business_registration_no AS 사업자등록번호
              ,B.ceo AS 대표자명
@@ -984,16 +984,16 @@ FROM(SELECT
              ,B.bank AS 정산계좌은행
              ,B.bank_account AS 정산계좌번호
              ,B.bank_account_holder AS 정산계좌명의
-             ,B.has_om_contract AS ONM계약여부
-             ,B.om_contract_start_date AS 계약기간시작일자
-             ,B.om_contract_end_date AS 계약기간종료일자
+             ,B.has_om_contract AS OM계약여부
+             ,B.om_contract_start_date AS OM계약기간시작일자
+             ,B.om_contract_end_date AS OM계약기간종료일자
              ,B.has_rec_contraction AS REC계약여부
              ,B.rec_contract_start_date AS REC계약기간시작일자
              ,B.rec_contract_end_date AS REC계약기간종료일자
              ,B.has_brokerage_contract AS 중개시장참여
-             ,B.brokerage_contract_start_date AS 전력중계계약시작일자
-             ,B.brokerage_contract_end_date AS 전력중계계약종료일자
-             ,B.has_kpx_meter AS KPX계량기설치여부
+             ,B.brokerage_contract_start_date AS 전력중계계약기간시작일자
+             ,B.brokerage_contract_end_date AS 전력중계계약기간종료일자
+             ,B.has_kpx_meter AS KPX계량기설치
              ,B.kpx_resource_id AS 분산자원코드
              ,B.kepco_meter_code AS 한전계량기코드
              ,B.previous_dealing_type AS 기존거래방식
@@ -1014,8 +1014,8 @@ FROM(SELECT
             ,status = #{설비상태}
             ,capacity = #{설비용량}
             ,has_ess = #{ESS유무}
-            ,ess_status = #{ESS운영상태}
-            ,ess_capacity = #{ESS설비용량}
+            ,ess_status = #{ESS상태}
+            ,ess_capacity = #{ESS용량}
             ,area_type = #{지역구분}
         WHERE id = #{발전자원ID}
     </update>
@@ -1030,19 +1030,19 @@ FROM(SELECT
            ,bank = #{정산계좌은행}
            ,bank_account = #{정산계좌번호}
            ,bank_account_holder = #{정산계좌명의}
-           ,has_om_contract = #{ONM계약여부}
-           ,om_contract_start_date = #{계약기간시작일자}
-           ,om_contract_end_date = #{계약기간종료일자}
+           ,has_om_contract = #{OM계약여부}
+           ,om_contract_start_date = #{OM계약기간시작일자}
+           ,om_contract_end_date = #{OM계약기간종료일자}
            ,has_rec_contraction = #{REC계약여부}
            ,rec_contract_start_date = #{REC계약기간시작일자}
            ,rec_contract_end_date = #{REC계약기간종료일자}
-           ,has_kpx_meter = #{KPX계량기설치여부}
+           ,has_kpx_meter = #{KPX계량기설치}
            ,kpx_resource_id = #{분산자원코드}
            ,kepco_meter_code = #{한전계량기코드}
            ,previous_dealing_type = #{기존거래방식}
            ,has_brokerage_contract = #{중개시장참여}
-           ,brokerage_contract_start_date = #{전력중계계약시작일자}
-           ,brokerage_contract_end_date = #{전력중계계약종료일자}
+           ,brokerage_contract_start_date = #{전력중계계약기간시작일자}
+           ,brokerage_contract_end_date = #{전력중계계약기간종료일자}
            ,commission_rate_code = #{중개사업계약종류}
            ,monitoring_info = #{모니터링정보}
         WHERE resource_id = #{발전자원ID}
