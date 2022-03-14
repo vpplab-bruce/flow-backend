@@ -34,6 +34,9 @@ public class BidService {
 
     public Map<String, Object> getBidList(HashMap<String,Object> paramMap, HttpServletRequest request) {
         Map<String, Object> multiMap = new HashMap<>();
+        HttpSession session = request.getSession();
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        paramMap.put("agency_id",loginInfo.get("중개사업자ID"));
 
         /******************페이징*********************/
         String pageNo = "1";
@@ -46,15 +49,13 @@ public class BidService {
         }
         paramMap.put("페이지번호", PagingUtil.schPageNo(Integer.parseInt(pageNo),Integer.parseInt(rowCnt)));
         paramMap.put("행갯수",Integer.parseInt(rowCnt));
-        HttpSession session = request.getSession();
-        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
-        paramMap.put("중개사업자ID",loginInfo.get("중개사업자ID"));
+
         HashMap<String,Object> pageInfo = new HashMap<>();
         pageInfo.put("페이지번호",pageNo);
         pageInfo.put("행갯수",rowCnt);
         /*****************페이징**********************/
         paramMap.put("base_date",paramMap.get("입찰일자"));
-        paramMap.put("id",paramMap.get("집합자원ID"));
+        paramMap.put("id",paramMap.get("발전자원ID"));
         paramMap.put("status",paramMap.get("운영상태"));
         paramMap.put("name",paramMap.get("집합자원그룹명"));
         paramMap.put("type",paramMap.get("집합자원구분"));
@@ -74,6 +75,8 @@ public class BidService {
             paramMap.put("입찰상태","미입찰");
         }
         paramMap.put("bid_type",paramMap.get("입찰상태"));
+
+        System.out.println(paramMap);
         List<HashMap> bidMap  =  bidDao.getBidList(paramMap);
         int bidMapCnt  =  bidDao.getBidListCnt(paramMap);
         if(bidMap.size() > 0){
@@ -98,7 +101,7 @@ public class BidService {
         Map<String, Object> multiMap = new HashMap<>();
         HttpSession session = request.getSession();
         HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
-        paramMap.put("중개사업자ID",loginInfo.get("중개사업자ID"));
+        paramMap.put("agency_id",loginInfo.get("중개사업자ID"));
 
         /******************페이징*********************/
         String pageNo = "1";
@@ -144,6 +147,9 @@ public class BidService {
     }
     public void getSettlementExcelList( HttpServletRequest request, HttpServletResponse response) {
         HashMap<String,Object> paramMap = new HashMap<>();
+        HttpSession session = request.getSession();
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        paramMap.put("agency_id",loginInfo.get("중개사업자ID"));
         paramMap.put("id",request.getParameter("발전자원ID"));
         paramMap.put("name",request.getParameter("발전자원명"));
         paramMap.put("grp_name",request.getParameter("집합자원그룹명"));
