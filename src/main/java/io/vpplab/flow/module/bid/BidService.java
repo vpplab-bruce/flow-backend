@@ -46,7 +46,9 @@ public class BidService {
         }
         paramMap.put("페이지번호", PagingUtil.schPageNo(Integer.parseInt(pageNo),Integer.parseInt(rowCnt)));
         paramMap.put("행갯수",Integer.parseInt(rowCnt));
-
+        HttpSession session = request.getSession();
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        paramMap.put("중개사업자ID",loginInfo.get("중개사업자ID"));
         HashMap<String,Object> pageInfo = new HashMap<>();
         pageInfo.put("페이지번호",pageNo);
         pageInfo.put("행갯수",rowCnt);
@@ -94,6 +96,9 @@ public class BidService {
     }
     public Map<String, Object> getSettlementList(HashMap<String,Object> paramMap, HttpServletRequest request) {
         Map<String, Object> multiMap = new HashMap<>();
+        HttpSession session = request.getSession();
+        HashMap<String,Object> loginInfo = (HashMap) session.getAttribute("사용자정보");
+        paramMap.put("중개사업자ID",loginInfo.get("중개사업자ID"));
 
         /******************페이징*********************/
         String pageNo = "1";

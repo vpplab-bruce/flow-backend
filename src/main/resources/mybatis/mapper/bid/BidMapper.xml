@@ -46,9 +46,8 @@
                                 resource_set_id
                                 ,(SUM(error_rate) / COUNT(error_rate)) * 100 AS error_rate
                             FROM  forecast_by_resource_set GROUP BY resource_set_id ) C ON A.resource_set_id = C.resource_set_id
-            LEFT OUTER JOIN	resource_set D ON A.resource_set_id = D.id AND D.is_simulation = '0'
+           INNER JOIN	resource_set D ON A.resource_set_id = D.id AND D.is_simulation = '0' AND D.agency_id = #{중개사업사ID}
             WHERE 1=1
-            AND 	A.resource_set_id = #{집합자원ID}
             GROUP BY 	A.resource_set_id ) CC
         WHERE 1=1
         <if test='base_date != null and base_date !=""'>
@@ -106,9 +105,8 @@
                             resource_set_id
                             ,(SUM(error_rate) / COUNT(error_rate)) * 100 AS error_rate
                         FROM  forecast_by_resource_set GROUP BY resource_set_id ) C ON A.resource_set_id = C.resource_set_id
-        LEFT OUTER JOIN	resource_set D ON A.resource_set_id = D.id  AND D.is_simulation = '0'
+        INNER JOIN	resource_set D ON A.resource_set_id = D.id AND D.is_simulation = '0' AND D.agency_id = #{중개사업사ID}
         WHERE 1=1
-        AND 	A.resource_set_id = #{집합자원ID}
         GROUP BY 	A.resource_set_id ) CC
         WHERE 1=1
         <if test='base_date != null and base_date !=""'>
@@ -155,7 +153,7 @@
         LEFT OUTER JOIN settlement B ON A.settlement_id = B.id
         LEFT OUTER JOIN resource_set_list C ON B.resource_set_id = C.resource_set_id
         LEFT OUTER JOIN resource D ON C.resource_id = D.id
-        LEFT OUTER JOIN resource_set E ON C.resource_set_id = E.id  AND E.is_simulation = '0'
+        INNER JOIN resource_set E ON C.resource_set_id = E.id  AND E.is_simulation = '0' AND E.agency_id = #{중개사업사ID}
         LEFT OUTER JOIN resource_meta F ON F.resource_id = D.id
         LEFT OUTER JOIN admin_common_code G ON F.commission_rate_code = G.code AND G.category ='계약타입'
         WHERE 1=1
@@ -187,7 +185,7 @@
         LEFT OUTER JOIN settlement B ON A.settlement_id = B.id
         LEFT OUTER JOIN resource_set_list C ON B.resource_set_id = C.resource_set_id
         LEFT OUTER JOIN resource D ON C.resource_id = D.id
-        LEFT OUTER JOIN resource_set E ON C.resource_set_id = E.id  AND E.is_simulation = '0'
+        LEFT OUTER JOIN resource_set E ON C.resource_set_id = E.id  AND E.is_simulation = '0' AND E.agency_id = #{중개사업사ID}
         LEFT OUTER JOIN resource_meta F ON F.resource_id = D.id
         WHERE 1=1
         <if test='id != null and id !=""'>
@@ -231,7 +229,7 @@
         LEFT OUTER JOIN settlement B ON A.settlement_id = B.id
         LEFT OUTER JOIN resource_set_list C ON B.resource_set_id = C.resource_set_id
         LEFT OUTER JOIN resource D ON C.resource_id = D.id
-        LEFT OUTER JOIN resource_set E ON C.resource_set_id = E.id  AND E.is_simulation = '0'
+        LEFT OUTER JOIN resource_set E ON C.resource_set_id = E.id  AND E.is_simulation = '0' AND E.agency_id = #{중개사업사ID}
         LEFT OUTER JOIN resource_meta F ON F.resource_id = D.id
         LEFT OUTER JOIN admin_common_code G ON F.commission_rate_code = G.code AND G.category ='계약타입'
         WHERE 1=1
