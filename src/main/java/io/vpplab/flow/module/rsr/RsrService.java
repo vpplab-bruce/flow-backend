@@ -126,9 +126,9 @@ public class RsrService {
         paramMap.put("중개사업자ID",loginInfo.get("중개사업자ID"));
         paramMap.put("작성자",loginInfo.get("사용자식별자"));
 
-        int cnt =  rsrDao.setClcRsrListDel(paramMap);
+        rsrDao.setClcRsrListDel(paramMap);
+        int cnt =  rsrDao.setClcRsrDel(paramMap);
         if(cnt > 0){
-            rsrDao.setClcRsrDel(paramMap);
             multiMap.put("성공여부",true);
         }else{
             multiMap.put("성공여부",false);
